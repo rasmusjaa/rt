@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/05 16:17:59 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/05 16:46:42 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,10 @@
 # define N_SHAPE_VALUES 19
 # define N_LIGHT_VALUES 8
 
+# define MIN_WIDTH 320
+# define MIN_HEIGHT 200
+# define MAX_WIDTH 1920
+# define MAX_HEIGHT 1080
 # define MIN_COORD -100
 # define MAX_COORD 100
 # define MIN_SCALE -10
@@ -27,6 +31,14 @@
 # define MAX_RADIUS 100
 # define MIN_ANGLE 0
 # define MAX_ANGLE 90
+# define MIN_FOV 45
+# define MAX_FOV 180
+# define MIN_INTENSITY 0f
+# define MAX_INTENSITY 1000f
+# define MIN_ASPECT 0.5f
+# define MAX_ASPECT 2.0f
+# define CAMERA_TYPES 2
+# define LIGHT_TYPES 2
 
 # include "color.h"
 # include "ft_get_next_line.h"
@@ -71,7 +83,7 @@ typedef enum	e_shape_type
 	DISC
 }
 
-typedef void		(*t_object_func)(char *line);
+typedef void		(*t_object_func)(t_scene *scene, char *line, int n);
 
 typedef struct		s_shape
 {
@@ -102,8 +114,8 @@ typedef				s_camera
 	double			fov;
 	e_camera_type	type;
 	double			aspect;
-	double			width;
-	double			height;
+	int				width;
+	int				height;
 }					t_camera;
 
 typedef				s_light
@@ -111,7 +123,7 @@ typedef				s_light
 	t_vec3			position;
 	t_rgba			color;
 	e_light_type	type;
-	int				intensity;
+	double			intensity;
 }					t_light;
 
 typedef struct		s_object

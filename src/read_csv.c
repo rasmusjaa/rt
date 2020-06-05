@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/05 16:17:38 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/05 16:47:27 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,24 +41,22 @@ t_vec3	clamp_vec_3(t_vec3 v, double min, double max)
 	return (v);
 }
 
-void	check_scene_fields(char *line, int n)
+void	check_scene_fields(t_scene *scene, char *line, int n)
 {
 	double		values[N_SCENE_VALUES];
 	size_t		i;
 
-	i = 0;
+	i = n >= 0 ? i = 0 : i = 0;
 	get_fields(line, values);
-	rt->scenes[0]->position = ft_clamp_vec3(ft_make_vec3(values[i++], values[i++], values[i++]), MIN_COORD, MAX_COORD);
-	rt->scenes[0]->target = ft_clamp_vec3(ft_make_vec3(values[i++], values[i++], values[i++]), MIN_COORD, MAX_COORD);
-	rt->scenes[0]->rotation = ft_clamp_vec3(ft_make_vec3(values[i++], values[i++], values[i++]), 0, 360);
-	rt->scenes[0]->scale = ft_clamp_vec3(ft_make_vec3(values[i++], values[i++], values[i++]), MIN_SCALE, MAX_SCALE);
-	rt->scenes[0]->color = ft_clamp_rgba(ft_make_rgba(values[i++], values[i++], values[i++], values[i++]));
-	rt->scenes[0]->radius = ft_clamp_d(values[i++], MIN_RADIUS, MAX_RADIUS);
-	rt->scenes[0]->angle = ft_clamp_d(values[i++], MIN_ANGLE, MAX_ANGLE);
-	rt->scenes[0]->opacity = ft_clamp_d(values[i++], 0, 1);
+	scene->shadows = round(ft_clamp_d0(values[i++], 0, 1));
+	scene->shading = round(ft_clamp_d0(values[i++], 0, 1));
+	scene->speculars = round(ft_clamp_d0(values[i++], 0, 1));
+	scene->refraction = round(ft_clamp_d0(values[i++], 0, 1));
+	scene->reflection = round(ft_clamp_d0(values[i++], 0, 1));
+	scene->bounces = round(ft_clamp_d0(values[i++], 0, 1));
 }
 
-void	check_camera_fields(char *line, t_scene *scene, int n)
+void	check_camera_fields(t_scene *scene, char *line, int n)
 {
 	double		values[N_CAMERA_VALUES];
 	size_t		i;
@@ -68,28 +66,29 @@ void	check_camera_fields(char *line, t_scene *scene, int n)
 	scene->cameras[n]->position = ft_clamp_vec3(ft_make_vec3(values[i++], values[i++], values[i++]), MIN_COORD, MAX_COORD);
 	scene->cameras[n]->target = ft_clamp_vec3(ft_make_vec3(values[i++], values[i++], values[i++]), MIN_COORD, MAX_COORD);
 	scene->cameras[n]->rotation = ft_clamp_vec3(ft_make_vec3(values[i++], values[i++], values[i++]), 0, 360);
-	scene->cameras[n]->scale = ft_clamp_vec3(ft_make_vec3(values[i++], values[i++], values[i++]), MIN_SCALE, MAX_SCALE);
-	scene->cameras[n]->color = ft_clamp_rgba(ft_make_rgba(values[i++], values[i++], values[i++], values[i++]));
-	scene->cameras[n]->radius = ft_clamp_d(values[i++], MIN_RADIUS, MAX_RADIUS);
-	scene->cameras[n]->angle = ft_clamp_d(values[i++], MIN_ANGLE, MAX_ANGLE);
-	scene->cameras[n]->opacity = ft_clamp_d(values[i++], 0, 1);
+	scene->cameras[n]->fov = ft_clamp_d0(values[i++], MIN_FOV, MAX_FOV);
+	scene->cameras[n]->type = round(ft_clamp_d0(values[i++], 0, CAMERA_TYPES - 1));
+	scene->cameras[n]->aspect = ft_clamp_d0(values[i++], MIN_ASPECT, MAX_ASPECT);
+	scene->cameras[n]->width = round(ft_clamp_d0(values[i++], MIN_WIDTH, MAX_WIDTH));
+	scene->cameras[n]->height = round(ft_clamp_d0(values[i++], MIN_HEIGHT, MAX_HEIGHT));
+
 }
 
-void	check_shape_fields(char *line, int n)
+void	check_shape_fields(t_scene *scene, char *line, int n)
 {
 	double		values[N_SHAPE_VALUES];
 	size_t		i;
 
 	i = 0;
 	get_fields(line, values);
-	rt->objects[n]->position = ft_clamp_vec3(ft_make_vec3(values[i++], values[i++], values[i++]), MIN_COORD, MAX_COORD);
-	rt->objects[n]->target = ft_clamp_vec3(ft_make_vec3(values[i++], values[i++], values[i++]), MIN_COORD, MAX_COORD);
-	rt->objects[n]->rotation = ft_clamp_vec3(ft_make_vec3(values[i++], values[i++], values[i++]), 0, 360);
-	rt->objects[n]->scale = ft_clamp_vec3(ft_make_vec3(values[i++], values[i++], values[i++]), MIN_SCALE, MAX_SCALE);
-	rt->objects[n]->color = ft_clamp_rgba(ft_make_rgba(values[i++], values[i++], values[i++], values[i++]));
-	rt->objects[n]->radius = ft_clamp_d(values[i++], MIN_RADIUS, MAX_RADIUS);
-	rt->objects[n]->angle = ft_clamp_d(values[i++], MIN_ANGLE, MAX_ANGLE);
-	rt->objects[n]->opacity = ft_clamp_d(values[i++], 0, 1);
+	scene->objects[n]->position = ft_clamp_vec3(ft_make_vec3(values[i++], values[i++], values[i++]), MIN_COORD, MAX_COORD);
+	scene->objects[n]->target = ft_clamp_vec3(ft_make_vec3(values[i++], values[i++], values[i++]), MIN_COORD, MAX_COORD);
+	scene->objects[n]->rotation = ft_clamp_vec3(ft_make_vec3(values[i++], values[i++], values[i++]), 0, 360);
+	scene->objects[n]->scale = ft_clamp_vec3(ft_make_vec3(values[i++], values[i++], values[i++]), MIN_SCALE, MAX_SCALE);
+	scene->objects[n]->color = ft_clamp_rgba(ft_make_rgba(values[i++], values[i++], values[i++], values[i++]));
+	scene->objects[n]->radius = ft_clamp_d(values[i++], MIN_RADIUS, MAX_RADIUS);
+	scene->objects[n]->angle = ft_clamp_d(values[i++], MIN_ANGLE, MAX_ANGLE);
+	scene->objects[n]->opacity = ft_clamp_d(values[i++], 0, 1);
 }
 
 void	check_light_fields(char *line, int n)
@@ -99,14 +98,10 @@ void	check_light_fields(char *line, int n)
 
 	i = 0;
 	get_fields(line, values);
-	rt->objects[n]->position = ft_clamp_vec3(ft_make_vec3(values[i++], values[i++], values[i++]), MIN_COORD, MAX_COORD);
-	rt->objects[n]->target = ft_clamp_vec3(ft_make_vec3(values[i++], values[i++], values[i++]), MIN_COORD, MAX_COORD);
-	rt->objects[n]->rotation = ft_clamp_vec3(ft_make_vec3(values[i++], values[i++], values[i++]), 0, 360);
-	rt->objects[n]->scale = ft_clamp_vec3(ft_make_vec3(values[i++], values[i++], values[i++]), MIN_SCALE, MAX_SCALE);
-	rt->objects[n]->color = ft_clamp_rgba(ft_make_rgba(values[i++], values[i++], values[i++], values[i++]));
-	rt->objects[n]->radius = ft_clamp_d(values[i++], MIN_RADIUS, MAX_RADIUS);
-	rt->objects[n]->angle = ft_clamp_d(values[i++], MIN_ANGLE, MAX_ANGLE);
-	rt->objects[n]->opacity = ft_clamp_d(values[i++], 0, 1);
+	scene->objects[n]->position = ft_clamp_vec3(ft_make_vec3(values[i++], values[i++], values[i++]), MIN_COORD, MAX_COORD);
+	scene->objects[n]->color = ft_clamp_rgba(ft_make_rgba(values[i++], values[i++], values[i++], values[i++]));
+	scene->objects[n]->type = round(ft_clamp_d0(values[i++], 0, LIGHT_TYPES - 1));
+	scene->objects[n]->intensity = ft_clamp_d(values[i++], MIN_INTENSITY, MAX_INTENSITY);
 }
 
 t_objects g_objects[N_OBJECTS] =
@@ -122,7 +117,7 @@ t_objects g_objects[N_OBJECTS] =
 
 void exit_message(char *str)
 {
-	ft_putendl(str);
+	ft_putendl_fd(str, 2);
 	exit(1);
 }
 
