@@ -3,17 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+         #
+#    By: wkorande <wkorande@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/01 15:48:04 by rjaakonm          #+#    #+#              #
-#    Updated: 2020/06/04 15:11:28 by rjaakonm         ###   ########.fr        #
+#    Updated: 2020/06/05 13:21:06 by wkorande         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = readtest
 
-SRCS =	read_csv.c \
-		main.c
+SRCS =	src/read_csv.c \
+		src/main.c
 
 FLAGS = -Wall -Wextra -Werror
 
