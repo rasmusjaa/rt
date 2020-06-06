@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/06 14:08:17 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/06 16:53:47 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 # include <pthread.h>
 # include <fcntl.h>
 
-# define N_OBJECTS 7
+# define N_UNIQUE_OBJS 8
 # define N_SCENE_VALUES 6
 # define N_CAMERA_VALUES 14
 # define N_SHAPE_VALUES 19
@@ -51,11 +51,23 @@
 # define MAX_INTENSITY 1000
 # define MIN_ASPECT 0.5
 # define MAX_ASPECT 2.0
-# define CAMERA_TYPES 2
-# define LIGHT_TYPES 2
-
 # define MIN_BOUNCES 1
 # define MAX_BOUNCES 100
+# define CAMERA_TYPES 2
+# define LIGHT_TYPES 2
+# define SHAPE_TYPES 5
+
+# define SETTINGS_STR "settings"
+# define CAMERA_STR "camera"
+# define POINT_LIGHT_STR "point"
+# define DIR_LIGHT_STR "directional"
+# define PLANE_STR "plane"
+# define SPHERE_STR "sphere"
+# define CONE_STR "cone"
+# define CYL_STR "cylinder"
+# define DISC_STR "disc"
+# define MOEBIUS_STR "moebius"
+# define SHAPE_ERROR_STR "shape_error"
 
 typedef enum	e_camera_type
 {
@@ -89,6 +101,7 @@ typedef enum	e_shape_type
 
 typedef struct		s_shape
 {
+	char			*name;
 	t_shape_type	type;
 	t_vec3			position;
 	t_vec3			target;
@@ -159,12 +172,18 @@ typedef struct		s_rt
 
 typedef void		(*t_object_func)(t_scene *scene, char *line, int n);
 
-typedef struct		s_objects
+typedef struct		s_unique_obj
 {
-	char			object[5];
+	char			obj_str[15];
 	t_object_func	func;
 	int				type;
-}					t_objects;
+}					t_unique_obj;
+
+typedef struct		s_shape_name_type_map
+{
+	char			name[20];
+	t_shape_type	type;
+}					t_shape_name_type_map;
 
 void				exit_message(char *str);
 t_scene				*read_scene(char *file);
