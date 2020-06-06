@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: wkorande <wkorande@student.hive.fi>        +#+  +:+       +#+         #
+#    By: wkorande <willehard@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/01 15:48:04 by rjaakonm          #+#    #+#              #
-#    Updated: 2020/06/05 13:21:06 by wkorande         ###   ########.fr        #
+#    Updated: 2020/06/06 09:45:42 by wkorande         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,14 +21,14 @@ OBJS = $(SRCS:.c=.o)
 
 INCL = -I libft/includes/ -I includes
 
-LIB = -L libft -lft
+LIB = -L libft -lft -lm
 
-.PHONY: all clean fclean re run
+CC = clang
 
 all: $(NAME)
 
 $(NAME): libftmake
-	gcc $(FLAGS) $(INCL) $(SRCS) $(LIB) -o $(NAME) -O2
+	$(CC) $(FLAGS) $(INCL) $(SRCS) $(LIB) -o $(NAME) -O2
 
 libftmake:
 	@make -C libft
@@ -43,5 +43,7 @@ fclean: clean
 re: fclean all
 
 run:
-	gcc $(FLAGS) $(INCL) $(SRCS) $(LIB) -o $(NAME) -O2
+	$(CC) $(FLAGS) $(INCL) $(SRCS) $(LIB) -o $(NAME) -O2
 	./readtest scene1.csv
+
+.PHONY: all libftmake clean fclean re run

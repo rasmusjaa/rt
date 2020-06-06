@@ -6,13 +6,14 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/05 16:47:27 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/06 09:45:21 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
+#include <math.h>
 
-void	get_fields(char *line, double *values)
+void	get_fields(char *line, double *values, int num_values)
 {
 	int i;
 	int field;
@@ -24,16 +25,16 @@ void	get_fields(char *line, double *values)
 		if (line[i] == ';')
 		{
 			field++;
-			if (field <= N_VALUES)
+			if (field <= num_values)
 			{
-				values[field] = ft_strod(line[i + 1]);
+				values[field] = ft_strtod(&line[i + 1]);
 			}
 		}
 		i++;
 	}
 }
 
-t_vec3	clamp_vec_3(t_vec3 v, double min, double max)
+t_vec3	ft_clamp_vec3(t_vec3 v, double min, double max)
 {
 	ft_clamp_d(v.x, min, max);
 	ft_clamp_d(v.y, min, max);
@@ -44,33 +45,31 @@ t_vec3	clamp_vec_3(t_vec3 v, double min, double max)
 void	check_scene_fields(t_scene *scene, char *line, int n)
 {
 	double		values[N_SCENE_VALUES];
-	size_t		i;
 
-	i = n >= 0 ? i = 0 : i = 0;
-	get_fields(line, values);
-	scene->shadows = round(ft_clamp_d0(values[i++], 0, 1));
-	scene->shading = round(ft_clamp_d0(values[i++], 0, 1));
-	scene->speculars = round(ft_clamp_d0(values[i++], 0, 1));
-	scene->refraction = round(ft_clamp_d0(values[i++], 0, 1));
-	scene->reflection = round(ft_clamp_d0(values[i++], 0, 1));
-	scene->bounces = round(ft_clamp_d0(values[i++], 0, 1));
+	n = 0;
+	get_fields(line, values, N_SCENE_VALUES);
+	scene->scene_config.shadows = round(ft_clamp_d0(values[0], 0, 1));
+	scene->scene_config.shading = round(ft_clamp_d0(values[1], 0, 1));
+	scene->scene_config.speculars = round(ft_clamp_d0(values[2], 0, 1));
+	scene->scene_config.refraction = round(ft_clamp_d0(values[3], 0, 1));
+	scene->scene_config.reflection = round(ft_clamp_d0(values[4], 0, 1));
+	scene->scene_config.bounces = round(ft_clamp_d0(values[5], 0, 1));
 }
 
 void	check_camera_fields(t_scene *scene, char *line, int n)
 {
 	double		values[N_CAMERA_VALUES];
-	size_t		i;
 
-	i = 0;
-	get_fields(line, values);
-	scene->cameras[n]->position = ft_clamp_vec3(ft_make_vec3(values[i++], values[i++], values[i++]), MIN_COORD, MAX_COORD);
-	scene->cameras[n]->target = ft_clamp_vec3(ft_make_vec3(values[i++], values[i++], values[i++]), MIN_COORD, MAX_COORD);
-	scene->cameras[n]->rotation = ft_clamp_vec3(ft_make_vec3(values[i++], values[i++], values[i++]), 0, 360);
-	scene->cameras[n]->fov = ft_clamp_d0(values[i++], MIN_FOV, MAX_FOV);
-	scene->cameras[n]->type = round(ft_clamp_d0(values[i++], 0, CAMERA_TYPES - 1));
-	scene->cameras[n]->aspect = ft_clamp_d0(values[i++], MIN_ASPECT, MAX_ASPECT);
-	scene->cameras[n]->width = round(ft_clamp_d0(values[i++], MIN_WIDTH, MAX_WIDTH));
-	scene->cameras[n]->height = round(ft_clamp_d0(values[i++], MIN_HEIGHT, MAX_HEIGHT));
+	get_fields(line, values, N_CAMERA_VALUES);
+	// camera type missing
+	scene->cameras[n].position = ft_clamp_vec3(ft_make_vec3(values[0], values[1], values[2]), MIN_COORD, MAX_COORD);
+	scene->cameras[n].target = ft_clamp_vec3(ft_make_vec3(values[3], values[4], values[5]), MIN_COORD, MAX_COORD);
+	scene->cameras[n].rotation = ft_clamp_vec3(ft_make_vec3(values[6], values[7], values[8]), 0, 360);
+	scene->cameras[n].fov = ft_clamp_d0(values[9], MIN_FOV, MAX_FOV);
+	scene->cameras[n].type = round(ft_clamp_d0(values[10], 0, CAMERA_TYPES - 1));
+	scene->cameras[n].aspect = ft_clamp_d0(values[11], MIN_ASPECT, MAX_ASPECT);
+	scene->cameras[n].width = round(ft_clamp_d0(values[12], MIN_WIDTH, MAX_WIDTH));
+	scene->cameras[n].height = round(ft_clamp_d0(values[13], MIN_HEIGHT, MAX_HEIGHT));
 
 }
 
@@ -80,28 +79,28 @@ void	check_shape_fields(t_scene *scene, char *line, int n)
 	size_t		i;
 
 	i = 0;
-	get_fields(line, values);
-	scene->objects[n]->position = ft_clamp_vec3(ft_make_vec3(values[i++], values[i++], values[i++]), MIN_COORD, MAX_COORD);
-	scene->objects[n]->target = ft_clamp_vec3(ft_make_vec3(values[i++], values[i++], values[i++]), MIN_COORD, MAX_COORD);
-	scene->objects[n]->rotation = ft_clamp_vec3(ft_make_vec3(values[i++], values[i++], values[i++]), 0, 360);
-	scene->objects[n]->scale = ft_clamp_vec3(ft_make_vec3(values[i++], values[i++], values[i++]), MIN_SCALE, MAX_SCALE);
-	scene->objects[n]->color = ft_clamp_rgba(ft_make_rgba(values[i++], values[i++], values[i++], values[i++]));
-	scene->objects[n]->radius = ft_clamp_d(values[i++], MIN_RADIUS, MAX_RADIUS);
-	scene->objects[n]->angle = ft_clamp_d(values[i++], MIN_ANGLE, MAX_ANGLE);
-	scene->objects[n]->opacity = ft_clamp_d(values[i++], 0, 1);
+	get_fields(line, values, N_SHAPE_VALUES);
+	// shape type missing
+	scene->shapes[n].position = ft_clamp_vec3(ft_make_vec3(values[0], values[1], values[2]), MIN_COORD, MAX_COORD);
+	scene->shapes[n].target = ft_clamp_vec3(ft_make_vec3(values[3], values[4], values[5]), MIN_COORD, MAX_COORD);
+	scene->shapes[n].rotation = ft_clamp_vec3(ft_make_vec3(values[6], values[7], values[8]), 0, 360);
+	scene->shapes[n].scale = ft_clamp_vec3(ft_make_vec3(values[9], values[10], values[11]), MIN_SCALE, MAX_SCALE);
+	scene->shapes[n].color = ft_clamp_rgba(ft_make_rgba(values[12], values[13], values[14], values[i]));
+	scene->shapes[n].radius = ft_clamp_d(values[15], MIN_RADIUS, MAX_RADIUS);
+	scene->shapes[n].angle = ft_clamp_d(values[16], MIN_ANGLE, MAX_ANGLE);
+	scene->shapes[n].opacity = ft_clamp_d(values[17], 0, 1);
 }
 
-void	check_light_fields(char *line, int n)
+void	check_light_fields(t_scene *scene, char *line, int n)
 {
 	double		values[N_LIGHT_VALUES];
-	size_t		i;
-
-	i = 0;
-	get_fields(line, values);
-	scene->objects[n]->position = ft_clamp_vec3(ft_make_vec3(values[i++], values[i++], values[i++]), MIN_COORD, MAX_COORD);
-	scene->objects[n]->color = ft_clamp_rgba(ft_make_rgba(values[i++], values[i++], values[i++], values[i++]));
-	scene->objects[n]->type = round(ft_clamp_d0(values[i++], 0, LIGHT_TYPES - 1));
-	scene->objects[n]->intensity = ft_clamp_d(values[i++], MIN_INTENSITY, MAX_INTENSITY);
+	
+	get_fields(line, values, N_LIGHT_VALUES);
+	// light type missing
+	scene->lights[n].position = ft_clamp_vec3(ft_make_vec3(values[0], values[1], values[2]), MIN_COORD, MAX_COORD);
+	scene->lights[n].color = ft_clamp_rgba(ft_make_rgba(values[3], values[4], values[5], 1.0));
+	scene->lights[n].type = round(ft_clamp_d0(values[6], 0, LIGHT_TYPES - 1));
+	scene->lights[n].intensity = ft_clamp_d(values[7], MIN_INTENSITY, MAX_INTENSITY);
 }
 
 t_objects g_objects[N_OBJECTS] =
@@ -121,7 +120,7 @@ void exit_message(char *str)
 	exit(1);
 }
 
-int			handle_line(char *str)
+int			handle_line(t_scene *scene, char *str)
 {
 	int i;
 	int	object_num[4];
@@ -135,7 +134,7 @@ int			handle_line(char *str)
 	{
 		if (ft_strncmp(str, g_objects[i].object, 4) == 0)
 		{
-			g_objects[i].func(str, object_num[g_objects[i].type]);
+			g_objects[i].func(scene, str, object_num[g_objects[i].type]);
 			object_num[g_objects[i].type]++;
 		}
 		i++;
@@ -148,7 +147,8 @@ int		init_scene(char *str, t_scene *scene)
 {
 	int		fd;
 	char	*line;
-
+	int		i;
+	
 	scene->num_all[0] = 0;
 	scene->num_all[1] = 0;
 	scene->num_all[2] = 0;
@@ -162,6 +162,7 @@ int		init_scene(char *str, t_scene *scene)
 		exit_message("Invalid file");
 	while (ft_get_next_line(fd, &line) > 0)
 	{
+		i = 0;
 		while (i < N_OBJECTS)
 		{
 			if (ft_strncmp(str, g_objects[i].object, 4) == 0)
@@ -178,10 +179,11 @@ int		init_scene(char *str, t_scene *scene)
 	scene->num_cameras = scene->num_all[CAMERA];
 	scene->num_shapes = scene->num_all[SHAPE];
 	scene->num_lights = scene->num_all[LIGHT];
+	// need to allocate memory for all object types
 	return (1);
 }
 
-t_scene		*read_scene(char *file, t_rt *rt)
+t_scene		*read_scene(char *file)
 {
 	int		fd;
 	char	*line;
@@ -196,7 +198,7 @@ t_scene		*read_scene(char *file, t_rt *rt)
 		exit_message("Invalid file");
 	while (ft_get_next_line(fd, &line) > 0)
 	{
-		handle_line(line);
+		handle_line(scene, line);
 		free(line);
 	}
 	close(fd);

@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/05 16:46:42 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/06 09:28:46 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,10 @@
 # define MAX_ANGLE 90
 # define MIN_FOV 45
 # define MAX_FOV 180
-# define MIN_INTENSITY 0f
-# define MAX_INTENSITY 1000f
-# define MIN_ASPECT 0.5f
-# define MAX_ASPECT 2.0f
+# define MIN_INTENSITY 0
+# define MAX_INTENSITY 1000
+# define MIN_ASPECT 0.5
+# define MAX_ASPECT 2.0
 # define CAMERA_TYPES 2
 # define LIGHT_TYPES 2
 
@@ -58,13 +58,13 @@ typedef enum	e_camera_type
 {
 	PERSPECTIVE,
 	ORTHOGRAPHIC
-}
+}				t_camera_type;
 
 typedef enum	e_light_type
 {
 	POINT,
 	DIRECTIONAL
-}
+}				t_light_type;
 
 typedef enum	e_obj_type
 {
@@ -72,7 +72,7 @@ typedef enum	e_obj_type
 	CAMERA,
 	SHAPE,
 	LIGHT
-}
+}				t_obj_type;
 
 typedef enum	e_shape_type
 {
@@ -81,9 +81,8 @@ typedef enum	e_shape_type
 	CONE,
 	CYLINDER,
 	DISC
-}
+}				e_shape_type;
 
-typedef void		(*t_object_func)(t_scene *scene, char *line, int n);
 
 typedef struct		s_shape
 {
@@ -94,9 +93,11 @@ typedef struct		s_shape
 	t_vec3			scale;
 	t_rgba			color;
 	double			radius;
+	double			angle;
+	double			opacity;
 }					t_shape;
 
-typedef				s_scene
+typedef	struct		s_scene_config
 {
 	int				shadows;
 	int				shading;
@@ -104,36 +105,37 @@ typedef				s_scene
 	int				refraction;
 	int				reflection;
 	int				bounces;
-}					t_scene;
+}					t_scene_config;
 
-typedef				s_camera
+typedef struct		s_camera
 {
 	t_vec3			position;
 	t_vec3			target;
 	t_vec3			rotation;
 	double			fov;
-	e_camera_type	type;
+	t_camera_type	type;
 	double			aspect;
 	int				width;
 	int				height;
 }					t_camera;
 
-typedef				s_light
+typedef struct		s_light
 {
 	t_vec3			position;
 	t_rgba			color;
-	e_light_type	type;
+	t_light_type	type;
 	double			intensity;
 }					t_light;
 
 typedef struct		s_object
 {
-	e_obj_type		type;
+	t_obj_type		type;
 	void			*data;
 }					t_object;
 
 typedef struct		s_scene
 {
+	t_scene_config	scene_config;
 	size_t			num_all[4];
 	t_object		*objects;
 	size_t			num_objects;
@@ -147,12 +149,11 @@ typedef struct		s_scene
 
 typedef struct		s_rt
 {
-	t_scene			*scenes;
+	t_scene			**scenes;
 	size_t			num_scenes;
 }					t_rt;
 
-
-
+typedef void		(*t_object_func)(t_scene *scene, char *line, int n);
 
 typedef struct		s_objects
 {
@@ -161,7 +162,7 @@ typedef struct		s_objects
 	int				type;
 }					t_objects;
 
-void exit_message(char *str);
-t_scene		*read_scene(char *file, t_rt *rt);
+void				exit_message(char *str);
+t_scene				*read_scene(char *file);
 
 #endif
