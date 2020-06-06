@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/06 17:09:02 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/06 17:12:42 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -289,7 +289,7 @@ void		print_scene_info(t_scene *scene)
 	i = 0;
 	while (i < scene->num_lights)
 	{
-		ft_printf("\ttype: %d %.2f ", scene->lights[i].type, scene->lights[i].intensity);
+		ft_printf("\ttype: %d intensity: %.2f ", scene->lights[i].type, scene->lights[i].intensity);
 		print_vec3("pos:", scene->lights[i].position);
 		print_rgba(" color:", scene->lights[i].color);
 		ft_printf("\n");
