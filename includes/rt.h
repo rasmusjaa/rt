@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/06 13:56:24 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/06 14:08:17 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,13 @@ typedef enum	e_light_type
 	DIRECTIONAL
 }				t_light_type;
 
-typedef enum	e_obj_type
+typedef enum	e_object_type
 {
-	SCENE,
+	SETTINGS,
 	CAMERA,
 	SHAPE,
 	LIGHT
-}				t_obj_type;
+}				t_object_type;
 
 typedef enum	e_shape_type
 {
@@ -133,7 +133,7 @@ typedef struct		s_light
 
 typedef struct		s_object
 {
-	t_obj_type		type;
+	t_object_type		type;
 	void			*data;
 }					t_object;
 
