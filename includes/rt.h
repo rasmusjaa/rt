@@ -6,12 +6,26 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/06 09:28:46 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/06 13:56:24 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RT_H
 # define RT_H
+
+# include "color.h"
+# include "ft_get_next_line.h"
+# include "ft_hashtable.h"
+# include "ft_printf.h"
+# include "ft_queue.h"
+# include "ft_stack.h"
+# include "libft.h"
+# include "matrix.h"
+# include "vector.h"
+# include "mlx.h"
+# include <math.h>
+# include <pthread.h>
+# include <fcntl.h>
 
 # define N_OBJECTS 7
 # define N_SCENE_VALUES 6
@@ -40,19 +54,8 @@
 # define CAMERA_TYPES 2
 # define LIGHT_TYPES 2
 
-# include "color.h"
-# include "ft_get_next_line.h"
-# include "ft_hashtable.h"
-# include "ft_printf.h"
-# include "ft_queue.h"
-# include "ft_stack.h"
-# include "libft.h"
-# include "matrix.h"
-# include "vector.h"
-# include "mlx.h"
-# include <math.h>
-# include <pthread.h>
-# include <fcntl.h>
+# define MIN_BOUNCES 1
+# define MAX_BOUNCES 100
 
 typedef enum	e_camera_type
 {
@@ -81,12 +84,12 @@ typedef enum	e_shape_type
 	CONE,
 	CYLINDER,
 	DISC
-}				e_shape_type;
+}				t_shape_type;
 
 
 typedef struct		s_shape
 {
-	e_shape_type	shape_type;
+	t_shape_type	type;
 	t_vec3			position;
 	t_vec3			target;
 	t_vec3			rotation;
@@ -99,9 +102,10 @@ typedef struct		s_shape
 
 typedef	struct		s_scene_config
 {
+	char			*filepath;
 	int				shadows;
 	int				shading;
-	int				speculars;
+	int				specular;
 	int				refraction;
 	int				reflection;
 	int				bounces;
@@ -164,5 +168,6 @@ typedef struct		s_objects
 
 void				exit_message(char *str);
 t_scene				*read_scene(char *file);
+void				print_scene_info(t_scene *scene);
 
 #endif

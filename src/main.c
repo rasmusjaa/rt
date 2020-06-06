@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 14:59:56 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/06 09:29:01 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/06 13:57:19 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int		main(int ac, char **av)
 	t_rt	*rt;
 	int		i;
 
-	rt = init_rt(ac);
+	rt = init_rt(ac - 1);
 	i = 0;
 	if (ac == 1)
 		exit_message("Usage:");
@@ -38,6 +38,7 @@ int		main(int ac, char **av)
 		while (i < ac - 1)
 		{
 			rt->scenes[i] = read_scene(av[i + 1]);
+			print_scene_info(rt->scenes[i]);
 			i++;
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/06 09:45:21 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/06 14:02:52 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	get_fields(char *line, double *values, int num_values)
 	int field;
 
 	i = 0;
-	field = 0;
+	field = -1;
 	while (line[i])
 	{
 		if (line[i] == ';')
@@ -50,10 +50,10 @@ void	check_scene_fields(t_scene *scene, char *line, int n)
 	get_fields(line, values, N_SCENE_VALUES);
 	scene->scene_config.shadows = round(ft_clamp_d0(values[0], 0, 1));
 	scene->scene_config.shading = round(ft_clamp_d0(values[1], 0, 1));
-	scene->scene_config.speculars = round(ft_clamp_d0(values[2], 0, 1));
+	scene->scene_config.specular = round(ft_clamp_d0(values[2], 0, 1));
 	scene->scene_config.refraction = round(ft_clamp_d0(values[3], 0, 1));
 	scene->scene_config.reflection = round(ft_clamp_d0(values[4], 0, 1));
-	scene->scene_config.bounces = round(ft_clamp_d0(values[5], 0, 1));
+	scene->scene_config.bounces = round(ft_clamp_d0(values[5], MIN_BOUNCES, MAX_BOUNCES));
 }
 
 void	check_camera_fields(t_scene *scene, char *line, int n)
@@ -61,7 +61,6 @@ void	check_camera_fields(t_scene *scene, char *line, int n)
 	double		values[N_CAMERA_VALUES];
 
 	get_fields(line, values, N_CAMERA_VALUES);
-	// camera type missing
 	scene->cameras[n].position = ft_clamp_vec3(ft_make_vec3(values[0], values[1], values[2]), MIN_COORD, MAX_COORD);
 	scene->cameras[n].target = ft_clamp_vec3(ft_make_vec3(values[3], values[4], values[5]), MIN_COORD, MAX_COORD);
 	scene->cameras[n].rotation = ft_clamp_vec3(ft_make_vec3(values[6], values[7], values[8]), 0, 360);
@@ -73,6 +72,23 @@ void	check_camera_fields(t_scene *scene, char *line, int n)
 
 }
 
+static t_shape_type	get_shape_type(char *line)
+{
+	if (ft_strncmp(line, "sphe", 4) == 0)
+		return (SPHERE);
+	else if (ft_strncmp(line, "plan", 4) == 0)
+		return (PLANE);
+	else if (ft_strncmp(line, "cone", 4) == 0)
+		return (CONE);
+	else if (ft_strncmp(line, "cyli", 4) == 0)
+		return (CYLINDER);
+	else if (ft_strncmp(line, "disc", 4) == 0)
+		return (DISC);
+	else
+		ft_printf("Error reading shape from: %s\n", line);
+	return (-1);
+}
+
 void	check_shape_fields(t_scene *scene, char *line, int n)
 {
 	double		values[N_SHAPE_VALUES];
@@ -80,7 +96,7 @@ void	check_shape_fields(t_scene *scene, char *line, int n)
 
 	i = 0;
 	get_fields(line, values, N_SHAPE_VALUES);
-	// shape type missing
+	scene->shapes[n].type = get_shape_type(line);
 	scene->shapes[n].position = ft_clamp_vec3(ft_make_vec3(values[0], values[1], values[2]), MIN_COORD, MAX_COORD);
 	scene->shapes[n].target = ft_clamp_vec3(ft_make_vec3(values[3], values[4], values[5]), MIN_COORD, MAX_COORD);
 	scene->shapes[n].rotation = ft_clamp_vec3(ft_make_vec3(values[6], values[7], values[8]), 0, 360);
@@ -96,7 +112,6 @@ void	check_light_fields(t_scene *scene, char *line, int n)
 	double		values[N_LIGHT_VALUES];
 	
 	get_fields(line, values, N_LIGHT_VALUES);
-	// light type missing
 	scene->lights[n].position = ft_clamp_vec3(ft_make_vec3(values[0], values[1], values[2]), MIN_COORD, MAX_COORD);
 	scene->lights[n].color = ft_clamp_rgba(ft_make_rgba(values[3], values[4], values[5], 1.0));
 	scene->lights[n].type = round(ft_clamp_d0(values[6], 0, LIGHT_TYPES - 1));
@@ -105,7 +120,7 @@ void	check_light_fields(t_scene *scene, char *line, int n)
 
 t_objects g_objects[N_OBJECTS] =
 {
-	{"scen", check_scene_fields, SCENE},
+	{"sett", check_scene_fields, SCENE},
 	{"came", check_camera_fields, CAMERA},
 	{"sphe", check_shape_fields, SHAPE},
 	{"plan", check_shape_fields, SHAPE},
@@ -114,9 +129,9 @@ t_objects g_objects[N_OBJECTS] =
 	{"spot", check_light_fields, LIGHT}
 };
 
-void exit_message(char *str)
+void exit_message(char *error)
 {
-	ft_putendl_fd(str, 2);
+	ft_putendl_fd(error, 2);
 	exit(1);
 }
 
@@ -143,7 +158,7 @@ int			handle_line(t_scene *scene, char *str)
 	return (0);
 }
 
-int		init_scene(char *str, t_scene *scene)
+int		init_scene(char *file, t_scene *scene)
 {
 	int		fd;
 	char	*line;
@@ -153,19 +168,17 @@ int		init_scene(char *str, t_scene *scene)
 	scene->num_all[1] = 0;
 	scene->num_all[2] = 0;
 	scene->num_all[3] = 0;
-	// init_scenes();
-	// init_cameras();
-	// init_shapes();
+	scene->scene_config.filepath = file;
 
-	fd = open(str, O_RDONLY);
+	fd = open(file, O_RDONLY);
 	if (fd < 0)
-		exit_message("Invalid file");
+		exit_message("Error loading file!");
 	while (ft_get_next_line(fd, &line) > 0)
 	{
 		i = 0;
 		while (i < N_OBJECTS)
 		{
-			if (ft_strncmp(str, g_objects[i].object, 4) == 0)
+			if (ft_strncmp(line, g_objects[i].object, 4) == 0)
 			{
 				scene->num_all[g_objects[i].type]++;
 				scene->num_objects++;
@@ -175,11 +188,12 @@ int		init_scene(char *str, t_scene *scene)
 		free(line);
 	}
 	close(fd);
-	// scene->num_scenes = scene->num_all[SCENE];
 	scene->num_cameras = scene->num_all[CAMERA];
 	scene->num_shapes = scene->num_all[SHAPE];
 	scene->num_lights = scene->num_all[LIGHT];
-	// need to allocate memory for all object types
+	scene->cameras = (t_camera*)malloc(sizeof(t_camera) * scene->num_cameras);
+	scene->shapes = (t_shape*)malloc(sizeof(t_shape) * scene->num_shapes);
+	scene->lights = (t_light*)malloc(sizeof(t_light) * scene->num_lights);
 	return (1);
 }
 
@@ -203,4 +217,42 @@ t_scene		*read_scene(char *file)
 	}
 	close(fd);
 	return (scene);
+}
+
+void		print_scene_info(t_scene *scene)
+{
+	size_t i;
+
+	// settings
+	ft_printf("scene\n\tfile: %s shadows: %d shading: %d specular: %d refraction: %d reflection: %d bounces %d\n",
+		scene->scene_config.filepath,
+		scene->scene_config.shadows,
+		scene->scene_config.shading,
+		scene->scene_config.specular,
+		scene->scene_config.refraction,
+		scene->scene_config.reflection, 
+		scene->scene_config.bounces);
+	// cameras
+	i = 0;
+	while (i < scene->num_cameras)
+	{
+		ft_printf("camera\n\ttype: %d\n", scene->cameras[i].type);
+		i++;
+	}
+
+	// lights
+	i = 0;
+	while (i < scene->num_lights)
+	{
+		ft_printf("light\n\ttype: %d\n", scene->lights[i].type);
+		i++;
+	}
+
+	// shapes
+	i = 0;
+	while (i < scene->num_shapes)
+	{
+		ft_printf("shape\n\ttype: %d\n", scene->shapes[i].type);
+		i++;
+	}
 }
