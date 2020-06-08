@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/08 11:55:30 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/08 12:46:19 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,18 +148,19 @@ t_unique_obj g_unique_objs[N_UNIQUE_OBJS] =
 	{POINT_LIGHT_STR, check_light_fields, LIGHT}
 };
 
-int			handle_line(t_scene *scene, char *line, int *object_num)
+int			handle_line(t_scene *scene, char *line/*, int *object_num*/)
 {
 	int i;
+	int n;
 
 	i = 0;
 	while (i < N_UNIQUE_OBJS)
 	{
 		if (ft_strncmp(line, g_unique_objs[i].obj_str, ft_strlen(g_unique_objs[i].obj_str)) == 0)
 		{
-
-			g_unique_objs[i].func(scene, line, object_num[(int)g_unique_objs[i].type]);
-			object_num[g_unique_objs[i].type]++;
+			scene->num_all[g_unique_objs[i].type]--;
+			n = scene->num_all[(int)g_unique_objs[i].type];
+			g_unique_objs[i].func(scene, line, n);
 		}
 		i++;
 	}
@@ -211,11 +212,11 @@ t_scene		*read_scene(char *file)
 	char	*line;
 	t_scene *scene;
 
-	int	object_num[4];
-	object_num[0] = 0;
-	object_num[1] = 0;
-	object_num[2] = 0;
-	object_num[3] = 0;
+	// int	object_num[N_OBJ_TYPES];
+	// object_num[0] = 0;
+	// object_num[1] = 0;
+	// object_num[2] = 0;
+	// object_num[3] = 0;
 
 	if (!(scene = (t_scene*)malloc(sizeof(t_scene))))
 		exit_message("Failed to malloc scene!");
@@ -226,7 +227,7 @@ t_scene		*read_scene(char *file)
 		exit_message("Invalid file");
 	while (ft_get_next_line(fd, &line) > 0)
 	{
-		handle_line(scene, line, object_num);
+		handle_line(scene, line/*, object_num*/);
 		free(line);
 	}
 	close(fd);

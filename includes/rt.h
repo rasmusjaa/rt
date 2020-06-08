@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/08 11:40:41 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/08 11:57:42 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # include <pthread.h>
 # include <fcntl.h>
 
+# define N_OBJ_TYPES 4
 # define N_UNIQUE_OBJS 8
 # define N_SCENE_VALUES 6
 # define N_CAMERA_VALUES 14
@@ -153,7 +154,7 @@ typedef struct		s_object
 typedef struct		s_scene
 {
 	t_scene_config	scene_config;
-	size_t			num_all[4];
+	size_t			num_all[N_OBJ_TYPES];
 	t_object		*objects;
 	size_t			num_objects;
 	t_camera		*cameras;
