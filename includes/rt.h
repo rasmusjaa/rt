@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/06 16:53:47 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/08 11:40:41 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,6 +187,9 @@ typedef struct		s_shape_name_type_map
 
 void				exit_message(char *str);
 t_scene				*read_scene(char *file);
+
 void				print_scene_info(t_scene *scene);
+void				print_vec3(char *s, t_vec3 v);
+void				print_rgba(char *s, t_rgba c);
 
 #endif
