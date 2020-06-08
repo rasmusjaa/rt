@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/06 17:12:42 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/08 10:57:52 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,6 @@ void	get_fields(char *line, double *values, int num_values)
 		}
 		i++;
 	}
-}
-
-t_vec3	ft_clamp_vec3(t_vec3 v, double min, double max)
-{
-	ft_clamp_d(v.x, min, max);
-	ft_clamp_d(v.y, min, max);
-	ft_clamp_d(v.z, min, max);
-	return (v);
 }
 
 void	check_scene_fields(t_scene *scene, char *line, int n)
@@ -133,7 +125,7 @@ void	check_shape_fields(t_scene *scene, char *line, int n)
 void	check_light_fields(t_scene *scene, char *line, int n)
 {
 	double		values[N_LIGHT_VALUES];
-	
+
 	get_fields(line, values, N_LIGHT_VALUES);
 	scene->lights[n].position = ft_clamp_vec3(ft_make_vec3(values[0], values[1], values[2]), MIN_COORD, MAX_COORD);
 	scene->lights[n].color = ft_clamp_rgba(ft_make_rgba(values[3], values[4], values[5], 1.0));
@@ -170,7 +162,7 @@ int			handle_line(t_scene *scene, char *line, int *object_num)
 	{
 		if (ft_strncmp(line, g_unique_objs[i].obj_str, ft_strlen(g_unique_objs[i].obj_str)) == 0)
 		{
-			
+
 			g_unique_objs[i].func(scene, line, object_num[(int)g_unique_objs[i].type]);
 			object_num[g_unique_objs[i].type]++;
 		}
@@ -184,7 +176,7 @@ int		init_scene(char *file, t_scene *scene)
 	int		fd;
 	char	*line;
 	int		i;
-	
+
 	scene->num_all[0] = 0;
 	scene->num_all[1] = 0;
 	scene->num_all[2] = 0;
@@ -269,7 +261,7 @@ void		print_scene_info(t_scene *scene)
 		scene->scene_config.shading,
 		scene->scene_config.specular,
 		scene->scene_config.refraction,
-		scene->scene_config.reflection, 
+		scene->scene_config.reflection,
 		scene->scene_config.bounces);
 	// cameras
 	ft_printf("cameras %d\n", scene->num_cameras);
