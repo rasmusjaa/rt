@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rt.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/09 15:51:38 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/06/10 17:03:00 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,17 @@ typedef struct		s_scene
 	t_shape			*shapes;
 	size_t			num_shapes;
 }					t_scene;
+
+typedef struct	s_mlx_img
+{
+	void		*img;
+	char		*d_addr;
+	int			bpp;
+	int			size_line;
+	int			endian;
+	int			width;
+	int			height;
+}				t_mlx_img;
 
 typedef struct		s_mlx
 {
