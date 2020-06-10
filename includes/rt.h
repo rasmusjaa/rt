@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rt.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/08 11:57:42 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/09 15:51:38 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@
 # include <math.h>
 # include <pthread.h>
 # include <fcntl.h>
+
+# define N_THREADS 10
 
 # define N_OBJ_TYPES 4
 # define N_UNIQUE_OBJS 8
@@ -159,17 +161,37 @@ typedef struct		s_scene
 	size_t			num_objects;
 	t_camera		*cameras;
 	size_t			num_cameras;
+	size_t			cur_camera;
 	t_light			*lights;
 	size_t			num_lights;
 	t_shape			*shapes;
 	size_t			num_shapes;
 }					t_scene;
 
+typedef struct		s_mlx
+{
+	void		*mlx_ptr;
+	void		*win_ptr;
+	void		*img_ptr;
+	char		*data_addr;
+	int			bpp;
+	int			size_line;
+	int			endian;
+}					t_mlx;
+
 typedef struct		s_rt
 {
-	t_scene			**scenes;
+	t_mlx 			*mlx;
+	t_scene 		**scenes;
 	size_t			num_scenes;
+	size_t 			cur_scene;
 }					t_rt;
+
+typedef struct		s_thread
+{
+	t_rt 			*rt;
+	int				thread;
+}					t_thread;
 
 typedef void		(*t_object_func)(t_scene *scene, char *line, int n);
 
@@ -186,11 +208,25 @@ typedef struct		s_shape_name_type_map
 	t_shape_type	type;
 }					t_shape_name_type_map;
 
-void				exit_message(char *str);
+void hooks_and_loop(t_rt *rt);
+void refresh_scene(t_rt *rt, int scene_nb, char *file);
+void load_scene(t_rt *rt, int scene_nb);
+
+void exit_message(char *str);
 t_scene				*read_scene(char *file);
 
 void				print_scene_info(t_scene *scene);
 void				print_vec3(char *s, t_vec3 v);
 void				print_rgba(char *s, t_rgba c);
+
+int mouse_press_hook(int button, int x, int y, t_rt *rt);
+int mouse_release_hook(int button, int x, int y, t_rt *rt);
+int mouse_move_hook(int x, int y, t_rt *rt);
+
+int key_press_hook(int key, t_rt *rt);
+int key_release_hook(int key, t_rt *rt);
+
+int	close_hook(t_rt *rt);
+int expose_hook(t_rt *rt);
 
 #endif

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: wkorande <willehard@gmail.com>             +#+  +:+       +#+         #
+#    By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/01 15:48:04 by rjaakonm          #+#    #+#              #
-#    Updated: 2020/06/08 11:49:55 by wkorande         ###   ########.fr        #
+#    Updated: 2020/06/09 15:10:52 by rjaakonm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,9 @@ SRCDIR = src
 
 SRC =	scene/read_csv.c\
 		debug/debug.c\
+		event_hooks/keyboard.c \
+		event_hooks/mouse.c \
+		event_hooks/window.c \
 		main.c
 
 SRCS = $(addprefix $(SRCDIR)/, $(SRC))
@@ -26,7 +29,13 @@ OBJS = $(SRCS:.c=.o)
 
 INCL = -I libft/includes/ -I includes
 
-LIB = -L libft -lft -lm
+UNAME_S := $(shell uname -s)
+    ifeq ($(UNAME_S),Linux) # On Linux
+        LIB = -L libft -lft -lmlx -lm -lXext -lX11 -pthread
+    endif
+    ifeq ($(UNAME_S),Darwin) # On MacOS
+        LIB = -L libft -lft -lmlx -framework OpenGL -framework AppKit # tarviiko -lm?
+    endif
 
 CC = clang
 
@@ -51,7 +60,7 @@ fclean: clean
 re: fclean all
 
 run:
-	$(CC) $(CFLAGS) $(INCL) $(SRCS) $(LIB) -o $(NAME) -O2
-	./readtest scene1.csv
+	$(CC) $(CFLAGS) $(INCL) $(SRCS) $(LIB) -o $(NAME)
+	./rt resources/scene1.csv
 
-.PHONY: all libftmake clean fclean re run
+.PHONY: all libftmake clean fclean re run debug

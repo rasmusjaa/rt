@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_csv.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/08 12:46:19 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/09 14:06:13 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	check_scene_fields(t_scene *scene, char *line, int n)
 	scene->scene_config.specular = round(ft_clamp_d0(values[2], 0, 1));
 	scene->scene_config.refraction = round(ft_clamp_d0(values[3], 0, 1));
 	scene->scene_config.reflection = round(ft_clamp_d0(values[4], 0, 1));
-	scene->scene_config.bounces = round(ft_clamp_d0(values[5], MIN_BOUNCES, MAX_BOUNCES));
+	scene->scene_config.bounces = round(ft_clamp_d(values[5], MIN_BOUNCES, MAX_BOUNCES));
 }
 
 void	check_camera_fields(t_scene *scene, char *line, int n)
@@ -65,11 +65,11 @@ void	check_camera_fields(t_scene *scene, char *line, int n)
 	scene->cameras[n].position = ft_clamp_vec3(ft_make_vec3(values[0], values[1], values[2]), MIN_COORD, MAX_COORD);
 	scene->cameras[n].target = ft_clamp_vec3(ft_make_vec3(values[3], values[4], values[5]), MIN_COORD, MAX_COORD);
 	scene->cameras[n].rotation = ft_clamp_vec3(ft_make_vec3(values[6], values[7], values[8]), 0, 360);
-	scene->cameras[n].fov = ft_clamp_d0(values[9], MIN_FOV, MAX_FOV);
+	scene->cameras[n].fov = ft_clamp_d(values[9], MIN_FOV, MAX_FOV);
 	scene->cameras[n].type = round(ft_clamp_d0(values[10], 0, CAMERA_TYPES - 1));
-	scene->cameras[n].aspect = ft_clamp_d0(values[11], MIN_ASPECT, MAX_ASPECT);
-	scene->cameras[n].width = round(ft_clamp_d0(values[12], MIN_WIDTH, MAX_WIDTH));
-	scene->cameras[n].height = round(ft_clamp_d0(values[13], MIN_HEIGHT, MAX_HEIGHT));
+	scene->cameras[n].aspect = ft_clamp_d(values[11], MIN_ASPECT, MAX_ASPECT);
+	scene->cameras[n].width = round(ft_clamp_d(values[12], MIN_WIDTH, MAX_WIDTH));
+	scene->cameras[n].height = round(ft_clamp_d(values[13], MIN_HEIGHT, MAX_HEIGHT));
 }
 
 static t_shape_type	get_shape_type(char *line)
@@ -108,7 +108,7 @@ void	check_shape_fields(t_scene *scene, char *line, int n)
 
 	get_fields(line, values, N_SHAPE_VALUES);
 	scene->shapes[n].type = get_shape_type(line);
-	scene->shapes[n].name = get_shape_name(scene->shapes[n].type);
+	scene->shapes[n].name = get_shape_name(scene->shapes[n].type); // eiks taa kannata yhdistaa ylempaan ku looppaa saman asian? tai alemmas kun on kaikki tyypit iffil
 	scene->shapes[n].position = ft_clamp_vec3(ft_make_vec3(values[0], values[1], values[2]), MIN_COORD, MAX_COORD);
 	scene->shapes[n].target = ft_clamp_vec3(ft_make_vec3(values[3], values[4], values[5]), MIN_COORD, MAX_COORD);
 	scene->shapes[n].rotation = ft_clamp_vec3(ft_make_vec3(values[6], values[7], values[8]), 0, 360);
@@ -156,10 +156,13 @@ int			handle_line(t_scene *scene, char *line/*, int *object_num*/)
 	i = 0;
 	while (i < N_UNIQUE_OBJS)
 	{
-		if (ft_strncmp(line, g_unique_objs[i].obj_str, ft_strlen(g_unique_objs[i].obj_str)) == 0)
+		if (ft_strncmp(line, g_unique_objs[i].obj_str, ft_strlen(g_unique_objs[i].obj_str)) == 0) // sama kun alemmassa
 		{
 			scene->num_all[g_unique_objs[i].type]--;
-			n = scene->num_all[(int)g_unique_objs[i].type];
+			n = scene->num_all[(int)g_unique_objs[i].type]; // onks taa etta saa luettuu ne kaanteisesti vaan arrayhin kun objektien arvo kuitenkin muualkin talles?
+			// valo kolmanneks ja if (g_unique_objs[i].type == SHAPE)
+			// scene->shapes[n].type = g_unique_objs[i].type; -2 tai jotain jos haluu
+			// scene->shapes[n].name = g_unique_objs[i].obj_str;
 			g_unique_objs[i].func(scene, line, n);
 		}
 		i++;
@@ -187,7 +190,7 @@ int		init_scene(char *file, t_scene *scene)
 		i = 0;
 		while (i < N_UNIQUE_OBJS)
 		{
-			if (ft_strncmp(line, g_unique_objs[i].obj_str, ft_strlen(g_unique_objs[i].obj_str)) == 0)
+			if (ft_strncmp(line, g_unique_objs[i].obj_str, ft_strlen(g_unique_objs[i].obj_str)) == 0) // hiukan raskas kun kattoo joka rivilla kaikkien pituuden uusiks
 			{
 				scene->num_all[g_unique_objs[i].type]++;
 				scene->num_objects++;
@@ -198,11 +201,13 @@ int		init_scene(char *file, t_scene *scene)
 	}
 	close(fd);
 	scene->num_cameras = scene->num_all[CAMERA];
+	scene->cur_camera = 0;
 	scene->num_shapes = scene->num_all[SHAPE];
 	scene->num_lights = scene->num_all[LIGHT];
-	scene->cameras = (t_camera*)malloc(sizeof(t_camera) * scene->num_cameras);
-	scene->shapes = (t_shape*)malloc(sizeof(t_shape) * scene->num_shapes);
-	scene->lights = (t_light*)malloc(sizeof(t_light) * scene->num_lights);
+	if (!(scene->cameras = (t_camera*)malloc(sizeof(t_camera) * scene->num_cameras)) ||
+	!(scene->shapes = (t_shape*)malloc(sizeof(t_shape) * scene->num_shapes)) ||
+	!(scene->lights = (t_light*)malloc(sizeof(t_light) * scene->num_lights)))
+		return (0);
 	return (1);
 }
 
