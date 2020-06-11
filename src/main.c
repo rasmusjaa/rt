@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 14:59:56 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/11 16:24:50 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/11 17:07:442 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ void	raycast(void *data)
 	else
 		color = 0x00ff00;//ft_make_rgba(0.0, 1.0, 0.0, 1.0);
 	put_pixel_mlx_img(job_data->mlx_img, job_data->screen_coord.x, job_data->screen_coord.y, color);
+	if (job_data->screen_coord.x == 799 && job_data->screen_coord.y == 599)
+		ft_printf("here!\n");
 }
 
 void	render_scene(t_rt *rt, t_scene *scene)
@@ -56,8 +58,9 @@ void	render_scene(t_rt *rt, t_scene *scene)
 	t_vec2i	cur;
 	// t_vec2	screen;
 	t_tp *tp;
+	t_job_data *job_block = (t_job_data*)(malloc(sizeof(t_job_data) * scene->scene_config.height * scene->scene_config.width));
 	
-	tp = tp_create(8);
+	tp = tp_create(0);
 
 	cur.y = 0;
 	while (cur.y < scene->scene_config.height)
@@ -65,21 +68,18 @@ void	render_scene(t_rt *rt, t_scene *scene)
 		cur.x = 0;
 		while (cur.x < scene->scene_config.width)
 		{
-			
-			t_job_data *data = (t_job_data*)malloc(sizeof(t_job_data));
-		//	data->ray = get_camera_ray(scene, &scene->cameras[scene->cur_camera], cur);
-			data->mlx_img = rt->mlx_img;
-			data->scene = scene;
-			data->screen_coord = cur;
-			tp_add_job(tp, raycast, data);
-			// ray = get_camera_ray(&scene->camera, screen.x, screen.y);
-			// put_pixel_mlx_img(env->mlx_img, cur.x, cur.y, ft_get_color(raycast(&ray, env->scene, &hit)));
+			job_block[cur.y * scene->scene_config.width + cur.x].mlx_img = rt->mlx_img;
+			job_block[cur.y * scene->scene_config.width + cur.x].scene = scene;
+			job_block[cur.y * scene->scene_config.width + cur.x].screen_coord = cur;
+			tp_add_job(tp, raycast, &job_block[cur.y * scene->scene_config.width + cur.x]);
 			cur.x++;
 		}
 		cur.y++;
 	}
+	tp_wait(tp);
 	tp_destroy(tp);
 	mlx_put_image_to_window(rt->mlx->mlx_ptr, rt->mlx->win_ptr, rt->mlx_img->img, 0, 0);
+	free(job_block);
 	ft_putendl("test");
 }
 
