@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tp.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <wkorande@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 10:31:02 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/05 12:57:41 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/11 16:29:41 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ void	tp_destroy(t_tp *thread_pool)
 	pthread_cond_broadcast(&(thread_pool->job_cond));
 	pthread_mutex_unlock(&(thread_pool->job_mutex));
 
-	// tp_wait(thread_pool);
+	tp_wait(thread_pool);
 
 	pthread_mutex_destroy(&(thread_pool->job_mutex));
 	pthread_cond_destroy(&(thread_pool->job_cond));

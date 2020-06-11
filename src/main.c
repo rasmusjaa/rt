@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 14:59:56 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/11 16:17:51 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/11 16:24:50 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	render_scene(t_rt *rt, t_scene *scene)
 	// t_vec2	screen;
 	t_tp *tp;
 	
-	tp = tp_create(N_THREADS);
+	tp = tp_create(8);
 
 	cur.y = 0;
 	while (cur.y < scene->scene_config.height)
@@ -78,7 +78,7 @@ void	render_scene(t_rt *rt, t_scene *scene)
 		}
 		cur.y++;
 	}
-	
+	tp_destroy(tp);
 	mlx_put_image_to_window(rt->mlx->mlx_ptr, rt->mlx->win_ptr, rt->mlx_img->img, 0, 0);
 	ft_putendl("test");
 }
@@ -165,9 +165,9 @@ void	refresh_scene(t_rt *rt, int scene_nb, char *file)
 	scene = read_scene(file);
 	window_x = scene->scene_config.width;
 	window_y = scene->scene_config.height;
-	// mlx_destroy_image(rt->mlx->mlx_ptr, rt->mlx_img);
-	rt->mlx_img = create_mlx_image(rt->mlx->mlx_ptr, window_x, window_y);
-	render_scene(rt, scene);
+//	mlx_destroy_image(rt->mlx->mlx_ptr, rt->mlx_img->img);
+//	rt->mlx_img = create_mlx_image(rt->mlx->mlx_ptr, window_x, window_y);
+//	render_scene(rt, scene);
 }
 
 void	load_scene(t_rt *rt, int scene_nb)
