@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/08 11:39:28 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/08 11:45:13 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/11 16:11:07 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	print_scene_info(t_scene *scene)
 		print_vec3(" pos:", scene->cameras[i].position);
 		print_vec3(" target:", scene->cameras[i].target);
 		print_vec3(" rot:", scene->cameras[i].rotation);
-		ft_printf(" fov %.2f aspect: %.2f width: %d height %d\n", scene->cameras[i].fov, scene->cameras[i].aspect, scene->cameras[i].width, scene->cameras[i].height);
+		ft_printf(" fov %.2f aspect: %.2f\n", scene->cameras[i].fov, scene->cameras[i].aspect);
 		i++;
 	}
 

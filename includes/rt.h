@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/10 17:03:00 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/11 16:10:12 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@
 
 # define N_OBJ_TYPES 4
 # define N_UNIQUE_OBJS 8
-# define N_SCENE_VALUES 6
-# define N_CAMERA_VALUES 14
+# define N_SCENE_VALUES 8
+# define N_CAMERA_VALUES 12
 # define N_SHAPE_VALUES 19
 # define N_LIGHT_VALUES 8
 
@@ -125,6 +125,8 @@ typedef	struct		s_scene_config
 	int				refraction;
 	int				reflection;
 	int				bounces;
+	int				width;
+	int				height;
 }					t_scene_config;
 
 typedef struct		s_camera
@@ -135,9 +137,18 @@ typedef struct		s_camera
 	double			fov;
 	t_camera_type	type;
 	double			aspect;
-	int				width;
-	int				height;
+	t_vec3			forward;
+	t_vec3			right;
+	t_vec3			up;
+	double			horizontal;
+	double			vertical;
 }					t_camera;
+
+typedef struct		s_ray
+{
+	t_vec3			origin;
+	t_vec3			direction;
+}					t_ray;
 
 typedef struct		s_light
 {
@@ -193,6 +204,7 @@ typedef struct		s_mlx
 typedef struct		s_rt
 {
 	t_mlx 			*mlx;
+	t_mlx_img		*mlx_img;
 	t_scene 		**scenes;
 	size_t			num_scenes;
 	size_t 			cur_scene;
@@ -239,5 +251,11 @@ int key_release_hook(int key, t_rt *rt);
 
 int	close_hook(t_rt *rt);
 int expose_hook(t_rt *rt);
+
+t_ray	get_camera_ray(t_scene *scene, t_camera *camera, t_vec2i screen_coord);
+void	init_camera(t_vec3 origin, t_vec3 target, t_camera *camera);
+
+t_mlx_img		*create_mlx_image(t_mlx *mlx, int width, int height);
+void			put_pixel_mlx_img(t_mlx_img *img, int x, int y, int c);
 
 #endif

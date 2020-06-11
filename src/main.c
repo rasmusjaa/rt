@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 14:59:56 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/09 16:51:58 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/06/11 16:17:51 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
+#include "thread_pool.h"
 
-static void	image_set(int x, int y, t_rt *rt, int color)
-{
-	t_camera 	camera;
+// static void	image_set(int x, int y, t_rt *rt, int color)
+// {
+// 	t_camera 	camera;
 
-	camera = rt->scenes[rt->cur_scene]->cameras[rt->scenes[rt->cur_scene]->cur_camera];
-	*(int*)(rt->mlx->data_addr + (((y * camera.width) + x)
-		* rt->mlx->bpp)) = color;
-}
+// 	camera = rt->scenes[rt->cur_scene]->cameras[rt->scenes[rt->cur_scene]->cur_camera];
+// 	*(int*)(rt->mlx->data_addr + (((y * camera.width) + x) * rt->mlx->bpp)) = color;
+// }
 
 int			get_pixel(int x, int y, t_rt *rt)
 {
@@ -28,6 +28,62 @@ int			get_pixel(int x, int y, t_rt *rt)
 	else
 		return (0x00ff00);
 }
+
+typedef struct	s_job_data
+{
+	t_ray		ray;		// camera ray
+	t_scene		*scene;		// scene we check want to raytrace
+	t_mlx_img	*mlx_img; 	// the image the job writes result to
+	t_vec2i		screen_coord;
+}				t_job_data;
+
+void	raycast(void *data)
+{
+	t_job_data *job_data;
+	int color;
+	
+	job_data = (t_job_data *)data;
+	// color = ft_make_rgba(1.0, 0.0, 0.0, 1.0); // scene->ambient_color;
+	if (job_data->screen_coord.x > job_data->screen_coord.y )
+		color = 0xff0000; //ft_make_rgba(1.0, 0.0, 0.0, 1.0);
+	else
+		color = 0x00ff00;//ft_make_rgba(0.0, 1.0, 0.0, 1.0);
+	put_pixel_mlx_img(job_data->mlx_img, job_data->screen_coord.x, job_data->screen_coord.y, color);
+}
+
+void	render_scene(t_rt *rt, t_scene *scene)
+{
+	t_vec2i	cur;
+	// t_vec2	screen;
+	t_tp *tp;
+	
+	tp = tp_create(N_THREADS);
+
+	cur.y = 0;
+	while (cur.y < scene->scene_config.height)
+	{
+		cur.x = 0;
+		while (cur.x < scene->scene_config.width)
+		{
+			
+			t_job_data *data = (t_job_data*)malloc(sizeof(t_job_data));
+		//	data->ray = get_camera_ray(scene, &scene->cameras[scene->cur_camera], cur);
+			data->mlx_img = rt->mlx_img;
+			data->scene = scene;
+			data->screen_coord = cur;
+			tp_add_job(tp, raycast, data);
+			// ray = get_camera_ray(&scene->camera, screen.x, screen.y);
+			// put_pixel_mlx_img(env->mlx_img, cur.x, cur.y, ft_get_color(raycast(&ray, env->scene, &hit)));
+			cur.x++;
+		}
+		cur.y++;
+	}
+	
+	mlx_put_image_to_window(rt->mlx->mlx_ptr, rt->mlx->win_ptr, rt->mlx_img->img, 0, 0);
+	ft_putendl("test");
+}
+
+/*
 
 void		*draw_view(void *data)
 {
@@ -84,10 +140,11 @@ void	multi_thread(t_rt *rt)
 	mlx_put_image_to_window(rt->mlx->mlx_ptr, rt->mlx->win_ptr, rt->mlx->img_ptr, 0, 0);
 	//add_texts(rt);
 }
+*/
 
 void	hooks_and_loop(t_rt *rt)
 {
-	mlx_hook(rt->mlx->win_ptr, 2, (1L << 0), key_press_hook, rt); // onks x mask ok macissakin jos ei 0?
+	mlx_hook(rt->mlx->win_ptr, 2, (1L << 0), key_press_hook, rt);
 	mlx_hook(rt->mlx->win_ptr, 3, (1L << 1), key_release_hook, rt);
 	mlx_hook(rt->mlx->win_ptr, 4, (1L << 2), mouse_press_hook, rt);
 	mlx_hook(rt->mlx->win_ptr, 5, (1L << 3), mouse_release_hook, rt);
@@ -106,11 +163,11 @@ void	refresh_scene(t_rt *rt, int scene_nb, char *file)
 	scene = rt->scenes[scene_nb];
 	// vapauta aiempi scene ja siihen liittyvat?
 	scene = read_scene(file);
-	window_x = scene->cameras[scene->cur_camera].width;
-	window_y = scene->cameras[scene->cur_camera].height;
-	mlx_destroy_image(rt->mlx->mlx_ptr, rt->mlx->img_ptr);
-	rt->mlx->img_ptr = mlx_new_image(rt->mlx->mlx_ptr, window_x, window_y);
-	multi_thread(rt);
+	window_x = scene->scene_config.width;
+	window_y = scene->scene_config.height;
+	// mlx_destroy_image(rt->mlx->mlx_ptr, rt->mlx_img);
+	rt->mlx_img = create_mlx_image(rt->mlx->mlx_ptr, window_x, window_y);
+	render_scene(rt, scene);
 }
 
 void	load_scene(t_rt *rt, int scene_nb)
@@ -120,17 +177,18 @@ void	load_scene(t_rt *rt, int scene_nb)
 	t_scene *scene;
 
 	scene = rt->scenes[scene_nb];
-	window_x = scene->cameras[scene->cur_camera].width;
-	window_y = scene->cameras[scene->cur_camera].height;
+	window_x = scene->scene_config.width;
+	window_y = scene->scene_config.height;
 	if (!(rt->mlx = (t_mlx *)malloc(sizeof(t_mlx))))
 		exit_message("Failed to malloc mlx!");
 	rt->mlx->mlx_ptr = mlx_init();
 	rt->mlx->win_ptr = mlx_new_window(rt->mlx->mlx_ptr, window_x, window_y, "RT");
-	rt->mlx->img_ptr = mlx_new_image(rt->mlx->mlx_ptr, window_x, window_y);
-	rt->mlx->data_addr = mlx_get_data_addr(rt->mlx->img_ptr,
-		&rt->mlx->bpp, &rt->mlx->size_line, &rt->mlx->endian);
-	rt->mlx->bpp /= 8;
-	multi_thread(rt);
+	// rt->mlx->img_ptr = mlx_new_image(rt->mlx->mlx_ptr, window_x, window_y);
+	// rt->mlx->data_addr = mlx_get_data_addr(rt->mlx->img_ptr,
+	// 	&rt->mlx->bpp, &rt->mlx->size_line, &rt->mlx->endian);
+	// rt->mlx->bpp /= 8;
+	rt->mlx_img = create_mlx_image(rt->mlx, window_x, window_y);
+	render_scene(rt, scene);
 }
 
 static t_rt	*init_rt(size_t num_scenes)

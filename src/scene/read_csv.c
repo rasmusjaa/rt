@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_csv.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/09 14:06:13 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/06/11 16:10:14 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ void	check_scene_fields(t_scene *scene, char *line, int n)
 	scene->scene_config.refraction = round(ft_clamp_d0(values[3], 0, 1));
 	scene->scene_config.reflection = round(ft_clamp_d0(values[4], 0, 1));
 	scene->scene_config.bounces = round(ft_clamp_d(values[5], MIN_BOUNCES, MAX_BOUNCES));
+	scene->scene_config.width = round(ft_clamp_d(values[6], MIN_WIDTH, MAX_WIDTH));
+	scene->scene_config.height = round(ft_clamp_d(values[7], MIN_HEIGHT, MAX_HEIGHT));
 }
 
 void	check_camera_fields(t_scene *scene, char *line, int n)
@@ -68,8 +70,6 @@ void	check_camera_fields(t_scene *scene, char *line, int n)
 	scene->cameras[n].fov = ft_clamp_d(values[9], MIN_FOV, MAX_FOV);
 	scene->cameras[n].type = round(ft_clamp_d0(values[10], 0, CAMERA_TYPES - 1));
 	scene->cameras[n].aspect = ft_clamp_d(values[11], MIN_ASPECT, MAX_ASPECT);
-	scene->cameras[n].width = round(ft_clamp_d(values[12], MIN_WIDTH, MAX_WIDTH));
-	scene->cameras[n].height = round(ft_clamp_d(values[13], MIN_HEIGHT, MAX_HEIGHT));
 }
 
 static t_shape_type	get_shape_type(char *line)

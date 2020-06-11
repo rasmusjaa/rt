@@ -6,11 +6,18 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/10 16:00:45 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/10 16:02:19 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/11 16:17:51 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
+#include "libft.h"
+
+static void panic(char *error)
+{
+	ft_putendl(error);
+	exit(EXIT_FAILURE);
+}
 
 t_mlx_img	*create_mlx_image(t_mlx *mlx, int width, int height)
 {

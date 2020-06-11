@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+         #
+#    By: wkorande <willehard@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/01 15:48:04 by rjaakonm          #+#    #+#              #
-#    Updated: 2020/06/09 15:10:52 by rjaakonm         ###   ########.fr        #
+#    Updated: 2020/06/11 16:17:51 by wkorande         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,12 @@ SRC =	scene/read_csv.c\
 		event_hooks/keyboard.c \
 		event_hooks/mouse.c \
 		event_hooks/window.c \
-		main.c
+		camera.c\
+		mlx_image.c\
+		main.c\
+		thread_pool/tp.c\
+		thread_pool/tp_job.c\
+		thread_pool/ft_get_num_procs.c
 
 SRCS = $(addprefix $(SRCDIR)/, $(SRC))
 
@@ -34,7 +39,7 @@ UNAME_S := $(shell uname -s)
         LIB = -L libft -lft -lmlx -lm -lXext -lX11 -pthread
     endif
     ifeq ($(UNAME_S),Darwin) # On MacOS
-        LIB = -L libft -lft -lmlx -framework OpenGL -framework AppKit # tarviiko -lm?
+        LIB = -L libft -lft -lmlx -lm -framework OpenGL -framework AppKit
     endif
 
 CC = clang
