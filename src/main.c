@@ -111,13 +111,12 @@ void	render_scene(t_rt *rt, t_scene *scene)
 			ji++;
 			cur.x += tile_size.x;
 		}
-		mlx_put_image_to_window(rt->mlx->mlx_ptr, rt->mlx->win_ptr, rt->mlx_img->img, 0, 0);
 		cur.y += tile_size.y;
 	}
 	tp_wait(tp);
-	tp_destroy(tp);
 	end = clock();
 	cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+	tp_destroy(tp);
 	mlx_put_image_to_window(rt->mlx->mlx_ptr, rt->mlx->win_ptr, rt->mlx_img->img, 0, 0);
 	free(job_block);
 	ft_printf("rendered in: %.4f s\n", cpu_time_used);
