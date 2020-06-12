@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/11 15:33:45 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/12 12:53:54 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/12 14:03:22 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,10 @@ typedef struct  s_tp
 	pthread_cond_t job_cond;
 	pthread_cond_t working_cond;
 	size_t		working_count;
-	size_t      thread_count;
+	size_t		thread_count;
 	int			stop;
 	t_queue		*job_queue;
-}               t_tp;
+}				t_tp;
 
 t_tp   *tp_create(size_t num_threads);
 void	tp_destroy(t_tp *thread_pool);

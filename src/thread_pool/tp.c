@@ -6,10 +6,11 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 10:31:02 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/12 12:45:28 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/12 14:17:04 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "rt.h"
 #include "thread_pool.h"
 #include <pthread.h>
 
@@ -33,6 +34,7 @@ static void	*tp_worker(void *arg)
 			break ;
 		job = tp_job_get(thread_pool);
 		thread_pool->working_count++;
+		// ft_putendl("add work");
 		pthread_mutex_unlock(&(thread_pool->job_mutex));
 		if (job)
 		{
@@ -41,6 +43,7 @@ static void	*tp_worker(void *arg)
 		}
 		pthread_mutex_lock(&(thread_pool->job_mutex));
 		thread_pool->working_count--;
+		// ft_putendl("done work");
 		if (!thread_pool->stop && thread_pool->working_count == 0 && ft_queue_isempty(thread_pool->job_queue))
 			pthread_cond_signal(&(thread_pool->working_cond));
 		pthread_mutex_unlock(&(thread_pool->job_mutex));
@@ -59,6 +62,7 @@ t_tp	*tp_create(size_t num_threads)
 
 	if (num_threads == 0)
 		num_threads = ft_get_num_procs() + 1;
+	ft_printf("threads: %d\n", num_threads);
 	if (!(thread_pool = (t_tp*)malloc(sizeof(t_tp))))
 		return (NULL);
 	thread_pool->stop = 0;
@@ -67,7 +71,7 @@ t_tp	*tp_create(size_t num_threads)
 	pthread_mutex_init(&(thread_pool->job_mutex), NULL);
 	pthread_cond_init(&(thread_pool->job_cond), NULL);
 	pthread_cond_init(&(thread_pool->working_cond), NULL);
-	thread_pool->job_queue = ft_queue_create(QUEUE_REF, MAX_JOBS, sizeof(t_tp_job));
+	thread_pool->job_queue = ft_queue_create(QUEUE_REF, MAX_JOBS, sizeof(t_tp_job*));
 	i = 0;
 	while (i < num_threads)
 	{
