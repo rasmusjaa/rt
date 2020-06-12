@@ -80,6 +80,8 @@ void	raycast(void *data)
 
 void	render_scene(t_rt *rt, t_scene *scene)
 {
+	clock_t start, end;
+	double cpu_time_used;
 	t_vec2i	cur;
 	t_vec2i tile_size;
 	t_tp *tp;
@@ -92,6 +94,7 @@ void	render_scene(t_rt *rt, t_scene *scene)
 	if (!(job_block = (t_job_data*)(malloc(sizeof(t_job_data) * tile_size.x * tile_size.y))))
 		exit_message("Failed to allocate memory for thread pool jobs!");
 	tp = tp_create(N_THREADS);
+	start = clock();
 	ji = 0;
 	cur.y = 0;
 	while (cur.y < scene->scene_config.height)
@@ -113,9 +116,11 @@ void	render_scene(t_rt *rt, t_scene *scene)
 	}
 	tp_wait(tp);
 	tp_destroy(tp);
+	end = clock();
+	cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 	mlx_put_image_to_window(rt->mlx->mlx_ptr, rt->mlx->win_ptr, rt->mlx_img->img, 0, 0);
 	free(job_block);
-	ft_putendl("done");
+	ft_printf("rendered in: %.4f s\n", cpu_time_used);
 }
 
 /*
