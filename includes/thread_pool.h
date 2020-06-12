@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/11 15:33:45 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/11 15:36:06 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/12 12:53:54 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include "libft.h"
 # include "ft_queue.h"
 
-# define MAX_JOBS 10000
+# define MAX_JOBS 1000
 
 typedef void (*tp_thread_func)(void *arg);
 

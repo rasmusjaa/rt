@@ -53,12 +53,12 @@ void	raycast(void *data)
 		if (tile_coord.y % 2 == 0)
 			color = 0xffffff;
 		else
-			color = 0;
+			color = 0xff0000;
 	}
 	else
 	{
 		if (tile_coord.y % 2 == 0)
-			color = 0;
+			color = 0xff0000;
 		else
 			color = 0xffffff;
 	}
@@ -84,7 +84,6 @@ void	render_scene(t_rt *rt, t_scene *scene)
 	double cpu_time_used;
 	t_vec2i	cur;
 	t_vec2i tile_size;
-	t_tp *tp;
 	t_job_data *job_block;
 	int ji;
 	int res;
@@ -93,7 +92,6 @@ void	render_scene(t_rt *rt, t_scene *scene)
 	tile_size = ft_make_vec2i(scene->scene_config.width / res, scene->scene_config.height / res);
 	if (!(job_block = (t_job_data*)(malloc(sizeof(t_job_data) * tile_size.x * tile_size.y))))
 		exit_message("Failed to allocate memory for thread pool jobs!");
-	tp = tp_create(N_THREADS);
 	start = clock();
 	ji = 0;
 	cur.y = 0;
@@ -107,16 +105,16 @@ void	render_scene(t_rt *rt, t_scene *scene)
 			job_block[ji].screen_coord = cur;
 			job_block[ji].tile_size = tile_size;
 			job_block[ji].tile_index = ji;
-			tp_add_job(tp, raycast, &job_block[ji]);
+			tp_add_job(rt->tp_render, raycast, &job_block[ji]);
 			ji++;
 			cur.x += tile_size.x;
 		}
 		cur.y += tile_size.y;
 	}
-	tp_wait(tp);
+	tp_wait(rt->tp_render);
 	end = clock();
 	cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-	tp_destroy(tp);
+
 	mlx_put_image_to_window(rt->mlx->mlx_ptr, rt->mlx->win_ptr, rt->mlx_img->img, 0, 0);
 	free(job_block);
 	ft_printf("rendered in: %.4f s\n", cpu_time_used);
@@ -230,25 +228,14 @@ void	load_scene(t_rt *rt, int scene_nb)
 	render_scene(rt, scene);
 }
 
-static t_rt	*init_rt(size_t num_scenes)
-{
-	t_rt	*rt;
 
-	if (!(rt = (t_rt*)malloc(sizeof(t_rt))))
-		exit_message("Failed to malloc rt!");
-	if (!(rt->scenes = (t_scene**)malloc(sizeof(t_scene*) * num_scenes)))
-		exit_message("Failed to malloc rt->scenes!");
-	rt->num_scenes = num_scenes;
-	rt->cur_scene = 0;
-	return (rt);
-}
 
 int		main(int ac, char **av)
 {
 	t_rt	*rt;
 	int		i;
 
-	rt = init_rt(ac - 1);
+	rt = rt_init(ac - 1);
 	i = 0;
 	if (ac == 1)
 		exit_message("Usage:");
@@ -260,5 +247,6 @@ int		main(int ac, char **av)
 	}
 	load_scene(rt, rt->cur_scene);
 	hooks_and_loop(rt);
+	tp_destroy(rt->tp_render);
 	return (0);
 }

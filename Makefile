@@ -6,7 +6,7 @@
 #    By: wkorande <willehard@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/01 15:48:04 by rjaakonm          #+#    #+#              #
-#    Updated: 2020/06/11 17:13:34 by wkorande         ###   ########.fr        #
+#    Updated: 2020/06/12 12:26:00 by wkorande         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,7 @@ SRC =	scene/read_csv.c\
 		camera.c\
 		mlx_image.c\
 		main.c\
+		rt.c\
 		thread_pool/tp.c\
 		thread_pool/tp_job.c\
 		thread_pool/ft_get_num_procs.c

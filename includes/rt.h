@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/11 16:10:12 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/12 12:36:08 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include <math.h>
 # include <pthread.h>
 # include <fcntl.h>
+# include "thread_pool.h"
 
 # define N_THREADS 10
 
@@ -208,6 +209,7 @@ typedef struct		s_rt
 	t_scene 		**scenes;
 	size_t			num_scenes;
 	size_t 			cur_scene;
+	t_tp			*tp_render;
 }					t_rt;
 
 typedef struct		s_thread
@@ -257,5 +259,8 @@ void	init_camera(t_vec3 origin, t_vec3 target, t_camera *camera);
 
 t_mlx_img		*create_mlx_image(t_mlx *mlx, int width, int height);
 void			put_pixel_mlx_img(t_mlx_img *img, int x, int y, int c);
+
+t_rt			*rt_init(size_t num_scenes);
+void			rt_destroy_exit(t_rt *rt, int status);
 
 #endif
