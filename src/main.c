@@ -35,52 +35,87 @@ typedef struct	s_job_data
 	t_scene		*scene;		// scene we check want to raytrace
 	t_mlx_img	*mlx_img; 	// the image the job writes result to
 	t_vec2i		screen_coord;
+	t_vec2i		tile_size;
+	int			tile_index;
 }				t_job_data;
 
 void	raycast(void *data)
 {
 	t_job_data *job_data;
 	int color;
-	
+	t_vec2i cur;
+	t_vec2i tile_coord;
+
 	job_data = (t_job_data *)data;
-	// color = ft_make_rgba(1.0, 0.0, 0.0, 1.0); // scene->ambient_color;
-	if (job_data->screen_coord.x > job_data->screen_coord.y )
-		color = 0xff0000; //ft_make_rgba(1.0, 0.0, 0.0, 1.0);
+	tile_coord = ft_make_vec2i(job_data->screen_coord.x / job_data->tile_size.x, job_data->screen_coord.y / job_data->tile_size.y);
+	if (tile_coord.x % 2 == 0)
+	{
+		if (tile_coord.y % 2 == 0)
+			color = 0xffffff;
+		else
+			color = 0;
+	}
 	else
-		color = 0x00ff00;//ft_make_rgba(0.0, 1.0, 0.0, 1.0);
-	put_pixel_mlx_img(job_data->mlx_img, job_data->screen_coord.x, job_data->screen_coord.y, color);
-	if (job_data->screen_coord.x == 799 && job_data->screen_coord.y == 599)
-		ft_printf("here!\n");
+	{
+		if (tile_coord.y % 2 == 0)
+			color = 0;
+		else
+			color = 0xffffff;
+	}
+
+	cur.y = job_data->screen_coord.y;
+	while (cur.y < job_data->screen_coord.y + job_data->tile_size.y)
+	{
+		cur.x = job_data->screen_coord.x;
+		while (cur.x < job_data->screen_coord.x + job_data->tile_size.x)
+		{
+			put_pixel_mlx_img(job_data->mlx_img,  cur.x, cur.y, color);
+			cur.x++;
+		}
+		cur.y++;
+	}
+	if (cur.x == 800 && cur.y == 600)
+		ft_printf("last tile\n");
 }
 
 void	render_scene(t_rt *rt, t_scene *scene)
 {
 	t_vec2i	cur;
-	// t_vec2	screen;
+	t_vec2i tile_size;
 	t_tp *tp;
-	t_job_data *job_block = (t_job_data*)(malloc(sizeof(t_job_data) * scene->scene_config.height * scene->scene_config.width));
-	
-	tp = tp_create(0);
+	t_job_data *job_block;
+	int ji;
+	int res;
 
+	res = 20;
+	tile_size = ft_make_vec2i(scene->scene_config.width / res, scene->scene_config.height / res);
+	if (!(job_block = (t_job_data*)(malloc(sizeof(t_job_data) * tile_size.x * tile_size.y))))
+		exit_message("Failed to allocate memory for thread pool jobs!");
+	tp = tp_create(N_THREADS);
+	ji = 0;
 	cur.y = 0;
 	while (cur.y < scene->scene_config.height)
 	{
 		cur.x = 0;
 		while (cur.x < scene->scene_config.width)
 		{
-			job_block[cur.y * scene->scene_config.width + cur.x].mlx_img = rt->mlx_img;
-			job_block[cur.y * scene->scene_config.width + cur.x].scene = scene;
-			job_block[cur.y * scene->scene_config.width + cur.x].screen_coord = cur;
-			tp_add_job(tp, raycast, &job_block[cur.y * scene->scene_config.width + cur.x]);
-			cur.x++;
+			job_block[ji].mlx_img = rt->mlx_img;
+			job_block[ji].scene = scene;
+			job_block[ji].screen_coord = cur;
+			job_block[ji].tile_size = tile_size;
+			job_block[ji].tile_index = ji;
+			tp_add_job(tp, raycast, &job_block[ji]);
+			ji++;
+			cur.x += tile_size.x;
 		}
-		cur.y++;
+		mlx_put_image_to_window(rt->mlx->mlx_ptr, rt->mlx->win_ptr, rt->mlx_img->img, 0, 0);
+		cur.y += tile_size.y;
 	}
 	tp_wait(tp);
 	tp_destroy(tp);
 	mlx_put_image_to_window(rt->mlx->mlx_ptr, rt->mlx->win_ptr, rt->mlx_img->img, 0, 0);
 	free(job_block);
-	ft_putendl("test");
+	ft_putendl("done");
 }
 
 /*
