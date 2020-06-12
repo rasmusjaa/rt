@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/05 12:41:59 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/11 17:13:34 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/12 17:15:16 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_tp_job	*tp_job_get(t_tp *thread_pool)
 
 	if (!thread_pool)
 		return (NULL);
-	job = ft_queue_dequeue(thread_pool->job_queue);
+	job = tp_queue_dequeue(thread_pool->job_queue);
 	return (job);
 }
 

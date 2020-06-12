@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 10:31:02 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/12 14:17:04 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/12 17:42:45 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 /*
 ** tp_worker does most of the work and handles one thread and gets jobs
 */
+pthread_mutex_t mutex2;
 
 static void	*tp_worker(void *arg)
 {
@@ -28,25 +29,27 @@ static void	*tp_worker(void *arg)
 	while (1)
 	{
 		pthread_mutex_lock(&(thread_pool->job_mutex));
-		while (ft_queue_isempty(thread_pool->job_queue) && !thread_pool->stop)
+		// pthread_mutex_lock(&mutex2);
+		while (tp_queue_isempty(thread_pool->job_queue) && !thread_pool->stop)
 			pthread_cond_wait(&(thread_pool->job_cond), &(thread_pool->job_mutex));
 		if (thread_pool->stop)
 			break ;
 		job = tp_job_get(thread_pool);
-		thread_pool->working_count++;
+		// thread_pool->working_count++;
 		// ft_putendl("add work");
+		// pthread_mutex_unlock(&(mutex2));
 		pthread_mutex_unlock(&(thread_pool->job_mutex));
 		if (job)
 		{
 			job->func(job->arg);
 			tp_job_destroy(job);
 		}
-		pthread_mutex_lock(&(thread_pool->job_mutex));
-		thread_pool->working_count--;
+		// pthread_mutex_lock(&(thread_pool->job_mutex));
+		// thread_pool->working_count--;
 		// ft_putendl("done work");
-		if (!thread_pool->stop && thread_pool->working_count == 0 && ft_queue_isempty(thread_pool->job_queue))
-			pthread_cond_signal(&(thread_pool->working_cond));
-		pthread_mutex_unlock(&(thread_pool->job_mutex));
+		// if (!thread_pool->stop && thread_pool->working_count == 0 && tp_queue_isempty(thread_pool->job_queue))
+			// pthread_cond_signal(&(thread_pool->working_cond));
+		// pthread_mutex_unlock(&(thread_pool->job_mutex));
 	}
 	thread_pool->thread_count--;
 	pthread_cond_signal(&(thread_pool->working_cond));
@@ -54,7 +57,7 @@ static void	*tp_worker(void *arg)
 	return (NULL);
 }
 
-t_tp	*tp_create(size_t num_threads)
+t_tp	*tp_create(size_t num_threads, size_t max_jobs)
 {
 	t_tp		*thread_pool;
 	pthread_t	thread;
@@ -69,9 +72,10 @@ t_tp	*tp_create(size_t num_threads)
 	thread_pool->thread_count = num_threads;
 	thread_pool->working_count = 0;
 	pthread_mutex_init(&(thread_pool->job_mutex), NULL);
+	pthread_mutex_init(&(mutex2), NULL);
 	pthread_cond_init(&(thread_pool->job_cond), NULL);
 	pthread_cond_init(&(thread_pool->working_cond), NULL);
-	thread_pool->job_queue = ft_queue_create(QUEUE_REF, MAX_JOBS, sizeof(t_tp_job*));
+	thread_pool->job_queue = tp_queue_create(max_jobs);
 	i = 0;
 	while (i < num_threads)
 	{
@@ -90,9 +94,9 @@ void	tp_destroy(t_tp *thread_pool)
 		return ;
 
 	pthread_mutex_lock(&(thread_pool->job_mutex));
-	while (!ft_queue_isempty(thread_pool->job_queue))
+	while (!tp_queue_isempty(thread_pool->job_queue))
 	{
-		job = ft_queue_dequeue(thread_pool->job_queue);
+		job = tp_queue_dequeue(thread_pool->job_queue);
 		tp_job_destroy(job);
 	}
 	thread_pool->stop = 1;
@@ -101,11 +105,12 @@ void	tp_destroy(t_tp *thread_pool)
 
 	tp_wait(thread_pool);
 
-	pthread_mutex_destroy(&(thread_pool->job_mutex));
+	// pthread_mutex_destroy(&(thread_pool->job_mutex));
+	pthread_mutex_destroy(&(mutex2));
 	pthread_cond_destroy(&(thread_pool->job_cond));
 	pthread_cond_destroy(&(thread_pool->working_cond));
 
-	ft_queue_destroy(thread_pool->job_queue);
+	tp_queue_destroy(thread_pool->job_queue);
 	free(thread_pool);
 }
 
@@ -136,7 +141,7 @@ int		tp_add_job(t_tp *thread_pool, tp_thread_func func, void *arg)
 		return (0);
 
 	pthread_mutex_lock(&(thread_pool->job_mutex));
-	ft_queue_enqueue(thread_pool->job_queue, job);
+	tp_queue_enqueue(thread_pool->job_queue, job);
 
 	// broadcast to workers that we have work to do,
 	// so the first available thread picks it up.

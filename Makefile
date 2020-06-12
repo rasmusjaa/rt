@@ -6,7 +6,7 @@
 #    By: wkorande <willehard@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/01 15:48:04 by rjaakonm          #+#    #+#              #
-#    Updated: 2020/06/12 14:03:22 by wkorande         ###   ########.fr        #
+#    Updated: 2020/06/12 17:16:32 by wkorande         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,7 @@ SRC =	scene/read_csv.c\
 		rt.c\
 		thread_pool/tp.c\
 		thread_pool/tp_job.c\
+		thread_pool/tp_queue.c\
 		thread_pool/ft_get_num_procs.c
 
 SRCS = $(addprefix $(SRCDIR)/, $(SRC))
