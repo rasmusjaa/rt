@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/15 15:29:30 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/15 17:03:26 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,6 +213,7 @@ typedef struct		s_rt
 	size_t			num_scenes;
 	size_t 			cur_scene;
 	t_tp			*tp_render;
+	t_queue			*done_tiles;
 }					t_rt;
 
 typedef struct	s_raycast_hit
@@ -229,6 +230,7 @@ typedef struct	s_raycast_hit
 
 typedef struct	s_tile_job_data
 {
+	t_rt			*rt;
 	t_mlx			*mlx;
 	t_scene			*scene;
 	t_mlx_img		*mlx_img;
@@ -290,6 +292,8 @@ void			put_pixel_mlx_img(t_mlx_img *img, int x, int y, int c);
 
 t_rt			*rt_init(size_t num_scenes);
 void			rt_destroy_exit(t_rt *rt, int status);
+
+void			render_scene(t_rt *rt, t_scene *scene);
 
 t_rgba			raycast(t_ray *ray, t_scene *scene);
 int				intersects_shape(t_ray *ray, t_shape *shape, t_raycast_hit *hit);

@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/15 15:09:51 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/15 17:44:06 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ int	trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit, int stop_at_first)
 static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
 {
 	scene = 0;
+
 	return (hit->shape->color);
 }
 
