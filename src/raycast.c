@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/15 17:44:06 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/15 19:34:03 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ t_rgba			raycast(t_ray *ray, t_scene *scene)
 	t_rgba color;
 	t_raycast_hit hit;
 
-	color = ft_make_rgba(0.2, 0.2, 0.2, 1.0);
+	color = ft_make_rgba(0.2, 0.2, 0.2, 1.0); // ambient
 	if (trace(ray, scene, &hit, FALSE))
 		color = shade(scene, &hit);
 	return (ft_clamp_rgba(color));

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   keyboard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/09 15:06:46 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/15 17:50:45 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/15 19:49:06 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,10 @@ int	key_release_hook(int key, t_rt *rt)
 	{
 		mlx_clear_window(rt->mlx->mlx_ptr, rt->mlx->win_ptr);
 		render_scene(rt, rt->scenes[rt->cur_scene]);
+	}
+	else if (key == KEY_ESC)
+	{
+		close_hook(rt);
 	}
 	return (0);
 }
