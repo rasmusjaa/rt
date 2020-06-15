@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/15 12:49:16 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/15 14:48:50 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,6 +236,7 @@ typedef struct	s_tile_job_data
 	int				tile_index;
 	int				*jobs;
 	pthread_mutex_t	*job_mutex;
+	t_camera		*camera;
 }					t_tile_job_data;
 
 typedef struct		s_thread

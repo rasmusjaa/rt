@@ -50,7 +50,9 @@ void	render_tile_job(void *data)
 		cur.x = job_data->screen_coord.x;
 		while (cur.x < job_data->screen_coord.x + job_data->tile_size.x)
 		{
-			put_pixel_mlx_img(job_data->mlx_img,  cur.x, cur.y, color);
+			t_ray camera_ray = get_camera_ray(job_data->scene, job_data->camera, cur);
+			t_rgba c = raycast(&camera_ray, job_data->scene);
+			put_pixel_mlx_img(job_data->mlx_img,  cur.x, cur.y, ft_get_color(c));
 			cur.x++;
 		}
 		cur.y++;
@@ -79,6 +81,10 @@ void	render_scene(t_rt *rt, t_scene *scene)
 	if (!(job_data_block = (t_tile_job_data*)(malloc(sizeof(t_tile_job_data) * num_jobs))))
 		exit_message("Failed to allocate memory for thread pool jobs!");
 	pthread_mutex_init(&(job_mutex), NULL);
+
+	t_camera *camera = &(scene->cameras[scene->cur_camera]);
+	init_camera(camera->position, camera->target, camera);
+
 	start = clock();
 	ji = 0;
 	cur.y = 0;
@@ -94,6 +100,7 @@ void	render_scene(t_rt *rt, t_scene *scene)
 			job_data_block[ji].tile_size = tile_size;
 			job_data_block[ji].tile_index = ji;
 			job_data_block[ji].jobs = &num_jobs;
+			job_data_block[ji].camera = camera;
 			tp_add_job(rt->tp_render, render_tile_job, &job_data_block[ji]);
 			// ft_printf("jobs %d\n", jobs);
 			// ft_putendl("added");
@@ -155,10 +162,6 @@ void	load_scene(t_rt *rt, int scene_nb)
 		exit_message("Failed to malloc mlx!");
 	rt->mlx->mlx_ptr = mlx_init();
 	rt->mlx->win_ptr = mlx_new_window(rt->mlx->mlx_ptr, window_x, window_y, "RT");
-	// rt->mlx->img_ptr = mlx_new_image(rt->mlx->mlx_ptr, window_x, window_y);
-	// rt->mlx->data_addr = mlx_get_data_addr(rt->mlx->img_ptr,
-	// 	&rt->mlx->bpp, &rt->mlx->size_line, &rt->mlx->endian);
-	// rt->mlx->bpp /= 8;
 	rt->mlx_img = create_mlx_image(rt->mlx, window_x, window_y);
 	render_scene(rt, scene);
 }

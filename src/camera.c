@@ -19,8 +19,8 @@ t_ray	get_camera_ray(t_scene *scene, t_camera *camera, t_vec2i screen_coord)
 	t_vec3		v1;
 	t_vec3		v2;
 	t_vec2		target;
-    
-    target.x = 2.0 * screen_coord.x / (scene->scene_config.width - 1) - 1.0;
+
+	target.x = 2.0 * screen_coord.x / (scene->scene_config.width - 1) - 1.0;
 	target.y = -2.0 * screen_coord.y / (scene->scene_config.height - 1) + 1;
 	ray.origin = camera->position;
 	ray.direction = camera->forward;

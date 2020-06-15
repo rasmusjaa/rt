@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/11 16:10:14 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/15 14:30:27 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,7 @@ int		init_scene(char *file, t_scene *scene)
 {
 	int		fd;
 	char	*line;
-	int		i;
+	size_t	i;
 
 	scene->num_all[0] = 0;
 	scene->num_all[1] = 0;
