@@ -13,15 +13,6 @@
 #include "rt.h"
 #include "thread_pool.h"
 
-// static void	image_set(int x, int y, t_rt *rt, int color)
-// {
-// 	t_camera 	camera;
-
-// 	camera = rt->scenes[rt->cur_scene]->cameras[rt->scenes[rt->cur_scene]->cur_camera];
-// 	*(int*)(rt->mlx->data_addr + (((y * camera.width) + x) * rt->mlx->bpp)) = color;
-// }
-
-
 int			get_pixel(int x, int y, t_rt *rt)
 {
 	if (x > y && rt)
@@ -29,11 +20,6 @@ int			get_pixel(int x, int y, t_rt *rt)
 	else
 		return (0x00ff00);
 }
-
-
-
-// int jobs;
-// pthread_mutex_t mutex;
 
 void	render_tile_job(void *data)
 {
@@ -70,11 +56,7 @@ void	render_tile_job(void *data)
 		cur.y++;
 	}
 	pthread_mutex_lock(job_data->job_mutex);
-	// if (cur.x == 800 && cur.y == 600)
-	// 	ft_printf("last tile\n");
-//	ft_printf("tiles %d remove one\n", jobs);
 	(*job_data->jobs)--;
-	// ft_printf("jobs %d\n", jobs);
 	pthread_mutex_unlock(job_data->job_mutex);
 }
 
@@ -86,15 +68,15 @@ void	render_scene(t_rt *rt, t_scene *scene)
 	t_vec2i tile_size;
 	t_tile_job_data *job_data_block;
 	pthread_mutex_t job_mutex;
-	int jobs;
+	int num_jobs;
 	int ji;
 	int res;
 
 	rt->tp_render = tp_create(N_THREADS, MAX_JOBS);
-	res = 10;
-	jobs = res * res;
+	res = 20;
+	num_jobs = res * res;
 	tile_size = ft_make_vec2i(scene->scene_config.width / res, scene->scene_config.height / res);
-	if (!(job_data_block = (t_tile_job_data*)(malloc(sizeof(t_tile_job_data) * res * res))))
+	if (!(job_data_block = (t_tile_job_data*)(malloc(sizeof(t_tile_job_data) * num_jobs))))
 		exit_message("Failed to allocate memory for thread pool jobs!");
 	pthread_mutex_init(&(job_mutex), NULL);
 	start = clock();
@@ -111,7 +93,7 @@ void	render_scene(t_rt *rt, t_scene *scene)
 			job_data_block[ji].screen_coord = cur;
 			job_data_block[ji].tile_size = tile_size;
 			job_data_block[ji].tile_index = ji;
-			job_data_block[ji].jobs = &jobs;
+			job_data_block[ji].jobs = &num_jobs;
 			tp_add_job(rt->tp_render, render_tile_job, &job_data_block[ji]);
 			// ft_printf("jobs %d\n", jobs);
 			// ft_putendl("added");
@@ -120,7 +102,7 @@ void	render_scene(t_rt *rt, t_scene *scene)
 		}
 		cur.y += tile_size.y;
 	}
-	while (jobs);
+	while (num_jobs);
 	// ft_printf("%d\n", jobs);
 	// while (rt->tp_render->working_count)
 	// tp_wait(rt->tp_render);
@@ -131,65 +113,6 @@ void	render_scene(t_rt *rt, t_scene *scene)
 	ft_printf("rendered in: %.4f s\n", cpu_time_used);
 	tp_destroy(rt->tp_render);
 }
-
-/*
-
-void		*draw_view(void *data)
-{
-	int			y;
-	int			x;
-	int			color;
-	t_rt		*rt;
-	t_thread	*thread;
-	t_camera 	camera;
-
-	thread = (t_thread *)data;
-	rt = (t_rt *)thread->rt;
-	camera = rt->scenes[rt->cur_scene]->cameras[rt->scenes[rt->cur_scene]->cur_camera];
-	color = 0xffffff;
-	y = thread->thread;
-	while (y < camera.height)
-	{
-		x = 0;
-		while (x < camera.width)
-		{
-			color = get_pixel(x, y, rt);
-			image_set(x, y, rt, color);
-			x++;
-		}
-		y += N_THREADS;
-	}
-	return (thread);
-}
-
-void	multi_thread(t_rt *rt)
-{
-	pthread_t	*thread_group;
-	t_thread	*threads[N_THREADS];
-	int			i;
-
-	thread_group = malloc(sizeof(pthread_t) * N_THREADS);
-	i = 0;
-	while (i < N_THREADS)
-	{
-		threads[i] = malloc(sizeof(t_thread));
-		threads[i]->rt = rt;
-		threads[i]->thread = i;
-		pthread_create(&thread_group[i], NULL, draw_view, threads[i]);
-		i++;
-	}
-	i = 0;
-	while (i < N_THREADS)
-	{
-		pthread_join(thread_group[i], NULL);
-		free(threads[i]);
-		i++;
-	}
-	free(thread_group);
-	mlx_put_image_to_window(rt->mlx->mlx_ptr, rt->mlx->win_ptr, rt->mlx->img_ptr, 0, 0);
-	//add_texts(rt);
-}
-*/
 
 void	hooks_and_loop(t_rt *rt)
 {
@@ -239,8 +162,6 @@ void	load_scene(t_rt *rt, int scene_nb)
 	rt->mlx_img = create_mlx_image(rt->mlx, window_x, window_y);
 	render_scene(rt, scene);
 }
-
-
 
 int		main(int ac, char **av)
 {

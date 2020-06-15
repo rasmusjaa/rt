@@ -6,7 +6,7 @@
 #    By: wkorande <willehard@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/01 15:48:04 by rjaakonm          #+#    #+#              #
-#    Updated: 2020/06/12 17:16:32 by wkorande         ###   ########.fr        #
+#    Updated: 2020/06/15 12:49:52 by wkorande         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,8 @@ SRC =	scene/read_csv.c\
 		mlx_image.c\
 		main.c\
 		rt.c\
+		raycast.c\
+		shape/shape.c\
 		thread_pool/tp.c\
 		thread_pool/tp_job.c\
 		thread_pool/tp_queue.c\

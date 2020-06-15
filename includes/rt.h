@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/15 12:31:39 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/15 12:49:16 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,9 @@
 # define DISC_STR "disc"
 # define MOEBIUS_STR "moebius"
 # define SHAPE_ERROR_STR "shape_error"
+
+# define TRUE 1
+# define FALSE 0
 
 typedef enum	e_camera_type
 {
@@ -212,6 +215,18 @@ typedef struct		s_rt
 	t_tp			*tp_render;
 }					t_rt;
 
+typedef struct	s_raycast_hit
+{
+	t_vec3		point;
+	t_vec3		normal;
+	t_shape		*shape;
+	t_vec3		light_dir;
+	double		t;
+	double		t2;
+	double		distance;
+	t_rgba		color;
+}				t_raycast_hit;
+
 typedef struct	s_tile_job_data
 {
 	t_scene			*scene;
@@ -274,4 +289,6 @@ void			put_pixel_mlx_img(t_mlx_img *img, int x, int y, int c);
 t_rt			*rt_init(size_t num_scenes);
 void			rt_destroy_exit(t_rt *rt, int status);
 
+t_rgba			raycast(t_ray *ray, t_scene *scene);
+int				intersects_shape(t_ray *ray, t_shape *shape, t_raycast_hit *hit);
 #endif
