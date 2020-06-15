@@ -45,7 +45,7 @@ typedef struct	s_job_data
 int jobs;
 pthread_mutex_t mutex;
 
-void	raycast(void *data)
+void	render_tile_job(void *data)
 {
 	t_job_data *job_data;
 	int color;
@@ -123,7 +123,7 @@ void	render_scene(t_rt *rt, t_scene *scene)
 			pthread_mutex_lock(&(mutex));
 			jobs++;
 			pthread_mutex_unlock(&(mutex));
-			tp_add_job(rt->tp_render, raycast, &job_block[ji]);
+			tp_add_job(rt->tp_render, render_tile_job, &job_block[ji]);
 			// ft_printf("jobs %d\n", jobs);
 			// ft_putendl("added");
 			ji++;
