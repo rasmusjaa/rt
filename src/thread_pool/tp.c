@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tp.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 10:31:02 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/15 15:35:57 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/15 17:57:45 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 /*
 ** tp_worker does most of the work and handles one thread and gets jobs
 */
-pthread_mutex_t mutex2;
 
 static void	*tp_worker(void *arg)
 {
@@ -55,14 +54,12 @@ t_tp	*tp_create(size_t num_threads, size_t max_jobs)
 
 	if (num_threads == 0)
 		num_threads = ft_get_num_procs() + 1;
-	ft_printf("threads: %d\n", num_threads);
 	if (!(thread_pool = (t_tp*)malloc(sizeof(t_tp))))
 		return (NULL);
 	thread_pool->stop = 0;
 	thread_pool->thread_count = num_threads;
-	// thread_pool->working_count = 0;
+	// thread_pool->working_count = 0; joko pois tast ja headerist?
 	pthread_mutex_init(&(thread_pool->job_mutex), NULL);
-	pthread_mutex_init(&(mutex2), NULL);
 	pthread_cond_init(&(thread_pool->job_cond), NULL);
 	pthread_cond_init(&(thread_pool->working_cond), NULL);
 	thread_pool->job_queue = tp_queue_create(max_jobs);
@@ -107,11 +104,10 @@ void	tp_wait(t_tp *thread_pool)
 {
 	if (!thread_pool)
 		return ;
-
 	pthread_mutex_lock(&(thread_pool->job_mutex));
 	while (1)
 	{
-		if (!thread_pool->stop || (thread_pool->stop && thread_pool->thread_count != 0))
+		if (!thread_pool->stop || (thread_pool->stop && thread_pool->thread_count != 0)) // stop on kai aina 1 nyt kun tata kutsutaan vaan destroyssa? onks thread count ok tas viel
 			pthread_cond_wait(&(thread_pool->working_cond), &(thread_pool->job_mutex));
 		else
 			break ;
@@ -125,17 +121,11 @@ int		tp_add_job(t_tp *thread_pool, tp_thread_func func, void *arg)
 
 	if (!thread_pool)
 		return (0);
-
 	if (!(job = tp_job_create(func, arg)))
 		return (0);
-
 	pthread_mutex_lock(&(thread_pool->job_mutex));
 	tp_queue_enqueue(thread_pool->job_queue, job);
-
-	// broadcast to workers that we have work to do,
-	// so the first available thread picks it up.
 	pthread_cond_broadcast(&(thread_pool->job_cond));
 	pthread_mutex_unlock(&(thread_pool->job_mutex));
-
 	return (1);
 }

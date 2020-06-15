@@ -160,10 +160,12 @@ void	refresh_scene(t_rt *rt, int scene_nb, char *file)
 	t_scene *scene;
 
 	scene = rt->scenes[scene_nb];
-	// vapauta aiempi scene ja siihen liittyvat?
+	free(scene);	// vapauta aiempi scene ja siihen liittyvat?
 	scene = read_scene(file);
 	window_x = scene->scene_config.width;
 	window_y = scene->scene_config.height;
+	mlx_clear_window(rt->mlx->mlx_ptr, rt->mlx->win_ptr);
+	render_scene(rt, rt->scenes[rt->cur_scene]);
 //	mlx_destroy_image(rt->mlx->mlx_ptr, rt->mlx_img->img);
 //	rt->mlx_img = create_mlx_image(rt->mlx->mlx_ptr, window_x, window_y);
 //	render_scene(rt, scene);

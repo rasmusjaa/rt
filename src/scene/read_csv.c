@@ -3,15 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   read_csv.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/15 14:30:27 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/15 18:31:13 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
 #include <math.h>
+#include <time.h>
+#include <sys/stat.h>
+
 
 t_shape_name_type_map g_shape_name_type_map[SHAPE_TYPES] =
 {
@@ -170,6 +173,19 @@ int			handle_line(t_scene *scene, char *line/*, int *object_num*/)
 	return (0);
 }
 
+time_t	last_modified(char *file)
+{
+	struct stat		buf;
+	time_t modified;
+
+	modified = 0;
+	if (lstat(file, &buf) != -1 && S_ISDIR(buf.st_mode) == 0)
+		modified = buf.st_mtime;
+	else
+		exit_message("Failed to get scene file stats, check file rights");
+	return (modified);
+}
+
 int		init_scene(char *file, t_scene *scene)
 {
 	int		fd;
@@ -181,6 +197,7 @@ int		init_scene(char *file, t_scene *scene)
 	scene->num_all[2] = 0;
 	scene->num_all[3] = 0;
 	scene->scene_config.filepath = file;
+	scene->scene_config.last_modified = last_modified(file);
 
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
