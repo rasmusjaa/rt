@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/12 17:41:51 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/15 12:31:39 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,6 +211,17 @@ typedef struct		s_rt
 	size_t 			cur_scene;
 	t_tp			*tp_render;
 }					t_rt;
+
+typedef struct	s_tile_job_data
+{
+	t_scene			*scene;
+	t_mlx_img		*mlx_img;
+	t_vec2i			screen_coord;
+	t_vec2i			tile_size;
+	int				tile_index;
+	int				*jobs;
+	pthread_mutex_t	*job_mutex;
+}					t_tile_job_data;
 
 typedef struct		s_thread
 {

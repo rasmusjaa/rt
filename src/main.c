@@ -30,29 +30,19 @@ int			get_pixel(int x, int y, t_rt *rt)
 		return (0x00ff00);
 }
 
-typedef struct	s_job_data
-{
-	t_ray		ray;		// camera ray
-	t_scene		*scene;		// scene we check want to raytrace
-	t_mlx_img	*mlx_img; 	// the image the job writes result to
-	t_vec2i		screen_coord;
-	t_vec2i		tile_size;
-	int			tile_index;
-	// int			*jobs;
-	// pthread_mutex_t *job_mutex;
-}				t_job_data;
 
-int jobs;
-pthread_mutex_t mutex;
+
+// int jobs;
+// pthread_mutex_t mutex;
 
 void	render_tile_job(void *data)
 {
-	t_job_data *job_data;
+	t_tile_job_data *job_data;
 	int color;
 	t_vec2i cur;
 	t_vec2i tile_coord;
 
-	job_data = (t_job_data *)data;
+	job_data = (t_tile_job_data *)data;
 	tile_coord = ft_make_vec2i(job_data->screen_coord.x / job_data->tile_size.x, job_data->screen_coord.y / job_data->tile_size.y);
 	if (tile_coord.x % 2 == 0)
 	{
@@ -79,13 +69,13 @@ void	render_tile_job(void *data)
 		}
 		cur.y++;
 	}
-	pthread_mutex_lock(&mutex);
-	if (cur.x == 800 && cur.y == 600)
-		ft_printf("last tile\n");
+	pthread_mutex_lock(job_data->job_mutex);
+	// if (cur.x == 800 && cur.y == 600)
+	// 	ft_printf("last tile\n");
 //	ft_printf("tiles %d remove one\n", jobs);
-	jobs--;
-	ft_printf("jobs %d\n", jobs);
-	pthread_mutex_unlock(&mutex);
+	(*job_data->jobs)--;
+	// ft_printf("jobs %d\n", jobs);
+	pthread_mutex_unlock(job_data->job_mutex);
 }
 
 void	render_scene(t_rt *rt, t_scene *scene)
@@ -94,36 +84,35 @@ void	render_scene(t_rt *rt, t_scene *scene)
 	double cpu_time_used;
 	t_vec2i	cur;
 	t_vec2i tile_size;
-	t_job_data *job_block;
+	t_tile_job_data *job_data_block;
+	pthread_mutex_t job_mutex;
+	int jobs;
 	int ji;
 	int res;
 
-	jobs = 0;
 	rt->tp_render = tp_create(N_THREADS, MAX_JOBS);
-	res = 100;
+	res = 10;
+	jobs = res * res;
 	tile_size = ft_make_vec2i(scene->scene_config.width / res, scene->scene_config.height / res);
-	if (!(job_block = (t_job_data*)(malloc(sizeof(t_job_data) * res * res))))
+	if (!(job_data_block = (t_tile_job_data*)(malloc(sizeof(t_tile_job_data) * res * res))))
 		exit_message("Failed to allocate memory for thread pool jobs!");
+	pthread_mutex_init(&(job_mutex), NULL);
 	start = clock();
 	ji = 0;
 	cur.y = 0;
-	pthread_mutex_init(&(mutex), NULL);
 	while (cur.y < scene->scene_config.height)
 	{
 		cur.x = 0;
 		while (cur.x < scene->scene_config.width)
 		{
-			// job_block[ji].job_mutex = &mutex;
-			job_block[ji].mlx_img = rt->mlx_img;
-			job_block[ji].scene = scene;
-			job_block[ji].screen_coord = cur;
-			job_block[ji].tile_size = tile_size;
-			job_block[ji].tile_index = ji;
-			// job_block[ji].jobs = &jobs;
-			pthread_mutex_lock(&(mutex));
-			jobs++;
-			pthread_mutex_unlock(&(mutex));
-			tp_add_job(rt->tp_render, render_tile_job, &job_block[ji]);
+			job_data_block[ji].job_mutex = &job_mutex;
+			job_data_block[ji].mlx_img = rt->mlx_img;
+			job_data_block[ji].scene = scene;
+			job_data_block[ji].screen_coord = cur;
+			job_data_block[ji].tile_size = tile_size;
+			job_data_block[ji].tile_index = ji;
+			job_data_block[ji].jobs = &jobs;
+			tp_add_job(rt->tp_render, render_tile_job, &job_data_block[ji]);
 			// ft_printf("jobs %d\n", jobs);
 			// ft_putendl("added");
 			ji++;
@@ -138,7 +127,7 @@ void	render_scene(t_rt *rt, t_scene *scene)
 	end = clock();
 	cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 	mlx_put_image_to_window(rt->mlx->mlx_ptr, rt->mlx->win_ptr, rt->mlx_img->img, 0, 0);
-	free(job_block);
+	free(job_data_block);
 	ft_printf("rendered in: %.4f s\n", cpu_time_used);
 	tp_destroy(rt->tp_render);
 }
