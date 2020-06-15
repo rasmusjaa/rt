@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 10:31:02 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/12 17:42:45 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/15 15:35:57 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,27 +29,17 @@ static void	*tp_worker(void *arg)
 	while (1)
 	{
 		pthread_mutex_lock(&(thread_pool->job_mutex));
-		// pthread_mutex_lock(&mutex2);
 		while (tp_queue_isempty(thread_pool->job_queue) && !thread_pool->stop)
 			pthread_cond_wait(&(thread_pool->job_cond), &(thread_pool->job_mutex));
 		if (thread_pool->stop)
 			break ;
 		job = tp_job_get(thread_pool);
-		// thread_pool->working_count++;
-		// ft_putendl("add work");
-		// pthread_mutex_unlock(&(mutex2));
 		pthread_mutex_unlock(&(thread_pool->job_mutex));
 		if (job)
 		{
 			job->func(job->arg);
 			tp_job_destroy(job);
 		}
-		// pthread_mutex_lock(&(thread_pool->job_mutex));
-		// thread_pool->working_count--;
-		// ft_putendl("done work");
-		// if (!thread_pool->stop && thread_pool->working_count == 0 && tp_queue_isempty(thread_pool->job_queue))
-			// pthread_cond_signal(&(thread_pool->working_cond));
-		// pthread_mutex_unlock(&(thread_pool->job_mutex));
 	}
 	thread_pool->thread_count--;
 	pthread_cond_signal(&(thread_pool->working_cond));
@@ -70,7 +60,7 @@ t_tp	*tp_create(size_t num_threads, size_t max_jobs)
 		return (NULL);
 	thread_pool->stop = 0;
 	thread_pool->thread_count = num_threads;
-	thread_pool->working_count = 0;
+	// thread_pool->working_count = 0;
 	pthread_mutex_init(&(thread_pool->job_mutex), NULL);
 	pthread_mutex_init(&(mutex2), NULL);
 	pthread_cond_init(&(thread_pool->job_cond), NULL);
@@ -105,8 +95,7 @@ void	tp_destroy(t_tp *thread_pool)
 
 	tp_wait(thread_pool);
 
-	// pthread_mutex_destroy(&(thread_pool->job_mutex));
-	pthread_mutex_destroy(&(mutex2));
+	pthread_mutex_destroy(&(thread_pool->job_mutex));
 	pthread_cond_destroy(&(thread_pool->job_cond));
 	pthread_cond_destroy(&(thread_pool->working_cond));
 
@@ -122,7 +111,7 @@ void	tp_wait(t_tp *thread_pool)
 	pthread_mutex_lock(&(thread_pool->job_mutex));
 	while (1)
 	{
-		if ((!thread_pool->stop && thread_pool->working_count != 0) || (thread_pool->stop && thread_pool->thread_count != 0))
+		if (!thread_pool->stop || (thread_pool->stop && thread_pool->thread_count != 0))
 			pthread_cond_wait(&(thread_pool->working_cond), &(thread_pool->job_mutex));
 		else
 			break ;

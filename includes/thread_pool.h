@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/11 15:33:45 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/12 17:16:32 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/15 15:35:02 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ typedef struct  s_tp
 	pthread_mutex_t job_mutex;
 	pthread_cond_t job_cond;
 	pthread_cond_t working_cond;
-	size_t		working_count;
+	// size_t		working_count;
 	size_t		thread_count;
 	int			stop;
 	t_tp_queue	*job_queue;
