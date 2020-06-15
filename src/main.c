@@ -24,7 +24,7 @@ int			get_pixel(int x, int y, t_rt *rt)
 void	render_tile_job(void *data)
 {
 	t_tile_job_data *job_data;
-	int color;
+	t_rgba tcolor;
 	t_vec2i cur;
 	t_vec2i tile_coord;
 
@@ -33,16 +33,16 @@ void	render_tile_job(void *data)
 	if (tile_coord.x % 2 == 0)
 	{
 		if (tile_coord.y % 2 == 0)
-			color = 0xffffff;
+			tcolor = ft_make_rgba(1.0, 1.0, 1.0, 1.0);
 		else
-			color = 0xff0000;
+			tcolor = ft_make_rgba(0.5, 0.5, 0.5, 1.0);
 	}
 	else
 	{
 		if (tile_coord.y % 2 == 0)
-			color = 0xff0000;
+			tcolor = ft_make_rgba(0.5, 0.5, 0.5, 1.0);
 		else
-			color = 0xffffff;
+			tcolor = ft_make_rgba(1.0, 1.0, 1.0, 1.0);
 	}
 	cur.y = job_data->screen_coord.y;
 	while (cur.y < job_data->screen_coord.y + job_data->tile_size.y)
@@ -51,8 +51,8 @@ void	render_tile_job(void *data)
 		while (cur.x < job_data->screen_coord.x + job_data->tile_size.x)
 		{
 			t_ray camera_ray = get_camera_ray(job_data->scene, job_data->camera, cur);
-			t_rgba c = raycast(&camera_ray, job_data->scene);
-			put_pixel_mlx_img(job_data->mlx_img,  cur.x, cur.y, ft_get_color(c));
+			t_rgba color = raycast(&camera_ray, job_data->scene);
+			put_pixel_mlx_img(job_data->mlx_img,  cur.x, cur.y, ft_get_color(ft_blend_rgba(color, tcolor)));
 			cur.x++;
 		}
 		cur.y++;
@@ -75,7 +75,7 @@ void	render_scene(t_rt *rt, t_scene *scene)
 	int res;
 
 	rt->tp_render = tp_create(N_THREADS, MAX_JOBS);
-	res = 20;
+	res = 10;
 	num_jobs = res * res;
 	tile_size = ft_make_vec2i(scene->scene_config.width / res, scene->scene_config.height / res);
 	if (!(job_data_block = (t_tile_job_data*)(malloc(sizeof(t_tile_job_data) * num_jobs))))
@@ -93,6 +93,7 @@ void	render_scene(t_rt *rt, t_scene *scene)
 		cur.x = 0;
 		while (cur.x < scene->scene_config.width)
 		{
+			job_data_block[ji].mlx = rt->mlx;
 			job_data_block[ji].job_mutex = &job_mutex;
 			job_data_block[ji].mlx_img = rt->mlx_img;
 			job_data_block[ji].scene = scene;
@@ -110,6 +111,7 @@ void	render_scene(t_rt *rt, t_scene *scene)
 		cur.y += tile_size.y;
 	}
 	while (num_jobs);
+
 	// ft_printf("%d\n", jobs);
 	// while (rt->tp_render->working_count)
 	// tp_wait(rt->tp_render);
