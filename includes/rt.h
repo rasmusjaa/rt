@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rt.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/15 17:03:26 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/15 19:47:49 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ typedef struct		s_shape
 typedef	struct		s_scene_config
 {
 	char			*filepath;
+	time_t			last_modified;
 	int				shadows;
 	int				shading;
 	int				specular;
@@ -268,7 +269,8 @@ void refresh_scene(t_rt *rt, int scene_nb, char *file);
 void load_scene(t_rt *rt, int scene_nb);
 
 void exit_message(char *str);
-t_scene				*read_scene(char *file);
+time_t last_modified(char *file);
+t_scene *read_scene(char *file);
 
 void				print_scene_info(t_scene *scene);
 void				print_vec3(char *s, t_vec3 v);

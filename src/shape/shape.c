@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shape.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/15 12:46:47 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/15 14:40:24 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/15 19:29:35 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	intersects_shape(t_ray *ray, t_shape *shape, t_raycast_hit *hit)
 	{
 		if (intersects_sphere(ray, shape, hit))
 		{
-			hit->shape = shape;
+			// hit->shape = shape; // asetettu jo mut voi teha vaan tas jos haluu
 			hit->color = shape->color;
 			return (TRUE);
 		}

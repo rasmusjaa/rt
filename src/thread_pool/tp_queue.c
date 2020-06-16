@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tp_queue.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 16:47:49 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/12 17:34:19 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/15 17:45:07 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,5 +79,5 @@ void		tp_queue_destroy(t_tp_queue *q)
 
 int			tp_queue_isempty(t_tp_queue *q)
 {
-	return (q->rear == -1);
+	return (q->rear == -1); // tan funktion vois mahollisesti karsii kun on vaan yhes if ehdossa samal taval kun full
 }

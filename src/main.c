@@ -88,7 +88,7 @@ void	render_scene(t_rt *rt, t_scene *scene)
 
 	t_camera *camera = &(scene->cameras[scene->cur_camera]);
 	init_camera(camera->position, camera->target, camera);
-	rt->done_tiles = ft_queue_create(QUEUE_COPY, num_jobs, sizeof(t_tile_job_data));
+	rt->done_tiles = ft_queue_create(QUEUE_COPY, num_jobs, sizeof(t_tile_job_data)); // ft tp sijaan
 
 	start = clock();
 	ji = 0;
@@ -155,18 +155,13 @@ void	hooks_and_loop(t_rt *rt)
 
 void	refresh_scene(t_rt *rt, int scene_nb, char *file)
 {
-	int window_x;
-	int window_y;
 	t_scene *scene;
 
 	scene = rt->scenes[scene_nb];
-	// vapauta aiempi scene ja siihen liittyvat?
+	free(scene);	// vapauta myos kaikki sen sisal
 	scene = read_scene(file);
-	window_x = scene->scene_config.width;
-	window_y = scene->scene_config.height;
-//	mlx_destroy_image(rt->mlx->mlx_ptr, rt->mlx_img->img);
-//	rt->mlx_img = create_mlx_image(rt->mlx->mlx_ptr, window_x, window_y);
-//	render_scene(rt, scene);
+	mlx_clear_window(rt->mlx->mlx_ptr, rt->mlx->win_ptr);
+	render_scene(rt, rt->scenes[rt->cur_scene]);
 }
 
 static void	init_mlx(t_rt *rt, int win_width, int win_height)
