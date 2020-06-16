@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mouse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/09 15:05:29 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/16 16:11:01 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/16 15:27:01 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	mouse_press_hook(int button, int x, int y, t_rt *rt)
 	t_scene *scene;
 
 	ft_printf("scene %d, press button %d, x %d, y %d\n", rt->cur_scene, button, x, y);
-	if (button == 1)
+	if (button == 1 && rt->render_finished)
 	{
 		scene = rt->scenes[rt->cur_scene];
 		scene->help_ray = 1;
