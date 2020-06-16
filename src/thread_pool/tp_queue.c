@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tp_queue.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 16:47:49 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/15 17:45:07 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/06/16 11:33:20 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ t_tp_queue	*tp_queue_create(size_t size)
 	return (q);
 }
 
-void	tp_queue_enqueue(t_tp_queue *q, t_tp_job *job)
+void		tp_queue_enqueue(t_tp_queue *q, t_tp_job *job)
 {
 	if (q->rear == (int)q->size - 1)
 	{

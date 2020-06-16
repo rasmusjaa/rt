@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rt.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/15 19:47:49 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/06/16 13:13:10 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -289,14 +289,16 @@ int expose_hook(t_rt *rt);
 t_ray	get_camera_ray(t_scene *scene, t_camera *camera, t_vec2i screen_coord);
 void	init_camera(t_vec3 origin, t_vec3 target, t_camera *camera);
 
-t_mlx_img		*create_mlx_image(t_mlx *mlx, int width, int height);
+t_mlx_img		*create_mlx_img(t_mlx *mlx, int width, int height);
+void			destroy_mlx_img(t_mlx *mlx, t_mlx_img *mlx_img);
 void			put_pixel_mlx_img(t_mlx_img *img, int x, int y, int c);
 
 t_rt			*rt_init(size_t num_scenes);
 void			rt_destroy_exit(t_rt *rt, int status);
-
 void			render_scene(t_rt *rt, t_scene *scene);
+void			destroy_scene(t_scene *scene);
 
 t_rgba			raycast(t_ray *ray, t_scene *scene);
 int				intersects_shape(t_ray *ray, t_shape *shape, t_raycast_hit *hit);
+
 #endif

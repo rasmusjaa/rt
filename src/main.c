@@ -13,14 +13,6 @@
 #include "rt.h"
 #include "thread_pool.h"
 
-int			get_pixel(int x, int y, t_rt *rt)
-{
-	if (x > y && rt)
-		return (0xff0000);
-	else
-		return (0x00ff00);
-}
-
 void	render_tile_job(void *data)
 {
 	t_tile_job_data *job_data;
@@ -45,11 +37,9 @@ void	render_tile_job(void *data)
 			tcolor = ft_make_rgba(1.0, 1.0, 1.0, 1.0);
 	}
 	cur.y = job_data->screen_coord.y;
-	// while (cur.y < job_data->tile_size.y)
 	while (cur.y < job_data->screen_coord.y + job_data->tile_size.y)
 	{
 		cur.x = job_data->screen_coord.x;
-		// while (cur.x < job_data->tile_size.x)
 		while (cur.x < job_data->screen_coord.x + job_data->tile_size.x)
 		{
 			t_ray camera_ray = get_camera_ray(job_data->scene, job_data->camera, cur);
@@ -61,7 +51,6 @@ void	render_tile_job(void *data)
 	}
 	pthread_mutex_lock(job_data->job_mutex);
 	(*job_data->jobs)--;
-	// ft_printf("tile %d done\n", job_data->tile_index);
 	ft_queue_enqueue(job_data->rt->done_tiles, data);
 	pthread_mutex_unlock(job_data->job_mutex);
 }
@@ -78,9 +67,9 @@ void	render_scene(t_rt *rt, t_scene *scene)
 	int ji;
 	int res;
 
-	rt->tp_render = tp_create(N_THREADS, MAX_JOBS);
 	res = 20;
 	num_jobs = res * res;
+	rt->tp_render = tp_create(N_THREADS, num_jobs);
 	tile_size = ft_make_vec2i(scene->scene_config.width / res, scene->scene_config.height / res);
 	if (!(job_data_block = (t_tile_job_data*)(malloc(sizeof(t_tile_job_data) * num_jobs))))
 		exit_message("Failed to allocate memory for thread pool jobs!");
@@ -101,7 +90,7 @@ void	render_scene(t_rt *rt, t_scene *scene)
 			job_data_block[ji].rt = rt;
 			job_data_block[ji].mlx = rt->mlx;
 			job_data_block[ji].job_mutex = &job_mutex;
-			job_data_block[ji].mlx_img = create_mlx_image(rt->mlx, tile_size.x, tile_size.y);
+			job_data_block[ji].mlx_img = create_mlx_img(rt->mlx, tile_size.x, tile_size.y);
 			job_data_block[ji].scene = scene;
 			job_data_block[ji].screen_coord = cur;
 			job_data_block[ji].tile_size = tile_size;
@@ -116,12 +105,12 @@ void	render_scene(t_rt *rt, t_scene *scene)
 		}
 		cur.y += tile_size.y;
 	}
-	while (num_jobs);
+	while (num_jobs); // siirretään muual
 	end = clock();
 	cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 	free(job_data_block);
 	ft_printf("rendered in: %.4f s\n", cpu_time_used);
-	tp_destroy(rt->tp_render);
+	// tp_destroy(rt->tp_render);
 	pthread_mutex_destroy(&job_mutex);
 }
 
@@ -136,7 +125,10 @@ int update(void *arg)
 	{
 		job = ft_queue_dequeue(rt->done_tiles);
 		if (job)
+		{
 			mlx_put_image_to_window(rt->mlx->mlx_ptr, rt->mlx->win_ptr, job->mlx_img->img, job->screen_coord.x, job->screen_coord.y);
+			destroy_mlx_img(rt->mlx, job->mlx_img);
+		}
 	}
 	return (1);
 }
@@ -158,7 +150,7 @@ void	refresh_scene(t_rt *rt, int scene_nb, char *file)
 	t_scene *scene;
 
 	scene = rt->scenes[scene_nb];
-	free(scene);	// vapauta myos kaikki sen sisal
+	destroy_scene(scene);
 	scene = read_scene(file);
 	mlx_clear_window(rt->mlx->mlx_ptr, rt->mlx->win_ptr);
 	render_scene(rt, rt->scenes[rt->cur_scene]);
@@ -170,7 +162,7 @@ static void	init_mlx(t_rt *rt, int win_width, int win_height)
 		exit_message("Failed to malloc mlx!");
 	rt->mlx->mlx_ptr = mlx_init();
 	rt->mlx->win_ptr = mlx_new_window(rt->mlx->mlx_ptr, win_width, win_height, "RT");
-	rt->mlx_img = create_mlx_image(rt->mlx, win_width, win_height);
+	// rt->mlx_img = create_mlx_image(rt->mlx, win_width, win_height);
 	mlx_string_put(rt->mlx->mlx_ptr, rt->mlx->win_ptr, (win_width / 2) - 110, win_height / 2, 0xFFFFFF, "PRESS SPACE TO RENDER");
 }
 
@@ -191,10 +183,7 @@ int		main(int ac, char **av)
 	}
 	t_scene *scene = rt->scenes[rt->cur_scene];
 	init_mlx(rt, scene->scene_config.width, scene->scene_config.height);
-	// render_scene(rt, scene);
 	hooks_and_loop(rt);
 	mlx_loop(rt->mlx->mlx_ptr);
-	// tp_destroy(rt->tp_render);
-	exit(EXIT_SUCCESS);
 	return (0);
 }

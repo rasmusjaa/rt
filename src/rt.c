@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 12:21:14 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/15 16:35:24 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/16 13:13:20 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,28 @@ t_rt	*rt_init(size_t num_scenes)
 	return (rt);
 }
 
+void	destroy_scene(t_scene *scene)
+{
+	free(scene->cameras);
+	free(scene->lights);
+	free(scene->shapes);
+	free(scene->objects);
+	free(scene);
+}
+
 void	rt_destroy_exit(t_rt *rt, int status)
 {
+	size_t i;
+
+	i = 0;
+	while (i < rt->num_scenes)
+	{
+		destroy_scene(rt->scenes[i]);
+		i++;
+	}
+	free(rt->scenes);
 	tp_destroy(rt->tp_render);
+	free(rt->mlx);
+	free(rt);
 	exit(status);
 }

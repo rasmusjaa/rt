@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   window.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/09 15:08:22 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/15 18:53:30 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/06/16 13:24:55 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 int	close_hook(t_rt *rt)
 {
 	ft_printf("scene %d close\n", rt->cur_scene);
-	exit(0);
-	return (0);
+	rt_destroy_exit(rt, EXIT_SUCCESS);
+	return (1);
 }
 
 int	expose_hook(t_rt *rt)

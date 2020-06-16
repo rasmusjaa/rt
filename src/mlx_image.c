@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/10 16:00:45 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/11 17:13:34 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/16 12:28:01 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void panic(char *error)
 	exit(EXIT_FAILURE);
 }
 
-t_mlx_img	*create_mlx_image(t_mlx *mlx, int width, int height)
+t_mlx_img	*create_mlx_img(t_mlx *mlx, int width, int height)
 {
 	t_mlx_img *img;
 
@@ -37,6 +37,16 @@ t_mlx_img	*create_mlx_image(t_mlx *mlx, int width, int height)
 		panic("mlx_get_data_addr failed!");
 	img->bpp /= 8;
 	return (img);
+}
+
+void	destroy_mlx_img(t_mlx *mlx, t_mlx_img *mlx_img)
+{
+	if (!mlx || !mlx_img)
+	{
+		ft_putendl("Failed to destroy mlx_img!");
+		return ;
+	}
+	mlx_destroy_image(mlx->mlx_ptr, mlx_img->img);
 }
 
 void		put_pixel_mlx_img(t_mlx_img *img, int x, int y, int c)

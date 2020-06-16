@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   keyboard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/09 15:06:46 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/15 19:49:06 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/06/16 11:48:08 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,13 @@ int	key_release_hook(int key, t_rt *rt)
 	if (key == KEY_SPACE)
 	{
 		mlx_clear_window(rt->mlx->mlx_ptr, rt->mlx->win_ptr);
+		render_scene(rt, rt->scenes[rt->cur_scene]);
+	}
+	else if (key == KEY_C)
+	{
+		rt->scenes[rt->cur_scene]->cur_camera++;
+		if (rt->scenes[rt->cur_scene]->cur_camera > rt->scenes[rt->cur_scene]->num_cameras - 1)
+			rt->scenes[rt->cur_scene]->cur_camera = 0;
 		render_scene(rt, rt->scenes[rt->cur_scene]);
 	}
 	else if (key == KEY_ESC)
