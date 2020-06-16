@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/09 15:08:22 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/16 13:24:55 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/16 16:11:01 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	expose_hook(t_rt *rt)
 	if (scene_config.last_modified != modified) // vaihtoehtosesti checksum, raskaampi mut autosave ei haittaa
 	{
 		ft_printf("Scene file has been saved, refreshing\n");
-		refresh_scene(rt, rt->cur_scene, file);
+		reload_scene(rt);
 	}
 	return (0);
 }

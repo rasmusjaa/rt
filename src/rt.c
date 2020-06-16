@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 12:21:14 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/16 13:13:20 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/16 16:11:01 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,7 @@ t_rt	*rt_init(size_t num_scenes)
 	rt->cur_scene = 0;
 	rt->done_tiles = NULL;
 	rt->tp_render = NULL;
-	// rt->tp_render = tp_create(N_THREADS, MAX_JOBS);
-
+	rt->render_finished = FALSE;
 	return (rt);
 }
 
@@ -35,7 +34,6 @@ void	destroy_scene(t_scene *scene)
 	free(scene->cameras);
 	free(scene->lights);
 	free(scene->shapes);
-	free(scene->objects);
 	free(scene);
 }
 

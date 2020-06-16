@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/15 19:34:03 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/06/16 15:59:24 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ int	trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit, int stop_at_first)
 			{
 				*hit = cur_hit;
 				min_dist = cur_hit.distance;
+				if (scene->help_ray == 1)
+					ft_printf("closest dist %f\n", min_dist);
 			}
 		}
 		i++;
@@ -69,7 +71,6 @@ int	trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit, int stop_at_first)
 static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
 {
 	scene = 0;
-
 	return (hit->shape->color);
 }
 
@@ -80,6 +81,9 @@ t_rgba			raycast(t_ray *ray, t_scene *scene)
 
 	color = ft_make_rgba(0.2, 0.2, 0.2, 1.0); // ambient
 	if (trace(ray, scene, &hit, FALSE))
+	{
+		// laske normaali ja muu hit info
 		color = shade(scene, &hit);
+	}
 	return (ft_clamp_rgba(color));
 }

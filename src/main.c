@@ -67,6 +67,7 @@ void	render_scene(t_rt *rt, t_scene *scene)
 	int ji;
 	int res;
 
+	rt->render_finished = FALSE;
 	res = 20;
 	num_jobs = res * res;
 	rt->tp_render = tp_create(N_THREADS, num_jobs);
@@ -77,7 +78,7 @@ void	render_scene(t_rt *rt, t_scene *scene)
 
 	t_camera *camera = &(scene->cameras[scene->cur_camera]);
 	init_camera(camera->position, camera->target, camera);
-	rt->done_tiles = ft_queue_create(QUEUE_COPY, num_jobs, sizeof(t_tile_job_data)); // ft tp sijaan
+	rt->done_tiles = ft_queue_create(QUEUE_COPY, num_jobs, sizeof(t_tile_job_data));
 
 	start = clock();
 	ji = 0;
@@ -112,6 +113,7 @@ void	render_scene(t_rt *rt, t_scene *scene)
 	ft_printf("rendered in: %.4f s\n", cpu_time_used);
 	// tp_destroy(rt->tp_render);
 	pthread_mutex_destroy(&job_mutex);
+	rt->render_finished = TRUE;
 }
 
 int update(void *arg)
@@ -128,7 +130,13 @@ int update(void *arg)
 		{
 			mlx_put_image_to_window(rt->mlx->mlx_ptr, rt->mlx->win_ptr, job->mlx_img->img, job->screen_coord.x, job->screen_coord.y);
 			destroy_mlx_img(rt->mlx, job->mlx_img);
+
 		}
+	}
+	if (rt->render_finished && rt->done_tiles != NULL && ft_queue_isempty(rt->done_tiles))
+	{
+		ft_queue_destroy(rt->done_tiles);
+		rt->done_tiles = NULL;
 	}
 	return (1);
 }
@@ -140,19 +148,23 @@ void	hooks_and_loop(t_rt *rt)
 	mlx_hook(rt->mlx->win_ptr, 4, (1L << 2), mouse_press_hook, rt);
 	mlx_hook(rt->mlx->win_ptr, 5, (1L << 3), mouse_release_hook, rt);
 	mlx_hook(rt->mlx->win_ptr, 6, (1L << 6), mouse_move_hook, rt);
-	mlx_hook(rt->mlx->win_ptr, 9, (1L << 21), expose_hook, rt);
+	if (OS == 0)
+		mlx_expose_hook(rt->mlx->win_ptr, expose_hook, rt);
+	else
+		mlx_hook(rt->mlx->win_ptr, 9, (1L << 21), expose_hook, rt);
 	mlx_hook(rt->mlx->win_ptr, 17, (1L << 17), close_hook, rt);
 	mlx_loop_hook(rt->mlx->mlx_ptr, update, rt);
 }
 
-void	refresh_scene(t_rt *rt, int scene_nb, char *file)
+void	reload_scene(t_rt *rt)
 {
 	t_scene *scene;
+	char	*file;
 
-	scene = rt->scenes[scene_nb];
+	scene = rt->scenes[rt->cur_scene];
+	file = scene->scene_config.filepath;
 	destroy_scene(scene);
-	scene = read_scene(file);
-	mlx_clear_window(rt->mlx->mlx_ptr, rt->mlx->win_ptr);
+	rt->scenes[rt->cur_scene] = read_scene(file);
 	render_scene(rt, rt->scenes[rt->cur_scene]);
 }
 

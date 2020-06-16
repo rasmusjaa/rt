@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/16 13:13:10 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/16 15:57:31 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,13 @@
 # include <fcntl.h>
 # include "thread_pool.h"
 
+# ifndef __linux__
+
+#  define OS 0
+# else
+#  define OS 1
+# endif
+
 # define N_THREADS 10
 
 # define N_OBJ_TYPES 4
@@ -43,6 +50,8 @@
 # define MAX_HEIGHT 1080
 # define MIN_COORD -100
 # define MAX_COORD 100
+# define MIN_CLIP 0.00001
+# define MAX_CLIP 100
 # define MIN_SCALE -10
 # define MAX_SCALE 10
 # define MIN_RADIUS 0.001
@@ -173,8 +182,8 @@ typedef struct		s_scene
 {
 	t_scene_config	scene_config;
 	size_t			num_all[N_OBJ_TYPES];
-	t_object		*objects;
-	size_t			num_objects;
+	// t_object		*objects;
+	// size_t			num_objects;
 	t_camera		*cameras;
 	size_t			num_cameras;
 	size_t			cur_camera;
@@ -182,6 +191,7 @@ typedef struct		s_scene
 	size_t			num_lights;
 	t_shape			*shapes;
 	size_t			num_shapes;
+	int				help_ray;
 }					t_scene;
 
 typedef struct	s_mlx_img
@@ -215,6 +225,7 @@ typedef struct		s_rt
 	size_t 			cur_scene;
 	t_tp			*tp_render;
 	t_queue			*done_tiles;
+	size_t			render_finished;
 }					t_rt;
 
 typedef struct	s_raycast_hit
@@ -265,7 +276,7 @@ typedef struct		s_shape_name_type_map
 }					t_shape_name_type_map;
 
 void hooks_and_loop(t_rt *rt);
-void refresh_scene(t_rt *rt, int scene_nb, char *file);
+void	reload_scene(t_rt *rt);
 void load_scene(t_rt *rt, int scene_nb);
 
 void exit_message(char *str);

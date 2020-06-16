@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/10 16:00:45 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/16 12:28:01 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/16 16:11:01 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	destroy_mlx_img(t_mlx *mlx, t_mlx_img *mlx_img)
 		return ;
 	}
 	mlx_destroy_image(mlx->mlx_ptr, mlx_img->img);
+	free(mlx_img);
 }
 
 void		put_pixel_mlx_img(t_mlx_img *img, int x, int y, int c)

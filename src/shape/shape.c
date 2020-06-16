@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shape.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/15 12:46:47 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/15 19:29:35 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/06/16 15:47:58 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,26 +52,20 @@ int	intersects_sphere(t_ray *ray, t_shape *sphere, t_raycast_hit *hit)
 {
 	t_quadratic	q;
 	t_vec3		oc;
+	int 		hits;
 
 	oc = ft_sub_vec3(ray->origin, sphere->position);
 	q.a = ft_dot_vec3(ray->direction, ray->direction);
 	q.b = 2.0 * ft_dot_vec3(oc, ray->direction);
 	q.c = ft_dot_vec3(oc, oc) - (sphere->radius * sphere->radius);
-	if (solve_quadratic(q, &hit->t, &hit->t2))
+	hits = solve_quadratic(q, &hit->t, &hit->t2);
+	if (hits > 0)
 	{
-		if (hit->t > hit->t2)
+		if ((hit->t > hit->t2 || hit->t < MIN_CLIP) && hit->t2 > MIN_CLIP)
 			ft_swap_d(&hit->t, &hit->t2);
-		if (hit->t < 0)
-		{
-			hit->t = hit->t2;
-			if (hit->t < 0)
-				return (FALSE);
-		}
-		if (hit->t > MAX_COORD)
+		if (hit->t > MAX_CLIP || hit->t < MIN_CLIP)
 			return (FALSE);
 		hit->point = point_on_ray(ray, hit->t);
-		hit->normal = ft_normalize_vec3(ft_sub_vec3(hit->point, sphere->position));
-		hit->shape = sphere;
 		hit->distance = hit->t;
 		return (TRUE);
 	}
@@ -80,16 +74,11 @@ int	intersects_sphere(t_ray *ray, t_shape *sphere, t_raycast_hit *hit)
 
 int	intersects_shape(t_ray *ray, t_shape *shape, t_raycast_hit *hit)
 {
-	// select function from shape->type (function pointer?)
-	if (shape->type == SPHERE)
+	if ((shape->type == SPHERE && intersects_sphere(ray, shape, hit))
+	|| (shape->type == PLANE && intersects_sphere(ray, shape, hit)))
 	{
-		if (intersects_sphere(ray, shape, hit))
-		{
-			// hit->shape = shape; // asetettu jo mut voi teha vaan tas jos haluu
-			hit->color = shape->color;
-			return (TRUE);
-		}
+		hit->shape = shape;
+		return (TRUE);
 	}
-	// populate hit info
 	return (FALSE);
 }

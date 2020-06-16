@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/17 20:37:20 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/16 11:45:35 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/16 16:11:01 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # ifndef __linux__
 
+#  define OS            0
 #  define KEY_ESC		53
 #  define KEY_NUM_MULT	67
 #  define KEY_NUM_DIV	75
@@ -48,6 +49,7 @@
 
 # else
 
+#  define OS            1
 #  define KEY_ESC		65307
 #  define KEY_NUM_MULT	65450
 #  define KEY_NUM_DIV	65455
@@ -77,6 +79,7 @@
 #  define KEY_2			50
 #  define KEY_3			51
 #  define KEY_I			105
+#  define KEY_C			999999999
 
 # endif
 

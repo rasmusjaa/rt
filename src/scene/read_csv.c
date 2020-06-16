@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_csv.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/15 18:31:13 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/06/16 16:11:01 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,7 @@ t_unique_obj g_unique_objs[N_UNIQUE_OBJS] =
 	{POINT_LIGHT_STR, check_light_fields, LIGHT}
 };
 
-int			handle_line(t_scene *scene, char *line/*, int *object_num*/)
+int			handle_line(t_scene *scene, char *line)
 {
 	int i;
 	int n;
@@ -192,6 +192,7 @@ int		init_scene(char *file, t_scene *scene)
 	char	*line;
 	size_t	i;
 
+	scene->help_ray = 0;
 	scene->num_all[0] = 0;
 	scene->num_all[1] = 0;
 	scene->num_all[2] = 0;
@@ -210,7 +211,6 @@ int		init_scene(char *file, t_scene *scene)
 			if (ft_strncmp(line, g_unique_objs[i].obj_str, ft_strlen(g_unique_objs[i].obj_str)) == 0) // hiukan raskas kun kattoo joka rivilla kaikkien pituuden uusiks
 			{
 				scene->num_all[g_unique_objs[i].type]++;
-				scene->num_objects++;
 			}
 			i++;
 		}
@@ -234,12 +234,6 @@ t_scene		*read_scene(char *file)
 	char	*line;
 	t_scene *scene;
 
-	// int	object_num[N_OBJ_TYPES];
-	// object_num[0] = 0;
-	// object_num[1] = 0;
-	// object_num[2] = 0;
-	// object_num[3] = 0;
-
 	if (!(scene = (t_scene*)malloc(sizeof(t_scene))))
 		exit_message("Failed to malloc scene!");
 	if (!init_scene(file, scene))
@@ -249,7 +243,7 @@ t_scene		*read_scene(char *file)
 		exit_message("Invalid file");
 	while (ft_get_next_line(fd, &line) > 0)
 	{
-		handle_line(scene, line/*, object_num*/);
+		handle_line(scene, line);
 		free(line);
 	}
 	close(fd);
