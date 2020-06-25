@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/16 15:57:31 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/25 15:01:05 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@
 # endif
 
 # define N_THREADS 10
-
+# define EPSILON 0.0001
 # define N_OBJ_TYPES 4
 # define N_UNIQUE_OBJS 8
 # define N_SCENE_VALUES 8

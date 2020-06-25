@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/15 12:46:47 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/16 15:47:58 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/25 15:36:48 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,31 @@ int	intersects_sphere(t_ray *ray, t_shape *sphere, t_raycast_hit *hit)
 	return (FALSE);
 }
 
+int	intersects_plane(t_ray *ray, t_shape *plane, t_raycast_hit *hit)
+{
+	double d;
+	t_vec3 normal;
+
+	normal = ft_normalize_vec3(ft_sub_vec3(plane->position, plane->target));
+	d = ft_dot_vec3(ray->direction, normal);
+	if (d < EPSILON)
+		return (FALSE);
+	hit->t = ft_dot_vec3(ft_sub_vec3(plane->position, ray->origin), normal) / d;
+	if (hit->t > MIN_CLIP && hit->t < MAX_CLIP)
+	{
+		hit->distance = hit->t;
+		hit->point = point_on_ray(ray, hit->t);
+		hit->shape = plane;
+		hit->normal = normal;
+		return (TRUE);
+	}
+	return (FALSE);
+}
+
 int	intersects_shape(t_ray *ray, t_shape *shape, t_raycast_hit *hit)
 {
 	if ((shape->type == SPHERE && intersects_sphere(ray, shape, hit))
-	|| (shape->type == PLANE && intersects_sphere(ray, shape, hit)))
+	|| (shape->type == PLANE && intersects_plane(ray, shape, hit)))
 	{
 		hit->shape = shape;
 		return (TRUE);
