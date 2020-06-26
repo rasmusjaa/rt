@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/17 20:37:20 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/16 16:11:01 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/26 14:56:40 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@
 #  define KEY_2			50
 #  define KEY_3			51
 #  define KEY_I			105
-#  define KEY_C			999999999
+#  define KEY_C			99
 
 # endif
 
