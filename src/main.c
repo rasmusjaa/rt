@@ -70,6 +70,8 @@ void	render_scene(t_rt *rt, t_scene *scene)
 	rt->render_finished = FALSE;
 	res = 20;
 	num_jobs = res * res;
+	if (rt->tp_render != NULL)
+		tp_destroy(rt->tp_render);
 	rt->tp_render = tp_create(N_THREADS, num_jobs);
 	tile_size = ft_make_vec2i(scene->scene_config.width / res, scene->scene_config.height / res);
 	if (!(job_data_block = (t_tile_job_data*)(malloc(sizeof(t_tile_job_data) * num_jobs))))

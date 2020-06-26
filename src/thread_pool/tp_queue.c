@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 16:47:49 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/16 11:33:20 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/26 18:49:06 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void		tp_queue_destroy(t_tp_queue *q)
 {
 	free(q->queue);
 	free(q);
+	q = NULL;
 }
 
 int			tp_queue_isempty(t_tp_queue *q)

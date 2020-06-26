@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tp.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 10:31:02 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/15 17:57:45 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/06/26 19:01:09 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ static void	*tp_worker(void *arg)
 	thread_pool->thread_count--;
 	pthread_cond_signal(&(thread_pool->working_cond));
 	pthread_mutex_unlock(&(thread_pool->job_mutex));
+	pthread_detach(pthread_self());
 	return (NULL);
 }
 
@@ -67,7 +68,7 @@ t_tp	*tp_create(size_t num_threads, size_t max_jobs)
 	while (i < num_threads)
 	{
 		pthread_create(&thread, NULL, tp_worker, thread_pool);
-		pthread_detach(thread);
+		// pthread_detach(thread);
 		i++;
 	}
 	return (thread_pool);
@@ -98,6 +99,7 @@ void	tp_destroy(t_tp *thread_pool)
 
 	tp_queue_destroy(thread_pool->job_queue);
 	free(thread_pool);
+	thread_pool = NULL;
 }
 
 void	tp_wait(t_tp *thread_pool)
