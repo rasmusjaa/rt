@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/09 15:06:46 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/16 11:48:08 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/26 15:06:04 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,14 @@ int	key_release_hook(int key, t_rt *rt)
 		rt->scenes[rt->cur_scene]->cur_camera++;
 		if (rt->scenes[rt->cur_scene]->cur_camera > rt->scenes[rt->cur_scene]->num_cameras - 1)
 			rt->scenes[rt->cur_scene]->cur_camera = 0;
+		render_scene(rt, rt->scenes[rt->cur_scene]);
+	}
+	else if (key == KEY_S)
+	{
+		rt->cur_scene++;
+		if (rt->cur_scene > rt->num_scenes - 1)
+			rt->cur_scene = 0;
+		ft_printf("selected scene: %d (%s)\n", rt->cur_scene, rt->scenes[rt->cur_scene]->scene_config.filepath);
 		render_scene(rt, rt->scenes[rt->cur_scene]);
 	}
 	else if (key == KEY_ESC)
