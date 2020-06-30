@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/15 12:46:47 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/26 17:47:14 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/30 11:42:02 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,8 +96,8 @@ int	intersects_plane(t_ray *ray, t_shape *plane, t_raycast_hit *hit)
 int	intersects_cone(t_ray *ray, t_shape *cone, t_raycast_hit *hit)
 {
 	t_quadratic	q;
-	t_vec3		oc;
-	t_vec3		v;
+	t_vec3		oc;			// cone position to ray origin
+	t_vec3		v;			// cone direction
 	double		theta_sqr;
 
 	theta_sqr = ft_deg_to_rad(cone->angle) * ft_deg_to_rad(cone->angle);
@@ -126,11 +126,41 @@ int	intersects_cone(t_ray *ray, t_shape *cone, t_raycast_hit *hit)
 	return (FALSE);
 }
 
+int	intersects_cylinder(t_ray *ray, t_shape *cyl, t_raycast_hit *hit)
+{
+	t_quadratic	q;
+	t_vec3		v;		// cylinder direction
+	t_vec3		ocxv;	// cross product of ray origin and cylinder direction
+	t_vec3		dxv;	// cross product of ray direction and cylinder direction
+
+	v = ft_sub_vec3(cyl->position, cyl->target);
+	ocxv = ft_cross_vec3(ft_sub_vec3(ray->origin, cyl->position), v);
+	dxv = ft_cross_vec3(ray->direction, v);
+	q.a = ft_dot_vec3(dxv, dxv);
+	q.b = 2 * ft_dot_vec3(dxv, ocxv);
+	q.c = ft_dot_vec3(ocxv, ocxv) - ((cyl->radius * cyl->radius) *
+		ft_dot_vec3(v, v));
+	if (solve_quadratic(q, &hit->t, &hit->t2))
+	{
+		if (hit->t < 0 || (hit->t2 > 0 && hit->t2 < hit->t))
+			hit->t = hit->t2;
+		if (hit->t < 0 || hit->t > MAX_CLIP)
+			return (FALSE);
+		hit->point = point_on_ray(ray, hit->t);
+		hit->distance = hit->t;
+		// hit->normal = calc_cylinder_normal(cyl, hit);
+		return (TRUE);
+	}
+	return (FALSE);
+
+}
+
 int	intersects_shape(t_ray *ray, t_shape *shape, t_raycast_hit *hit)
 {
 	if ((shape->type == SPHERE && intersects_sphere(ray, shape, hit))
 	|| (shape->type == PLANE && intersects_plane(ray, shape, hit))
-	|| (shape->type == CONE && intersects_cone(ray, shape, hit)))
+	|| (shape->type == CONE && intersects_cone(ray, shape, hit))
+	|| (shape->type == CYLINDER && intersects_cylinder(ray, shape, hit)))
 	{
 		hit->shape = shape;
 		return (TRUE);
