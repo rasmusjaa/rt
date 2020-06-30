@@ -44,7 +44,7 @@ void	render_tile_job(void *data)
 		{
 			t_ray camera_ray = get_camera_ray(job_data->scene, job_data->camera, cur);
 			t_rgba color = raycast(&camera_ray, job_data->scene);
-			put_pixel_mlx_img(job_data->mlx_img, cur.x - job_data->screen_coord.x, cur.y - job_data->screen_coord.y, ft_get_color(color));
+			put_pixel_mlx_img(job_data->mlx_img, cur.x - job_data->screen_coord.x, cur.y - job_data->screen_coord.y, ft_get_color(ft_lerp_rgba(tcolor, color, 0.9)));
 			cur.x++;
 		}
 		cur.y++;
