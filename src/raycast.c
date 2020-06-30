@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/16 15:59:24 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/30 14:02:40 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ t_rgba			raycast(t_ray *ray, t_scene *scene)
 	if (trace(ray, scene, &hit, FALSE))
 	{
 		// laske normaali ja muu hit info
+		//hit.normal = calc_hit_normal(&hit);
 		color = shade(scene, &hit);
 	}
 	return (ft_clamp_rgba(color));

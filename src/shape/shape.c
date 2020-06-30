@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/15 12:46:47 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/30 11:42:02 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/30 14:12:17 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,4 +166,64 @@ int	intersects_shape(t_ray *ray, t_shape *shape, t_raycast_hit *hit)
 		return (TRUE);
 	}
 	return (FALSE);
+}
+
+t_vec3 calc_hit_normal_sphere(t_shape *sphere, t_raycast_hit *hit)
+{
+	return (ft_normalize_vec3(ft_sub_vec3(hit->point, sphere->position)));
+}
+
+t_vec3 calc_hit_normal_plane(t_shape *plane, t_raycast_hit *hit)
+{
+	hit = 0;
+	return (ft_normalize_vec3(ft_sub_vec3(plane->target, plane->position)));
+}
+
+t_vec3	calc_hit_normal_cone(t_shape *cone, t_raycast_hit *hit)
+{
+	t_vec3 n;
+	t_vec3 cp;
+	t_vec3 v;
+
+	v = ft_normalize_vec3(ft_sub_vec3(cone->target, cone->position));
+	cp = ft_sub_vec3(hit->point, cone->position);
+	n = ft_sub_vec3(cp, ft_mul_vec3(v,
+		(ft_len_vec3(cp) / cos(cone->radius))));
+	return (ft_normalize_vec3(n));
+}
+
+t_vec3	calc_hit_normal_cylinder(t_shape *c, t_raycast_hit *hit)
+{
+	t_vec3 dir;
+	t_vec3 c_to_hit;
+	t_vec3 v;
+	double d;
+
+	dir = ft_normalize_vec3(ft_sub_vec3(c->target, c->position));
+	c_to_hit = ft_sub_vec3(hit->point, c->position);
+	d = ft_dot_vec3(dir, c_to_hit);
+	v = ft_add_vec3(c->position, ft_mul_vec3(dir, d));
+	return (ft_normalize_vec3(ft_sub_vec3(hit->point, v)));
+}
+
+t_vec3 calc_hit_normal(t_raycast_hit *hit)
+{
+	if (!hit->shape)
+	{
+		ft_printf("calc_hit_normal -- hit.shape is null!\n");
+		return (ft_make_vec3(0, 0, 0));
+	}
+	if (hit->shape->type == SPHERE)
+		return (calc_hit_normal_sphere(hit->shape, hit));
+	else if (hit->shape->type == PLANE)
+		return (calc_hit_normal_plane(hit->shape, hit));
+	else if (hit->shape->type == CONE)
+		return (calc_hit_normal_cone(hit->shape, hit));
+	else if (hit->shape->type == CYLINDER)
+		return (calc_hit_normal_cylinder(hit->shape, hit));
+	else
+	{
+		ft_printf("calc_hit_normal -- unknown shape type\n");
+		return (ft_make_vec3(0, 0, 0));
+	}
 }

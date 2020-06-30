@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/25 15:01:05 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/06/30 14:00:21 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -311,5 +311,6 @@ void			destroy_scene(t_scene *scene);
 
 t_rgba			raycast(t_ray *ray, t_scene *scene);
 int				intersects_shape(t_ray *ray, t_shape *shape, t_raycast_hit *hit);
+t_vec3			calc_hit_normal(t_raycast_hit *hit);
 
 #endif
