@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/02 21:43:50 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/02 22:17:48 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,16 @@ typedef struct		s_triangle
 	t_vec3			v2;
 	t_vec3			normal;
 }					t_triangle;
+
+typedef struct		s_mesh
+{
+	t_triangle		*triangles;
+	size_t			num_triangles;
+	t_vec3			position;
+	t_vec3			rotation;
+	t_vec3			scale;
+	t_rgba			color;
+}					t_mesh;
 
 typedef	struct		s_scene_config
 {
