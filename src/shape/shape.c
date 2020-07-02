@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/15 12:46:47 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/30 14:12:17 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/02 22:11:00 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,37 @@ int	intersects_cylinder(t_ray *ray, t_shape *cyl, t_raycast_hit *hit)
 	}
 	return (FALSE);
 
+}
+
+int intersects_triangle(t_ray *ray, t_triangle *triangle)
+{
+	// compute triangle normal (can be computed when loading mesh, as well as edges can be precomputed)
+	t_vec3 v0v1 = ft_sub_vec3(triangle->v1, triangle->v0);
+	t_vec3 v0v2 = ft_sub_vec3(triangle->v2, triangle->v0);
+	triangle->normal = ft_normalize_vec3(ft_cross_vec3(v0v1, v0v2));
+
+	// intersects triangle plane? (plane intersection test using computed triangle normal)
+	double d = ft_dot_vec3(ray->direction, triangle->normal);
+	if (d < EPSILON)
+		return (FALSE);
+	double t = ft_dot_vec3(ft_sub_vec3(triangle->v0, ray->origin), triangle->normal) / d;
+	if (t < 0)
+		return (FALSE);
+	t_vec3 p = ft_add_vec3(ray->origin, ft_mul_vec3(ray->direction, t));
+
+	// is intersection inside triangle? (edges can be precomputed)
+	t_vec3 e0 = ft_sub_vec3(triangle->v1, triangle->v0);
+	t_vec3 e1 = ft_sub_vec3(triangle->v2, triangle->v1);
+	t_vec3 e2 = ft_sub_vec3(triangle->v0, triangle->v2);
+
+	t_vec3 p0 = ft_sub_vec3(p, triangle->v0);
+	t_vec3 p1 = ft_sub_vec3(p, triangle->v1);
+	t_vec3 p2 = ft_sub_vec3(p, triangle->v2);
+
+	// dot product of triangle normal and cross product of all need to be positive for p to be inside triangle
+	if (ft_dot_vec3(triangle->normal, ft_cross_vec3(e0, p0)) >0 && ft_dot_vec3(triangle->normal, ft_cross_vec3(e1, p1)) > 0 && ft_dot_vec3(triangle->normal, ft_cross_vec3(e2, p2)) > 0)
+		return (TRUE);
+	return (FALSE);
 }
 
 int	intersects_shape(t_ray *ray, t_shape *shape, t_raycast_hit *hit)
