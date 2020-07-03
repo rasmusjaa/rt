@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/03 15:05:05 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/03 17:42:36 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/03 17:46:25 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static void parse_face(t_mesh *m, size_t i, char *line)
 	while (parts[j])
 	{
 		// tf = ft_strsplit(parts[i], '/');
-		m->trifaces[i].v[j] = m->vertices[ft_atoi(parts[j])];
+		m->trifaces[i].v[j] = m->vertices[ft_atoi(parts[j]) - 1];
 		// m->trifaces[i].v[i] = m->vertices[ft_atoi(tf[1])];
 		// m->trifaces[i].v[i] = m->vertices[ft_atoi(tf[2])];
 		// free(tf[0]);
