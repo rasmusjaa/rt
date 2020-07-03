@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/03 17:27:02 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/03 18:22:40 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/03 19:56:39 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,15 @@ int main(void)
 	{
 		printf("%zu f %f %f %f ", i, m->trifaces[i].v[0].x, m->trifaces[i].v[0].y, m->trifaces[i].v[0].z);
 		printf("/ %f %f ", m->trifaces[i].uv[0].x, m->trifaces[i].uv[0].y);
-		printf("/ %f %f %f\n", m->trifaces[i].n[0].x, m->trifaces[i].n[0].y, m->trifaces[i].n[0].z);
+		printf("/ %f %f %f ", m->trifaces[i].n[0].x, m->trifaces[i].n[0].y, m->trifaces[i].n[0].z);
+
+		printf("\t%zu f %f %f %f ", i, m->trifaces[i].v[1].x, m->trifaces[i].v[1].y, m->trifaces[i].v[1].z);
+		printf("/ %f %f ", m->trifaces[i].uv[1].x, m->trifaces[i].uv[1].y);
+		printf("/ %f %f %f ", m->trifaces[i].n[1].x, m->trifaces[i].n[1].y, m->trifaces[i].n[1].z);
+
+		printf("\t%zu f %f %f %f ", i, m->trifaces[i].v[2].x, m->trifaces[i].v[2].y, m->trifaces[i].v[2].z);
+		printf("/ %f %f ", m->trifaces[i].uv[2].x, m->trifaces[i].uv[2].y);
+		printf("/ %f %f %f\n", m->trifaces[i].n[2].x, m->trifaces[i].n[2].y, m->trifaces[i].n[2].z);
 		i++;
 	}
 
