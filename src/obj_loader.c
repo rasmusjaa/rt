@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/03 15:05:05 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/03 17:46:25 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/03 18:23:35 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,18 @@ static void read_mesh_info(t_mesh *m, const char *filename)
 	{
 		if (ft_strncmp(line, "v ", 2) == 0)
 			m->num_vertices++;
-		else if (ft_strncmp(line, "vt", 2) == 0);
-		else if (ft_strncmp(line, "vn", 2) == 0);
+		else if (ft_strncmp(line, "vt", 2) == 0)
+			m->num_uvs++;
+		else if (ft_strncmp(line, "vn", 2) == 0)
+			m->num_normals++;
 		else if (ft_strncmp(line, "f ", 2) == 0)
 			m->num_trifaces++;
 		free(line);
 	}
 	close(fd);
 	mesh_create_verts(m, m->num_vertices);
+	mesh_create_normals(m, m->num_normals);
+	mesh_create_uvs(m, m->num_uvs);
 	mesh_create_trifaces(m, m->num_trifaces);
 }
 
@@ -56,8 +60,10 @@ static void parse_face(t_mesh *m, size_t i, char *line)
 	j = 0;
 	while (parts[j])
 	{
-		// tf = ft_strsplit(parts[i], '/');
-		m->trifaces[i].v[j] = m->vertices[ft_atoi(parts[j]) - 1];
+		tf = ft_strsplit(parts[j], '/');
+		m->trifaces[i].v[j] = m->vertices[ft_atoi(tf[0]) - 1];
+		m->trifaces[i].uv[j] = m->uvs[ft_atoi(tf[1]) - 1];
+		m->trifaces[i].n[j] = m->normals[ft_atoi(tf[2]) - 1];
 		// m->trifaces[i].v[i] = m->vertices[ft_atoi(tf[1])];
 		// m->trifaces[i].v[i] = m->vertices[ft_atoi(tf[2])];
 		// free(tf[0]);
@@ -77,6 +83,8 @@ t_mesh	*obj_load(const char *filename)
 	int fd;
 	char *line;
 	size_t vi;
+	size_t ni;
+	size_t uvi;
 	size_t ti;
 
 	if (!(m = mesh_create()))
@@ -86,6 +94,8 @@ t_mesh	*obj_load(const char *filename)
 	if (fd < 0)
 		ft_putendl("Error loading file!");
 	vi = 0;
+	ni = 0;
+	uvi = 0;
 	ti = 0;
 	while (ft_get_next_line(fd, &line) > 0)
 	{
@@ -94,8 +104,16 @@ t_mesh	*obj_load(const char *filename)
 			m->vertices[vi] = ft_parse_vec3(line + 1);
 			vi++;
 		}
-		else if (ft_strncmp(line, "vt", 2) == 0);
-		else if (ft_strncmp(line, "vn", 2) == 0);
+		else if (ft_strncmp(line, "vt", 2) == 0)
+		{
+			m->uvs[uvi] = ft_make_vec2(0.0, 1.0); // need to parse vec2
+			uvi++;
+		}
+		else if (ft_strncmp(line, "vn", 2) == 0)
+		{
+			m->normals[ni] = ft_parse_vec3(line + 2);
+			ni++;
+		}
 		else if (ft_strncmp(line, "f ", 2) == 0)
 		{
 			parse_face(m, ti, line);
