@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/03 15:05:05 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/03 18:23:35 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/03 19:53:16 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ t_mesh	*obj_load(const char *filename)
 		}
 		else if (ft_strncmp(line, "vt", 2) == 0)
 		{
-			m->uvs[uvi] = ft_make_vec2(0.0, 1.0); // need to parse vec2
+			m->uvs[uvi] = ft_parse_vec2(line + 1);
 			uvi++;
 		}
 		else if (ft_strncmp(line, "vn", 2) == 0)
