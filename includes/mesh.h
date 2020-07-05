@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/03 15:00:35 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/03 18:08:07 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/05 19:11:00 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct	s_mesh
 }				t_mesh;
 
 t_mesh			*mesh_create(void);
+void			mesh_destroy(t_mesh *m);
 void			mesh_create_verts(t_mesh *m, size_t num_vertices);
 void			mesh_create_normals(t_mesh *m, size_t num_normals);
 void			mesh_create_uvs(t_mesh *m, size_t num_uvs);

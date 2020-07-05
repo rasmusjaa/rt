@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/03 17:27:02 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/03 19:56:39 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/05 19:28:32 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ int main(void)
 		printf("/ %f %f %f\n", m->trifaces[i].n[2].x, m->trifaces[i].n[2].y, m->trifaces[i].n[2].z);
 		i++;
 	}
+
+	mesh_destroy(m);
 
 	return (0);
 }

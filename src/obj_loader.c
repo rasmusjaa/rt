@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/03 15:05:05 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/03 19:53:16 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/05 19:18:19 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,17 +64,16 @@ static void parse_face(t_mesh *m, size_t i, char *line)
 		m->trifaces[i].v[j] = m->vertices[ft_atoi(tf[0]) - 1];
 		m->trifaces[i].uv[j] = m->uvs[ft_atoi(tf[1]) - 1];
 		m->trifaces[i].n[j] = m->normals[ft_atoi(tf[2]) - 1];
-		// m->trifaces[i].v[i] = m->vertices[ft_atoi(tf[1])];
-		// m->trifaces[i].v[i] = m->vertices[ft_atoi(tf[2])];
-		// free(tf[0]);
-		// free(tf[1]);
-		// free(tf[2]);
-		// free(tf);
+		free(tf[0]);
+		free(tf[1]);
+		free(tf[2]);
+		free(tf);
 		j++;
 	}
-	// while (parts[i])
-	// 	free(parts[i++]);
-	// free(parts);
+	j = 0;
+	while (parts[j])
+		free(parts[j++]);
+	free(parts);
 }
 
 t_mesh	*obj_load(const char *filename)
@@ -93,11 +92,12 @@ t_mesh	*obj_load(const char *filename)
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
 		ft_putendl("Error loading file!");
+	line = NULL;
 	vi = 0;
 	ni = 0;
 	uvi = 0;
 	ti = 0;
-	while (ft_get_next_line(fd, &line) > 0)
+	while (ft_get_next_line(fd, &line))
 	{
 		if (ft_strncmp(line, "v ", 2) == 0)
 		{
