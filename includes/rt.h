@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/02 22:17:48 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/05 19:52:00 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # include <pthread.h>
 # include <fcntl.h>
 # include "thread_pool.h"
+# include "mesh.h"
 
 # ifndef __linux__
 
@@ -129,23 +130,14 @@ typedef struct		s_shape
 	double			opacity;
 }					t_shape;
 
-typedef struct		s_triangle
+typedef struct		s_model
 {
-	t_vec3			v0;
-	t_vec3			v1;
-	t_vec3			v2;
-	t_vec3			normal;
-}					t_triangle;
-
-typedef struct		s_mesh
-{
-	t_triangle		*triangles;
-	size_t			num_triangles;
 	t_vec3			position;
 	t_vec3			rotation;
 	t_vec3			scale;
 	t_rgba			color;
-}					t_mesh;
+	t_mesh			*mesh;
+}					t_model;
 
 typedef	struct		s_scene_config
 {
@@ -200,8 +192,7 @@ typedef struct		s_scene
 {
 	t_scene_config	scene_config;
 	size_t			num_all[N_OBJ_TYPES];
-	// t_object		*objects;
-	// size_t			num_objects;
+	t_model			model;
 	t_camera		*cameras;
 	size_t			num_cameras;
 	size_t			cur_camera;
@@ -251,6 +242,7 @@ typedef struct	s_raycast_hit
 	t_vec3		point;
 	t_vec3		normal;
 	t_shape		*shape;
+	t_model		*model;
 	t_vec3		light_dir;
 	double		t;
 	double		t2;
@@ -305,18 +297,18 @@ void				print_scene_info(t_scene *scene);
 void				print_vec3(char *s, t_vec3 v);
 void				print_rgba(char *s, t_rgba c);
 
-int mouse_press_hook(int button, int x, int y, t_rt *rt);
-int mouse_release_hook(int button, int x, int y, t_rt *rt);
-int mouse_move_hook(int x, int y, t_rt *rt);
+int					mouse_press_hook(int button, int x, int y, t_rt *rt);
+int					mouse_release_hook(int button, int x, int y, t_rt *rt);
+int					mouse_move_hook(int x, int y, t_rt *rt);
 
-int key_press_hook(int key, t_rt *rt);
-int key_release_hook(int key, t_rt *rt);
+int					key_press_hook(int key, t_rt *rt);
+int					key_release_hook(int key, t_rt *rt);
 
-int	close_hook(t_rt *rt);
-int expose_hook(t_rt *rt);
+int					close_hook(t_rt *rt);
+int					expose_hook(t_rt *rt);
 
-t_ray	get_camera_ray(t_scene *scene, t_camera *camera, t_vec2i screen_coord);
-void	init_camera(t_vec3 origin, t_vec3 target, t_camera *camera);
+t_ray			get_camera_ray(t_scene *scene, t_camera *camera, t_vec2i screen_coord);
+void			init_camera(t_vec3 origin, t_vec3 target, t_camera *camera);
 
 t_mlx_img		*create_mlx_img(t_mlx *mlx, int width, int height);
 void			destroy_mlx_img(t_mlx *mlx, t_mlx_img *mlx_img);
@@ -330,5 +322,9 @@ void			destroy_scene(t_scene *scene);
 t_rgba			raycast(t_ray *ray, t_scene *scene);
 int				intersects_shape(t_ray *ray, t_shape *shape, t_raycast_hit *hit);
 t_vec3			calc_hit_normal(t_raycast_hit *hit);
+
+int				intersects_model(t_ray *ray, t_model *model, t_raycast_hit *hit);
+
+t_mesh			*obj_load(const char *filename);
 
 #endif

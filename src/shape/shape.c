@@ -6,11 +6,12 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/15 12:46:47 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/02 22:11:00 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/05 19:55:50 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
+#include "mesh.h"
 
 typedef struct	s_quadratic
 {
@@ -155,34 +156,58 @@ int	intersects_cylinder(t_ray *ray, t_shape *cyl, t_raycast_hit *hit)
 
 }
 
-int intersects_triangle(t_ray *ray, t_triangle *triangle)
+int intersects_triangle(t_ray *ray, t_triface *triface, t_raycast_hit *hit)
 {
 	// compute triangle normal (can be computed when loading mesh, as well as edges can be precomputed)
-	t_vec3 v0v1 = ft_sub_vec3(triangle->v1, triangle->v0);
-	t_vec3 v0v2 = ft_sub_vec3(triangle->v2, triangle->v0);
-	triangle->normal = ft_normalize_vec3(ft_cross_vec3(v0v1, v0v2));
+	// t_vec3 v0v1 = ft_sub_vec3(triface->v[1], triface->v[0]);
+	// t_vec3 v0v2 = ft_sub_vec3(triface->v[2], triface->v[0]);
+	triface->normal = triface->n[0]; //ft_normalize_vec3(ft_cross_vec3(v0v1, v0v2));
 
-	// intersects triangle plane? (plane intersection test using computed triangle normal)
-	double d = ft_dot_vec3(ray->direction, triangle->normal);
+	// intersects triface plane? (plane intersection test using computed triface normal)
+	double d = ft_dot_vec3(ray->direction, triface->normal);
 	if (d < EPSILON)
 		return (FALSE);
-	double t = ft_dot_vec3(ft_sub_vec3(triangle->v0, ray->origin), triangle->normal) / d;
+	double t = ft_dot_vec3(ft_sub_vec3(triface->v[0], ray->origin), triface->normal) / d;
 	if (t < 0)
 		return (FALSE);
 	t_vec3 p = ft_add_vec3(ray->origin, ft_mul_vec3(ray->direction, t));
 
-	// is intersection inside triangle? (edges can be precomputed)
-	t_vec3 e0 = ft_sub_vec3(triangle->v1, triangle->v0);
-	t_vec3 e1 = ft_sub_vec3(triangle->v2, triangle->v1);
-	t_vec3 e2 = ft_sub_vec3(triangle->v0, triangle->v2);
+	// is intersection inside triface? (edges can be precomputed)
+	t_vec3 e0 = ft_sub_vec3(triface->v[1], triface->v[0]);
+	t_vec3 e1 = ft_sub_vec3(triface->v[2], triface->v[1]);
+	t_vec3 e2 = ft_sub_vec3(triface->v[0], triface->v[2]);
 
-	t_vec3 p0 = ft_sub_vec3(p, triangle->v0);
-	t_vec3 p1 = ft_sub_vec3(p, triangle->v1);
-	t_vec3 p2 = ft_sub_vec3(p, triangle->v2);
+	t_vec3 p0 = ft_sub_vec3(p, triface->v[0]);
+	t_vec3 p1 = ft_sub_vec3(p, triface->v[1]);
+	t_vec3 p2 = ft_sub_vec3(p, triface->v[2]);
 
-	// dot product of triangle normal and cross product of all need to be positive for p to be inside triangle
-	if (ft_dot_vec3(triangle->normal, ft_cross_vec3(e0, p0)) >0 && ft_dot_vec3(triangle->normal, ft_cross_vec3(e1, p1)) > 0 && ft_dot_vec3(triangle->normal, ft_cross_vec3(e2, p2)) > 0)
+	// dot product of triface normal and cross product of all need to be positive for p to be inside triface
+	if (ft_dot_vec3(triface->normal, ft_cross_vec3(e0, p0)) >0 && ft_dot_vec3(triface->normal, ft_cross_vec3(e1, p1)) > 0 && ft_dot_vec3(triface->normal, ft_cross_vec3(e2, p2)) > 0)
+	{
+		hit->t = t;
+		hit->distance = t;
+		hit->point = p;
 		return (TRUE);
+	}
+	return (FALSE);
+}
+
+int intersects_model(t_ray *ray, t_model *model, t_raycast_hit *hit)
+{
+	size_t i;
+
+	// we should first check if ray intersects model bounds, then go through each triface
+
+	i = 0;
+	while (i < model->mesh->num_trifaces)
+	{
+		if (intersects_triangle(ray, &(model->mesh->trifaces[i]), hit))
+		{
+			hit->model = model;
+			return (TRUE);
+		}
+		i++;
+	}
 	return (FALSE);
 }
 

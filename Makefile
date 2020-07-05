@@ -6,7 +6,7 @@
 #    By: wkorande <willehard@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/01 15:48:04 by rjaakonm          #+#    #+#              #
-#    Updated: 2020/06/15 15:38:01 by wkorande         ###   ########.fr        #
+#    Updated: 2020/07/05 19:56:15 by wkorande         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,9 @@ SRC =	scene/read_csv.c\
 		thread_pool/tp.c\
 		thread_pool/tp_job.c\
 		thread_pool/tp_queue.c\
-		thread_pool/ft_get_num_procs.c
+		thread_pool/ft_get_num_procs.c\
+		mesh.c\
+		obj_loader.c
 
 SRCS = $(addprefix $(SRCDIR)/, $(SRC))
 

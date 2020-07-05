@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/03 15:00:35 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/05 19:11:00 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/05 19:39:30 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,7 @@ typedef struct	s_triface
 	t_vec3		v[3];
 	t_vec3		n[3];
 	t_vec2		uv[3];
-	// t_vec3		v0;
-	// t_vec3		v1;
-	// t_vec3		v2;
-	// t_vec3		n0;
-	// t_vec3		n1;
-	// t_vec3		n2;
-	// t_vec2		uv0;
-	// t_vec2		uv1;
-	// t_vec2		uv2;
+	t_vec3		normal;
 }				t_triface;
 
 typedef struct	s_mesh

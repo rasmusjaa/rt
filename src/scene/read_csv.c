@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/16 16:11:01 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/05 20:09:37 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,5 +247,12 @@ t_scene		*read_scene(char *file)
 		free(line);
 	}
 	close(fd);
+
+	scene->model.position = ft_make_vec3(0,0,0);
+	scene->model.rotation  = ft_make_vec3(0,0,0);
+	scene->model.scale  = ft_make_vec3(1,1,1);
+	scene->model.color = ft_make_rgba(0.5, 0.8, 0.1, 1.0);
+	scene->model.mesh = obj_load("covid.obj");
+
 	return (scene);
 }

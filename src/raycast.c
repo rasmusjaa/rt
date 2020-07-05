@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/30 14:02:40 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/05 20:19:34 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,10 @@ int	trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit, int stop_at_first)
 		}
 		i++;
 	}
+	if (!hit_found && intersects_model(ray, &scene->model, hit))
+	{
+		hit_found = TRUE;
+	}
 	return (hit_found);
 }
 
@@ -71,13 +75,24 @@ int	trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit, int stop_at_first)
 static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
 {
 	scene = 0;
+	if (!hit->shape && hit->model)
+	{
+		return (ft_lerp_rgba(hit->model->color, ft_make_rgba(0.0, 0.0, 1.0, 1.0), ft_inv_lerp_d(hit->distance, 5, 6)));
+	}
 	return (hit->shape->color);
+}
+
+static void		init_hit_info(t_raycast_hit *hit)
+{
+	hit->model = NULL;
+	hit->shape = NULL;
 }
 
 t_rgba			raycast(t_ray *ray, t_scene *scene)
 {
 	t_rgba color;
 	t_raycast_hit hit;
+	init_hit_info(&hit);
 
 	color = ft_make_rgba(0.2, 0.2, 0.2, 1.0); // ambient
 	if (trace(ray, scene, &hit, FALSE))
