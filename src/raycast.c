@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/06 15:39:08 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/06 18:19:50 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,11 @@ int	trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit, int stop_at_first)
 		}
 		i++;
 	}
-	if (!hit_found && intersects_model(ray, &scene->model, hit))
+	if (!hit_found && intersects_model(ray, &scene->model, &cur_hit))
 	{
 		hit_found = TRUE;
+		hit->shape = NULL;
+		*hit = cur_hit;
 		if (scene->help_ray == 1)
 			ft_printf("closest dist %f\n", hit->distance);
 	}
@@ -79,9 +81,12 @@ static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
 	scene = 0;
 	if (!hit->shape && hit->model)
 	{
-		return (ft_make_rgba(hit->normal.x, hit->normal.y, hit->normal.z, 1.0));
+		t_rgba c = ft_make_rgba(hit->normal.x * 0.5 + 0.5, hit->normal.y * 0.5 + 0.5, hit->normal.z * 0.5 + 0.5, 1.0);
+		return (c);
 	}
-	return (hit->shape->color);
+	if (hit->shape)
+		return (hit->shape->color);
+	return (ft_make_rgba(0.1, 0.1, 0.1, 1.0));
 }
 
 static void		init_hit_info(t_raycast_hit *hit)

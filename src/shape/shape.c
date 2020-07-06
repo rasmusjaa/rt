@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/15 12:46:47 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/06 15:39:50 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/06 18:19:09 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,22 +232,33 @@ int	intersects_bounds(t_ray *ray, t_bounds *b)
 int intersects_model(t_ray *ray, t_model *model, t_raycast_hit *hit)
 {
 	size_t i;
+	t_raycast_hit cur_hit;
+	double min_dist;
+	int hit_found;
 
 	// we should first check if ray intersects model bounds, then go through each triface
 	if (!intersects_bounds(ray, &(model->mesh->bounds)))
 		return (FALSE);
 
+	hit_found = FALSE;
+	min_dist = MAX_CLIP;
 	i = 0;
 	while (i < model->mesh->num_trifaces)
 	{
-		if (intersects_triangle(ray, &(model->mesh->trifaces[i]), hit))
+		if (intersects_triangle(ray, &(model->mesh->trifaces[i]), &cur_hit))
 		{
+			hit_found = TRUE;
+			if (hit->distance < min_dist)
+			{
+				min_dist = hit->distance;
+				*hit = cur_hit;
+			}
 			hit->model = model;
-			return (TRUE);
+			hit->shape = NULL;
 		}
 		i++;
 	}
-	return (FALSE);
+	return (hit_found);
 }
 
 int	intersects_shape(t_ray *ray, t_shape *shape, t_raycast_hit *hit)

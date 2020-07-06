@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/06 13:07:51 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/06 17:42:04 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,7 +254,7 @@ t_scene		*read_scene(char *file)
 	scene->model.rotation  = ft_make_vec3(0,0,0);
 	scene->model.scale  = ft_make_vec3(1,1,1);
 	scene->model.color = ft_make_rgba(0.5, 0.8, 0.1, 1.0);
-	scene->model.mesh = obj_load("monkey.obj");
+	scene->model.mesh = obj_load("test.obj");
 
 	return (scene);
 }
