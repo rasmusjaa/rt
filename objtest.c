@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/03 17:27:02 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/05 19:28:32 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/06 13:27:45 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ t_mesh	*obj_load(const char *filename);
 
 int main(void)
 {
-	t_mesh *m = obj_load("test.obj");
+	t_mesh *m = obj_load("monkey.obj");
 
 	size_t i;
 
@@ -58,6 +58,11 @@ int main(void)
 		printf("/ %f %f %f\n", m->trifaces[i].n[2].x, m->trifaces[i].n[2].y, m->trifaces[i].n[2].z);
 		i++;
 	}
+
+	mesh_calc_bounds(m);
+
+	printf("bounds min %f %f %f\n", m->bounds.min.x, m->bounds.min.y, m->bounds.min.z);
+	printf("bounds max %f %f %f\n", m->bounds.max.x, m->bounds.max.y, m->bounds.max.z);
 
 	mesh_destroy(m);
 

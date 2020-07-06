@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/15 12:46:47 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/05 19:55:50 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/06 13:14:26 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ int intersects_triangle(t_ray *ray, t_triface *triface, t_raycast_hit *hit)
 	// compute triangle normal (can be computed when loading mesh, as well as edges can be precomputed)
 	// t_vec3 v0v1 = ft_sub_vec3(triface->v[1], triface->v[0]);
 	// t_vec3 v0v2 = ft_sub_vec3(triface->v[2], triface->v[0]);
-	triface->normal = triface->n[0]; //ft_normalize_vec3(ft_cross_vec3(v0v1, v0v2));
+	//triface->normal = triface->n[0]; //ft_normalize_vec3(ft_cross_vec3(v0v1, v0v2));
 
 	// intersects triface plane? (plane intersection test using computed triface normal)
 	double d = ft_dot_vec3(ray->direction, triface->normal);
@@ -173,16 +173,18 @@ int intersects_triangle(t_ray *ray, t_triface *triface, t_raycast_hit *hit)
 	t_vec3 p = ft_add_vec3(ray->origin, ft_mul_vec3(ray->direction, t));
 
 	// is intersection inside triface? (edges can be precomputed)
-	t_vec3 e0 = ft_sub_vec3(triface->v[1], triface->v[0]);
-	t_vec3 e1 = ft_sub_vec3(triface->v[2], triface->v[1]);
-	t_vec3 e2 = ft_sub_vec3(triface->v[0], triface->v[2]);
+	//t_vec3 e0 = ft_sub_vec3(triface->v[1], triface->v[0]);
+	//t_vec3 e1 = ft_sub_vec3(triface->v[2], triface->v[1]);
+	//t_vec3 e2 = ft_sub_vec3(triface->v[0], triface->v[2]);
 
 	t_vec3 p0 = ft_sub_vec3(p, triface->v[0]);
 	t_vec3 p1 = ft_sub_vec3(p, triface->v[1]);
 	t_vec3 p2 = ft_sub_vec3(p, triface->v[2]);
 
 	// dot product of triface normal and cross product of all need to be positive for p to be inside triface
-	if (ft_dot_vec3(triface->normal, ft_cross_vec3(e0, p0)) >0 && ft_dot_vec3(triface->normal, ft_cross_vec3(e1, p1)) > 0 && ft_dot_vec3(triface->normal, ft_cross_vec3(e2, p2)) > 0)
+	if (ft_dot_vec3(triface->normal, ft_cross_vec3(triface->e[0], p0)) > 0 &&
+		ft_dot_vec3(triface->normal, ft_cross_vec3(triface->e[1], p1)) > 0 &&
+		ft_dot_vec3(triface->normal, ft_cross_vec3(triface->e[2], p2)) > 0)
 	{
 		hit->t = t;
 		hit->distance = t;

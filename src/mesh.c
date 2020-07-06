@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/03 14:56:36 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/05 19:10:42 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/06 13:27:18 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ t_mesh *mesh_create(void)
 	m->normals = NULL;
 	m->num_uvs = 0;
 	m->uvs = NULL;
+	m->bounds.min = ft_make_vec3(MAX_BOUNDS, MAX_BOUNDS, MAX_BOUNDS);
+	m->bounds.max = ft_make_vec3(MIN_BOUNDS, MIN_BOUNDS, MIN_BOUNDS);
 	return (m);
 }
 
@@ -104,4 +106,30 @@ void	mesh_set_vert(t_mesh *m, size_t i, t_vec3 v)
 		ft_printf("mesh_set_vert: failed to set vertex!\n");
 	else
 		m->vertices[i] = v;
+}
+
+void	mesh_calc_bounds(t_mesh *m)
+{
+	size_t i;
+
+	m->bounds.min = ft_make_vec3(MAX_BOUNDS, MAX_BOUNDS, MAX_BOUNDS);
+	m->bounds.max = ft_make_vec3(MIN_BOUNDS, MIN_BOUNDS, MIN_BOUNDS);
+	i = 0;
+	while (i < m->num_vertices)
+	{
+		if (m->vertices[i].x < m->bounds.min.x)
+			m->bounds.min.x = m->vertices[i].x;
+		if (m->vertices[i].y < m->bounds.min.y)
+			m->bounds.min.y = m->vertices[i].y;
+		if (m->vertices[i].z < m->bounds.min.z)
+			m->bounds.min.z = m->vertices[i].z;
+
+		if (m->vertices[i].x > m->bounds.max.x)
+			m->bounds.max.x = m->vertices[i].x;
+		if (m->vertices[i].y > m->bounds.max.y)
+			m->bounds.max.y = m->vertices[i].y;
+		if (m->vertices[i].z > m->bounds.max.z)
+			m->bounds.max.z = m->vertices[i].z;
+		i++;
+	}
 }

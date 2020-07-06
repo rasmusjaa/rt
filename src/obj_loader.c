@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/03 15:05:05 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/05 19:41:07 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/06 13:11:56 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ static void parse_face(t_mesh *m, size_t i, char *line)
 		m->trifaces[i].v[j] = m->vertices[ft_atoi(tf[0]) - 1];
 		m->trifaces[i].uv[j] = m->uvs[ft_atoi(tf[1]) - 1];
 		m->trifaces[i].n[j] = m->normals[ft_atoi(tf[2]) - 1];
-		m->trifaces[i].normal = m->trifaces->n[0]; // this should not be here
 		free(tf[0]);
 		free(tf[1]);
 		free(tf[2]);
@@ -75,6 +74,10 @@ static void parse_face(t_mesh *m, size_t i, char *line)
 	while (parts[j])
 		free(parts[j++]);
 	free(parts);
+	m->trifaces[i].e[0] = ft_sub_vec3(m->trifaces[i].v[1], m->trifaces[i].v[0]);
+	m->trifaces[i].e[1] = ft_sub_vec3(m->trifaces[i].v[2], m->trifaces[i].v[1]);
+	m->trifaces[i].e[2] = ft_sub_vec3(m->trifaces[i].v[0], m->trifaces[i].v[2]);
+	m->trifaces[i].normal = m->trifaces[i].n[0]; // this should not be here
 }
 
 t_mesh	*obj_load(const char *filename)

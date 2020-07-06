@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/05 19:52:00 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/06 13:07:28 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@
 # define N_THREADS 10
 # define EPSILON 0.0001
 # define N_OBJ_TYPES 4
-# define N_UNIQUE_OBJS 8
+# define N_UNIQUE_OBJS 9
 # define N_SCENE_VALUES 8
 # define N_CAMERA_VALUES 12
 # define N_SHAPE_VALUES 19
@@ -69,7 +69,7 @@
 # define MAX_BOUNCES 100
 # define CAMERA_TYPES 2
 # define LIGHT_TYPES 2
-# define SHAPE_TYPES 5
+# define SHAPE_TYPES 6
 
 # define SETTINGS_STR "settings"
 # define CAMERA_STR "camera"
@@ -80,6 +80,7 @@
 # define CONE_STR "cone"
 # define CYL_STR "cylinder"
 # define DISC_STR "disc"
+# define MODEL_STR "model"
 # define MOEBIUS_STR "moebius"
 # define SHAPE_ERROR_STR "shape_error"
 
@@ -112,7 +113,8 @@ typedef enum	e_shape_type
 	PLANE,
 	CONE,
 	CYLINDER,
-	DISC
+	DISC,
+	MODEL
 }				t_shape_type;
 
 
@@ -128,6 +130,7 @@ typedef struct		s_shape
 	double			radius;
 	double			angle;
 	double			opacity;
+	t_mesh			*mesh;
 }					t_shape;
 
 typedef struct		s_model
