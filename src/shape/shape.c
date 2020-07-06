@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/15 12:46:47 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/06 13:14:26 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/06 15:39:50 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,9 +189,44 @@ int intersects_triangle(t_ray *ray, t_triface *triface, t_raycast_hit *hit)
 		hit->t = t;
 		hit->distance = t;
 		hit->point = p;
+		hit->normal = triface->normal;
 		return (TRUE);
 	}
 	return (FALSE);
+}
+
+/*
+** mesh bounds are calculated on load
+** axis aligned
+*/
+int	intersects_bounds(t_ray *ray, t_bounds *b)
+{
+	double txmin = (b->min.x - ray->origin.x) / ray->direction.x;
+	double txmax = (b->max.x - ray->origin.x) / ray->direction.x;
+
+	// need to swap if we are looking from behind, as is only works if camera pos in front of bounds
+	if (txmin > txmax)
+		ft_swap_d(&txmin, &txmax);
+
+	double tymin = (b->min.y - ray->origin.y) / ray->direction.y;
+	double tymax = (b->max.y - ray->origin.y) / ray->direction.y;
+
+	if (tymin > tymax)
+		ft_swap_d(&tymin, &tymax);
+
+	if ((txmin > tymax) || (tymin > txmax))
+		return (FALSE);
+
+	double tzmin = (b->min.z - ray->origin.z) / ray->direction.z;
+	double tzmax = (b->max.z - ray->origin.z) / ray->direction.z;
+
+	if (tzmin > tzmax)
+		ft_swap_d(&tzmin, &tzmax);
+
+	if ((txmin > tzmax) || (tzmin > txmax))
+		return (FALSE);
+
+	return (TRUE);
 }
 
 int intersects_model(t_ray *ray, t_model *model, t_raycast_hit *hit)
@@ -199,6 +234,8 @@ int intersects_model(t_ray *ray, t_model *model, t_raycast_hit *hit)
 	size_t i;
 
 	// we should first check if ray intersects model bounds, then go through each triface
+	if (!intersects_bounds(ray, &(model->mesh->bounds)))
+		return (FALSE);
 
 	i = 0;
 	while (i < model->mesh->num_trifaces)
