@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/07 18:38:03 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/07 18:57:51 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/07 19:20:44 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@
 
 typedef struct	s_octree
 {
-	t_octree	*children[NUM_CHILDREN];
-	void		*content;
+	struct s_octree	*children[NUM_CHILDREN];
+	char		*content;
 }				t_octree;
 
 
-t_octree	*octree_create_node(void *content);
+t_octree	*octree_create_node(char *content);
 
 #endif
