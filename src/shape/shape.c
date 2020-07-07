@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shape.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/15 12:46:47 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/07 17:49:04 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/07 19:00:53 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,11 +228,11 @@ int intersects_model(t_ray *ray, t_shape *model, t_raycast_hit *hit)
 	// we should first check if ray intersects model bounds, then go through each triface
 	if (!intersects_bounds(ray, &(model->mesh->bounds)))
 		return (FALSE);
-	else
-	{
-		hit->shape = model;
-		return (TRUE);
-	}
+	// else
+	// {
+	// 	hit->shape = model;
+	// 	return (TRUE);
+	// }
 
 
 	hit_found = FALSE;
