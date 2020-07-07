@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rt.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/06 13:07:28 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/07 16:27:13 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,14 +133,14 @@ typedef struct		s_shape
 	t_mesh			*mesh;
 }					t_shape;
 
-typedef struct		s_model
-{
-	t_vec3			position;
-	t_vec3			rotation;
-	t_vec3			scale;
-	t_rgba			color;
-	t_mesh			*mesh;
-}					t_model;
+// typedef struct		s_model
+// {
+// 	t_vec3			position;
+// 	t_vec3			rotation;
+// 	t_vec3			scale;
+// 	t_rgba			color;
+// 	t_mesh			*mesh;
+// }					t_model;
 
 typedef	struct		s_scene_config
 {
@@ -195,7 +195,7 @@ typedef struct		s_scene
 {
 	t_scene_config	scene_config;
 	size_t			num_all[N_OBJ_TYPES];
-	t_model			model;
+	// t_model			model;
 	t_camera		*cameras;
 	size_t			num_cameras;
 	size_t			cur_camera;
@@ -245,7 +245,7 @@ typedef struct	s_raycast_hit
 	t_vec3		point;
 	t_vec3		normal;
 	t_shape		*shape;
-	t_model		*model;
+	// t_model		*model;
 	t_vec3		light_dir;
 	double		t;
 	double		t2;
@@ -323,10 +323,10 @@ void			render_scene(t_rt *rt, t_scene *scene);
 void			destroy_scene(t_scene *scene);
 
 t_rgba			raycast(t_ray *ray, t_scene *scene);
-int				intersects_shape(t_ray *ray, t_shape *shape, t_raycast_hit *hit);
+int				intersects_shape(t_ray *ray, t_shape *shape, t_raycast_hit *hit, int debug);
 t_vec3			calc_hit_normal(t_raycast_hit *hit);
 
-int				intersects_model(t_ray *ray, t_model *model, t_raycast_hit *hit);
+int				intersects_model(t_ray *ray, t_shape *model, t_raycast_hit *hit);
 
 t_mesh			*obj_load(const char *filename);
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/06 18:19:50 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/07 16:30:22 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit, int stop_at_first)
 	i = 0;
 	while (i < scene->num_shapes)
 	{
-		if (intersects_shape(ray, &scene->shapes[i], &cur_hit))
+		if (intersects_shape(ray, &scene->shapes[i], &cur_hit, scene->help_ray))
 		{
 			if (stop_at_first)
 				return (TRUE);
@@ -42,14 +42,14 @@ int	trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit, int stop_at_first)
 		}
 		i++;
 	}
-	if (!hit_found && intersects_model(ray, &scene->model, &cur_hit))
-	{
-		hit_found = TRUE;
-		hit->shape = NULL;
-		*hit = cur_hit;
-		if (scene->help_ray == 1)
-			ft_printf("closest dist %f\n", hit->distance);
-	}
+	// if (!hit_found && intersects_model(ray, &scene->model, &cur_hit, scene->help_ray))
+	// {
+	// 	hit_found = TRUE;
+	// 	hit->shape = NULL;
+	// 	*hit = cur_hit;
+	// 	if (scene->help_ray == 1)
+	// 		ft_printf("closest dist %f\n", hit->distance);
+	// }
 	return (hit_found);
 }
 
@@ -79,19 +79,21 @@ int	trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit, int stop_at_first)
 static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
 {
 	scene = 0;
-	if (!hit->shape && hit->model)
-	{
-		t_rgba c = ft_make_rgba(hit->normal.x * 0.5 + 0.5, hit->normal.y * 0.5 + 0.5, hit->normal.z * 0.5 + 0.5, 1.0);
-		return (c);
-	}
 	if (hit->shape)
+	{
+		if (hit->shape->type == MODEL)
+		{
+			t_rgba c = ft_make_rgba(hit->normal.x * 0.5 + 0.5, hit->normal.y * 0.5 + 0.5, hit->normal.z * 0.5 + 0.5, 1.0);
+		//	t_rgba c = ft_make_rgba(1.0- ft_inv_lerp_d(hit->distance, 4, 6), 0, 0, 1);
+			return (c);
+		}
 		return (hit->shape->color);
+	}
 	return (ft_make_rgba(0.1, 0.1, 0.1, 1.0));
 }
 
 static void		init_hit_info(t_raycast_hit *hit)
 {
-	hit->model = NULL;
 	hit->shape = NULL;
 }
 
