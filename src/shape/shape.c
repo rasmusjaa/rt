@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shape.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/15 12:46:47 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/06 18:19:09 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/07 17:49:04 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,9 @@ int	intersects_plane(t_ray *ray, t_shape *plane, t_raycast_hit *hit)
 	double d;
 	t_vec3 normal;
 
-	normal = ft_normalize_vec3(ft_sub_vec3(plane->position, plane->target));
+	normal = ft_normalize_vec3(ft_sub_vec3(plane->target, plane->position));
 	d = ft_dot_vec3(ray->direction, normal);
-	if (d < EPSILON)
+	if (d > EPSILON)
 		return (FALSE);
 	hit->t = ft_dot_vec3(ft_sub_vec3(plane->position, ray->origin), normal) / d;
 	if (hit->t > MIN_CLIP && hit->t < MAX_CLIP)
@@ -117,11 +117,10 @@ int	intersects_cone(t_ray *ray, t_shape *cone, t_raycast_hit *hit)
 		(hit->t < MAX_CLIP))
 	{
 		hit->point = point_on_ray(ray, hit->t);
-		hit->distance = hit->t;
-		// hit->normal = calc_cone_normal(cone, hit);
 		if ((ft_dot_vec3(
 				ft_sub_vec3(hit->point, cone->position), v) < 0))
 			return (FALSE);
+		hit->distance = hit->t;
 		return (TRUE);
 	}
 	return (FALSE);
@@ -149,7 +148,6 @@ int	intersects_cylinder(t_ray *ray, t_shape *cyl, t_raycast_hit *hit)
 			return (FALSE);
 		hit->point = point_on_ray(ray, hit->t);
 		hit->distance = hit->t;
-		// hit->normal = calc_cylinder_normal(cyl, hit);
 		return (TRUE);
 	}
 	return (FALSE);
@@ -158,37 +156,28 @@ int	intersects_cylinder(t_ray *ray, t_shape *cyl, t_raycast_hit *hit)
 
 int intersects_triangle(t_ray *ray, t_triface *triface, t_raycast_hit *hit)
 {
-	// compute triangle normal (can be computed when loading mesh, as well as edges can be precomputed)
-	// t_vec3 v0v1 = ft_sub_vec3(triface->v[1], triface->v[0]);
-	// t_vec3 v0v2 = ft_sub_vec3(triface->v[2], triface->v[0]);
-	//triface->normal = triface->n[0]; //ft_normalize_vec3(ft_cross_vec3(v0v1, v0v2));
+	t_vec3	p0;
+	t_vec3	p1;
+	t_vec3	p2;
+	double	d;
 
-	// intersects triface plane? (plane intersection test using computed triface normal)
-	double d = ft_dot_vec3(ray->direction, triface->normal);
-	if (d < EPSILON)
+	d = ft_dot_vec3(triface->normal, ray->direction);
+	if (d > EPSILON)
 		return (FALSE);
-	double t = ft_dot_vec3(ft_sub_vec3(triface->v[0], ray->origin), triface->normal) / d;
-	if (t < 0)
+	hit->t = ft_dot_vec3(ft_sub_vec3(triface->v[0], ray->origin), triface->normal) / d;
+	if (hit->t < 0)
 		return (FALSE);
-	t_vec3 p = ft_add_vec3(ray->origin, ft_mul_vec3(ray->direction, t));
+	hit->point = ft_add_vec3(ray->origin, ft_mul_vec3(ray->direction, hit->t));
 
-	// is intersection inside triface? (edges can be precomputed)
-	//t_vec3 e0 = ft_sub_vec3(triface->v[1], triface->v[0]);
-	//t_vec3 e1 = ft_sub_vec3(triface->v[2], triface->v[1]);
-	//t_vec3 e2 = ft_sub_vec3(triface->v[0], triface->v[2]);
+	p0 = ft_sub_vec3(hit->point, triface->v[0]);
+	p1 = ft_sub_vec3(hit->point, triface->v[1]);
+	p2 = ft_sub_vec3(hit->point, triface->v[2]);
 
-	t_vec3 p0 = ft_sub_vec3(p, triface->v[0]);
-	t_vec3 p1 = ft_sub_vec3(p, triface->v[1]);
-	t_vec3 p2 = ft_sub_vec3(p, triface->v[2]);
-
-	// dot product of triface normal and cross product of all need to be positive for p to be inside triface
-	if (ft_dot_vec3(triface->normal, ft_cross_vec3(triface->e[0], p0)) > 0 &&
-		ft_dot_vec3(triface->normal, ft_cross_vec3(triface->e[1], p1)) > 0 &&
-		ft_dot_vec3(triface->normal, ft_cross_vec3(triface->e[2], p2)) > 0)
+	if (ft_dot_vec3(triface->normal, ft_cross_vec3(triface->e[0], p0)) >= 0 &&
+		ft_dot_vec3(triface->normal, ft_cross_vec3(triface->e[1], p1)) >= 0 &&
+		ft_dot_vec3(triface->normal, ft_cross_vec3(triface->e[2], p2)) >= 0)
 	{
-		hit->t = t;
-		hit->distance = t;
-		hit->point = p;
+		hit->distance = hit->t;
 		hit->normal = triface->normal;
 		return (TRUE);
 	}
@@ -229,7 +218,7 @@ int	intersects_bounds(t_ray *ray, t_bounds *b)
 	return (TRUE);
 }
 
-int intersects_model(t_ray *ray, t_model *model, t_raycast_hit *hit)
+int intersects_model(t_ray *ray, t_shape *model, t_raycast_hit *hit)
 {
 	size_t i;
 	t_raycast_hit cur_hit;
@@ -239,6 +228,12 @@ int intersects_model(t_ray *ray, t_model *model, t_raycast_hit *hit)
 	// we should first check if ray intersects model bounds, then go through each triface
 	if (!intersects_bounds(ray, &(model->mesh->bounds)))
 		return (FALSE);
+	else
+	{
+		hit->shape = model;
+		return (TRUE);
+	}
+
 
 	hit_found = FALSE;
 	min_dist = MAX_CLIP;
@@ -248,26 +243,28 @@ int intersects_model(t_ray *ray, t_model *model, t_raycast_hit *hit)
 		if (intersects_triangle(ray, &(model->mesh->trifaces[i]), &cur_hit))
 		{
 			hit_found = TRUE;
-			if (hit->distance < min_dist)
+			if (cur_hit.distance < min_dist)
 			{
-				min_dist = hit->distance;
+				min_dist = cur_hit.distance;
 				*hit = cur_hit;
+				hit->shape = model;
 			}
-			hit->model = model;
-			hit->shape = NULL;
 		}
 		i++;
 	}
 	return (hit_found);
 }
 
-int	intersects_shape(t_ray *ray, t_shape *shape, t_raycast_hit *hit)
+int	intersects_shape(t_ray *ray, t_shape *shape, t_raycast_hit *hit, int debug)
 {
 	if ((shape->type == SPHERE && intersects_sphere(ray, shape, hit))
 	|| (shape->type == PLANE && intersects_plane(ray, shape, hit))
 	|| (shape->type == CONE && intersects_cone(ray, shape, hit))
-	|| (shape->type == CYLINDER && intersects_cylinder(ray, shape, hit)))
+	|| (shape->type == CYLINDER && intersects_cylinder(ray, shape, hit))
+	|| (shape->type == MODEL && intersects_model(ray, shape, hit)))
 	{
+		if (debug)
+				ft_printf("hit shape, hit point %f %f %f\n", hit->point.x, hit->point.y, hit->point.z);
 		hit->shape = shape;
 		return (TRUE);
 	}

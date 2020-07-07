@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_csv.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/06 17:42:04 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/07 17:19:46 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,35 @@ void	get_fields(char *line, double *values, int num_values)
 		if (line[i] == ';')
 		{
 			field++;
-			if (field <= num_values)
+			if (field < num_values)
 			{
 				values[field] = ft_strtod(&line[i + 1]);
 			}
 		}
 		i++;
 	}
+}
+
+char	*get_shape_file(char *line, int num_values)
+{
+	int i;
+	int field;
+
+	i = 0;
+	field = -1;
+	while (line[i])
+	{
+		if (line[i] == ';')
+		{
+			field++;
+			if (field == num_values)
+			{
+				return (&line[i + 1]);
+			}
+		}
+		i++;
+	}
+	return (NULL);
 }
 
 void	check_scene_fields(t_scene *scene, char *line, int n)
@@ -121,6 +143,14 @@ void	check_shape_fields(t_scene *scene, char *line, int n)
 	scene->shapes[n].radius = ft_clamp_d(values[16], MIN_RADIUS, MAX_RADIUS);
 	scene->shapes[n].angle = ft_clamp_d(values[17], MIN_ANGLE, MAX_ANGLE);
 	scene->shapes[n].opacity = ft_clamp_d(values[18], 0, 1);
+	if (scene->shapes[n].type == MODEL)
+	{
+		char file[100];
+		ft_strcpy(file, get_shape_file(line, N_SHAPE_VALUES));
+		scene->shapes[n].mesh = obj_load(file);
+		ft_printf("file is %s\n", file);
+	}
+	ft_printf(" done here\n");
 }
 
 void	check_light_fields(t_scene *scene, char *line, int n)
@@ -168,7 +198,9 @@ int			handle_line(t_scene *scene, char *line)
 			// valo kolmanneks ja if (g_unique_objs[i].type == SHAPE)
 			// scene->shapes[n].type = g_unique_objs[i].type; -2 tai jotain jos haluu
 			// scene->shapes[n].name = g_unique_objs[i].obj_str;
+			ft_printf(" i %d, line %s n %d\n", i, line, n);
 			g_unique_objs[i].func(scene, line, n);
+			ft_printf(" done\n");
 		}
 		i++;
 	}
@@ -250,11 +282,11 @@ t_scene		*read_scene(char *file)
 	}
 	close(fd);
 
-	scene->model.position = ft_make_vec3(0,0,0);
-	scene->model.rotation  = ft_make_vec3(0,0,0);
-	scene->model.scale  = ft_make_vec3(1,1,1);
-	scene->model.color = ft_make_rgba(0.5, 0.8, 0.1, 1.0);
-	scene->model.mesh = obj_load("test.obj");
+	// scene->model.position = ft_make_vec3(0,0,0);
+	// scene->model.rotation  = ft_make_vec3(0,0,0);
+	// scene->model.scale  = ft_make_vec3(1,1,1);
+	// scene->model.color = ft_make_rgba(0.5, 0.8, 0.1, 1.0);
+	// scene->model.mesh = obj_load("monkey.obj");
 
 	return (scene);
 }
