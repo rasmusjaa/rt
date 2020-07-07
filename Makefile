@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: wkorande <willehard@gmail.com>             +#+  +:+       +#+         #
+#    By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/01 15:48:04 by rjaakonm          #+#    #+#              #
-#    Updated: 2020/06/15 15:38:01 by wkorande         ###   ########.fr        #
+#    Updated: 2020/07/07 14:33:42 by rjaakonm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,9 @@ SRC =	scene/read_csv.c\
 		thread_pool/tp.c\
 		thread_pool/tp_job.c\
 		thread_pool/tp_queue.c\
-		thread_pool/ft_get_num_procs.c
+		thread_pool/ft_get_num_procs.c\
+		mesh.c\
+		obj_loader.c
 
 SRCS = $(addprefix $(SRCDIR)/, $(SRC))
 
@@ -70,6 +72,6 @@ re: fclean all
 
 run:
 	$(CC) $(CFLAGS) $(INCL) $(SRCS) $(LIB) -o $(NAME)
-	./RT resources/scene1.csv
+	./RT resources/scene4.csv
 
 .PHONY: all libftmake clean fclean re run debug
