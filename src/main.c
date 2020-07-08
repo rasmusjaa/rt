@@ -58,16 +58,14 @@ void	render_scene(t_rt *rt, t_scene *scene)
 	int res;
 
 	rt->render_finished = FALSE;
-	res = 20;
+	res = 10;
 	rt->num_render_jobs = res * res;
-	// if (rt->tp_render != NULL)
-	// 	tp_destroy(rt->tp_render);
+	if (rt->tp_render != NULL)
+		tp_destroy(rt->tp_render);
 	rt->tp_render = tp_create(N_THREADS, rt->num_render_jobs);
 	tile_size = ft_make_vec2i(scene->scene_config.width / res, scene->scene_config.height / res);
 	if (!(rt->job_data_block = (t_tile_job_data*)(malloc(sizeof(t_tile_job_data) * rt->num_render_jobs))))
 		exit_message("Failed to allocate memory for thread pool jobs!");
-	// pthread_mutex_init(&(rt->job_mutex), NULL);
-
 	t_camera *camera = &(scene->cameras[scene->cur_camera]);
 	init_camera(camera->position, camera->target, camera);
 	rt->done_tiles = ft_queue_create(QUEUE_COPY, rt->num_render_jobs, sizeof(t_tile_job_data));
@@ -122,7 +120,6 @@ int update(void *arg)
 	{
 		ft_queue_destroy(rt->done_tiles);
 		rt->done_tiles = NULL;
-		// tp_destroy(rt->tp_render);
 		i = 0;
 		while (i < rt->num_render_jobs)
 		{
@@ -130,6 +127,8 @@ int update(void *arg)
 			i++;
 		}
 		free(rt->job_data_block);
+		tp_destroy(rt->tp_render);
+		rt->tp_render = NULL;
 	}
 	return (1);
 }

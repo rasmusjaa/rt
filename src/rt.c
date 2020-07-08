@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 12:21:14 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/08 13:24:59 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/08 14:41:23 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,15 @@ t_rt	*rt_init(size_t num_scenes)
 
 void	destroy_scene(t_scene *scene)
 {
+	size_t i;
+
+	i = 0;
+	while (i < scene->num_shapes)
+	{
+		if (scene->shapes[i].type == MODEL)
+			mesh_destroy(scene->shapes[i].mesh);
+		i++;
+	}
 	free(scene->cameras);
 	free(scene->lights);
 	free(scene->shapes);
@@ -48,9 +57,9 @@ void	rt_destroy_exit(t_rt *rt, int status)
 		destroy_scene(rt->scenes[i]);
 		i++;
 	}
-	pthread_mutex_destroy(&rt->job_mutex);
 	free(rt->scenes);
 	tp_destroy(rt->tp_render);
+	pthread_mutex_destroy(&rt->job_mutex);
 	free(rt->mlx);
 	free(rt);
 	exit(status);
