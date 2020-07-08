@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shape.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/15 12:46:47 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/07 19:00:53 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/08 16:12:02 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,7 +188,7 @@ int intersects_triangle(t_ray *ray, t_triface *triface, t_raycast_hit *hit)
 ** mesh bounds are calculated on load
 ** axis aligned
 */
-int	intersects_bounds(t_ray *ray, t_bounds *b)
+int	intersects_bounds(t_ray *ray, t_bounds *b, int debug)
 {
 	double txmin = (b->min.x - ray->origin.x) / ray->direction.x;
 	double txmax = (b->max.x - ray->origin.x) / ray->direction.x;
@@ -215,10 +215,24 @@ int	intersects_bounds(t_ray *ray, t_bounds *b)
 	if ((txmin > tzmax) || (tzmin > txmax))
 		return (FALSE);
 
+	if ((tymin > tzmax)  || (tzmin > tymax))
+       return (FALSE);
+
+	if (debug)
+	{
+		ft_printf("RAY\norigin x %f y %f z%f\ndirection x %f y %f z%f\n",
+		ray->origin.x, ray->origin.y, ray->origin.z,
+		ray->direction.x, ray->direction.y, ray->direction.z);
+		ft_printf("BOUNDS\nxmin %f xmax %f\nymin %f ymax %f\nzmin %f zmax %f\n\n",
+		b->min.x, b->max.x, b->min.y, b->max.y, b->min.z, b->max.z);
+		ft_printf("T\nxmin %f xmax %f\nymin %f ymax %f\nzmin %f zmax %f\n\n",
+		txmin, txmax, tymin, tymax, tzmin, tzmax);
+	}
+
 	return (TRUE);
 }
 
-int intersects_model(t_ray *ray, t_shape *model, t_raycast_hit *hit)
+int intersects_model(t_ray *ray, t_shape *model, t_raycast_hit *hit, int debug)
 {
 	size_t i;
 	t_raycast_hit cur_hit;
@@ -226,7 +240,7 @@ int intersects_model(t_ray *ray, t_shape *model, t_raycast_hit *hit)
 	int hit_found;
 
 	// we should first check if ray intersects model bounds, then go through each triface
-	if (!intersects_bounds(ray, &(model->mesh->bounds)))
+	if (!intersects_bounds(ray, &(model->mesh->bounds), debug))
 		return (FALSE);
 	// else
 	// {
@@ -261,7 +275,7 @@ int	intersects_shape(t_ray *ray, t_shape *shape, t_raycast_hit *hit, int debug)
 	|| (shape->type == PLANE && intersects_plane(ray, shape, hit))
 	|| (shape->type == CONE && intersects_cone(ray, shape, hit))
 	|| (shape->type == CYLINDER && intersects_cylinder(ray, shape, hit))
-	|| (shape->type == MODEL && intersects_model(ray, shape, hit)))
+	|| (shape->type == MODEL && intersects_model(ray, shape, hit, debug)))
 	{
 		if (debug)
 				ft_printf("hit shape, hit point %f %f %f\n", hit->point.x, hit->point.y, hit->point.z);
