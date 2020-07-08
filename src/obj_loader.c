@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/03 15:05:05 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/07 17:34:15 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/08 15:35:39 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "libft.h"
 #include <unistd.h>
 #include <fcntl.h>
+#include "rt.h"
 
 /*
 ** reads through the file as we need to know the count before reading for real
@@ -25,7 +26,10 @@ static void read_mesh_info(t_mesh *m, const char *filename)
 	char *line;
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
-		ft_putendl("Error loading file!");
+	{
+		ft_putendl("Error loading model file!");
+		exit(1);
+	}
 	while (ft_get_next_line(fd, &line) > 0)
 	{
 		if (ft_strncmp(line, "v ", 2) == 0)
@@ -55,15 +59,22 @@ static void parse_face(t_mesh *m, size_t i, char *line)
 	size_t j;
 	char **parts;
 	char **tf;
+	size_t	atoi;
 
 	parts = ft_strsplit(line + 1, ' ');
 	j = 0;
 	while (parts[j])
 	{
 		tf = ft_strsplit(parts[j], '/');
-		m->trifaces[i].v[j] = m->vertices[ft_atoi(tf[0]) - 1];
-		m->trifaces[i].uv[j] = m->uvs[ft_atoi(tf[1]) - 1];
-		m->trifaces[i].n[j] = m->normals[ft_atoi(tf[2]) - 1];
+		if (!tf[0] || ((atoi = ft_atoi(tf[0])) && (atoi > m->num_vertices || atoi < 1)))
+			exit_message("Not enough model vertices");
+		m->trifaces[i].v[j] = m->vertices[atoi - 1];
+		if (!tf[1] || ((atoi = ft_atoi(tf[1])) && (atoi > m->num_uvs || atoi < 1)))
+			exit_message("Not enough model textures");
+		m->trifaces[i].uv[j] = m->uvs[atoi - 1];
+		if (!tf[2] || ((atoi = ft_atoi(tf[2])) && (atoi > m->num_normals || atoi < 1)))
+			exit_message("Not enough model normals");
+		m->trifaces[i].n[j] = m->normals[atoi - 1];
 		free(tf[0]);
 		free(tf[1]);
 		free(tf[2]);
@@ -95,7 +106,10 @@ t_mesh	*obj_load(const char *filename)
 	read_mesh_info(m, filename);
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
+	{
 		ft_putendl("Error loading file!");
+		exit(1);
+	}
 	line = NULL;
 	vi = 0;
 	ni = 0;

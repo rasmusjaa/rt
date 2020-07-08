@@ -6,7 +6,7 @@
 #    By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/01 15:48:04 by rjaakonm          #+#    #+#              #
-#    Updated: 2020/07/07 14:33:42 by rjaakonm         ###   ########.fr        #
+#    Updated: 2020/07/08 14:45:44 by rjaakonm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,7 +58,13 @@ $(NAME): libftmake
 libftmake:
 	@make -C libft
 
+libftdebug:
+	@make debug -C libft
+
 debug:
+	$(CC) -g $(CFLAGS) $(INCL) $(SRCS) $(LIB) -o $(NAME)
+
+rebug: libftdebug
 	$(CC) -g $(CFLAGS) $(INCL) $(SRCS) $(LIB) -o $(NAME)
 
 clean:
