@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 12:21:14 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/16 16:11:01 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/08 13:24:59 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ t_rt	*rt_init(size_t num_scenes)
 	rt->done_tiles = NULL;
 	rt->tp_render = NULL;
 	rt->render_finished = FALSE;
+	pthread_mutex_init(&rt->job_mutex, NULL);
 	return (rt);
 }
 
@@ -47,6 +48,7 @@ void	rt_destroy_exit(t_rt *rt, int status)
 		destroy_scene(rt->scenes[i]);
 		i++;
 	}
+	pthread_mutex_destroy(&rt->job_mutex);
 	free(rt->scenes);
 	tp_destroy(rt->tp_render);
 	free(rt->mlx);
