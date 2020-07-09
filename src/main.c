@@ -78,8 +78,8 @@ void	cleanup_render_task(t_rt *rt, t_render_task *task)
 
 void	render_scene(t_rt *rt, t_scene *scene)
 {
-	clock_t start, end;
-	double cpu_time_used;
+	// clock_t start, end;
+	// double cpu_time_used;
 	t_vec2i	cur;
 	t_vec2i tile_size;
 
@@ -100,7 +100,7 @@ void	render_scene(t_rt *rt, t_scene *scene)
 	t_camera *camera = &(scene->cameras[scene->cur_camera]);
 	init_camera(camera->position, camera->target, camera);
 	// rt->done_tiles = ft_queue_create(QUEUE_COPY, rt->num_render_jobs, sizeof(t_tile_job_data));
-	start = clock();
+	gettimeofday(&rt->render_task.start_time, NULL);
 	ji = 0;
 	cur.y = 0;
 	while (cur.y < scene->scene_config.height)
@@ -124,9 +124,9 @@ void	render_scene(t_rt *rt, t_scene *scene)
 		}
 		cur.y += tile_size.y;
 	}
-	end = clock();
-	cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-	ft_printf("jobs created in: %.4f s\n", cpu_time_used);
+	// end = clock();
+	// cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+	
 }
 
 int update(void *arg)
@@ -152,6 +152,8 @@ int update(void *arg)
 	}
 	if (task->render_finished && task->done_tiles != NULL && ft_queue_isempty(task->done_tiles))
 	{
+		gettimeofday(&task->end_time, NULL);
+		ft_printf("render task finished in in: %.4f s\n", (double)(task->end_time.tv_usec - task->start_time.tv_usec) / 1000000 + (double)(task->end_time.tv_sec - task->start_time.tv_sec));
 		// ft_queue_destroy(task->done_tiles);
 		// task->done_tiles = NULL;
 		// i = 0;

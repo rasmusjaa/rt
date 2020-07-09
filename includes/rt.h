@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/09 09:04:01 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/09 09:44:38 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # include <fcntl.h>
 # include "thread_pool.h"
 # include "mesh.h"
+# include <sys/time.h>
 
 # ifndef __linux__
 
@@ -244,6 +245,8 @@ typedef struct	s_tile_job_data
 
 typedef struct		s_render_task
 {
+	struct timeval	start_time;
+	struct timeval	end_time;
 	t_tp			*thread_pool;
 	t_tile_job_data *job_data_block;
 	pthread_mutex_t task_mutex;
