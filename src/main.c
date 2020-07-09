@@ -143,7 +143,7 @@ int update(void *arg)
 	rt = (t_rt*)arg;
 	task = &rt->render_task;
 	job = NULL;
-	while (task->done_tiles != NULL && !ft_queue_isempty(task->done_tiles))
+	while (task->render_started && task->done_tiles != NULL && !ft_queue_isempty(task->done_tiles))
 	{
 		pthread_mutex_lock(&task->task_mutex);
 		job = (t_tile_job_data*)ft_queue_dequeue(task->done_tiles);

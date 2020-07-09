@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_csv.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/08 15:37:13 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/09 18:11:19 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,7 @@ void	check_shape_fields(t_scene *scene, char *line, int n)
 	{
 		ft_strcpy(file, get_shape_file(line, N_SHAPE_VALUES));
 		scene->shapes[n].mesh = obj_load(file);
+		scene->shapes[n].octree = octree_create_node(scene->shapes[n].mesh->bounds, scene->shapes[n].mesh->num_trifaces, scene->shapes[n].mesh->trifaces);
 		ft_printf("loaded model from file %s\n", file);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/09 13:49:19 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/09 17:42:02 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # include <fcntl.h>
 # include "thread_pool.h"
 # include "mesh.h"
+# include "octree.h"
 # include <sys/time.h>
 
 # ifndef __linux__
@@ -132,16 +133,8 @@ typedef struct		s_shape
 	double			angle;
 	double			opacity;
 	t_mesh			*mesh;
+	t_octree		*octree;
 }					t_shape;
-
-// typedef struct		s_model
-// {
-// 	t_vec3			position;
-// 	t_vec3			rotation;
-// 	t_vec3			scale;
-// 	t_rgba			color;
-// 	t_mesh			*mesh;
-// }					t_model;
 
 typedef	struct		s_scene_config
 {

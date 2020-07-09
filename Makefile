@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+         #
+#    By: wkorande <willehard@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/01 15:48:04 by rjaakonm          #+#    #+#              #
-#    Updated: 2020/07/08 15:48:43 by rjaakonm         ###   ########.fr        #
+#    Updated: 2020/07/09 17:43:31 by wkorande         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,8 @@ SRC =	scene/read_csv.c\
 		thread_pool/tp_queue.c\
 		thread_pool/ft_get_num_procs.c\
 		mesh.c\
-		obj_loader.c
+		obj_loader.c\
+		octree/octree.c
 
 SRCS = $(addprefix $(SRCDIR)/, $(SRC))
 
