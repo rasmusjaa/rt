@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/09 15:06:46 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/08 13:59:51 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/09 09:10:57 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	key_press_hook(int key, t_rt *rt)
 	ft_printf("scene %d, press key %d\n", rt->cur_scene, key);
 	if (key == KEY_UP || key == KEY_DOWN || key == KEY_LEFT || key == KEY_RIGHT)
 	{
-		if (!rt->render_finished)
+		if (!rt->render_task.render_finished)
 		{
 			ft_printf("not yet\n");
 			return (0);

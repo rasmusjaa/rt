@@ -19,7 +19,7 @@ void	render_tile_job(void *data)
 	t_vec2i cur;
 	t_vec2i tile_coord;
 
-	job_data = (t_tile_job_data *)data;
+	job_data = (t_tile_job_data*)data;
 	tile_coord = ft_make_vec2i(job_data->screen_coord.x / job_data->tile_size.x, job_data->screen_coord.y / job_data->tile_size.y);
 	cur.y = job_data->screen_coord.y;
 	while (cur.y < job_data->screen_coord.y + job_data->tile_size.y)
@@ -34,15 +34,46 @@ void	render_tile_job(void *data)
 		}
 		cur.y++;
 	}
-	pthread_mutex_lock(job_data->job_mutex);
+	pthread_mutex_lock(&job_data->rt->render_task.task_mutex);
 	(*job_data->jobs)--;
-	pthread_mutex_unlock(job_data->job_mutex);
-	ft_queue_enqueue(job_data->rt->done_tiles, data);
+	ft_queue_enqueue(job_data->rt->render_task.done_tiles, job_data);
 	if (*job_data->jobs == 0)
 	{
 		ft_printf("last job done\n");
-		job_data->rt->render_finished = TRUE;
+		job_data->rt->render_task.render_finished = TRUE;
 	}
+	pthread_mutex_unlock(&job_data->rt->render_task.task_mutex);
+}
+
+void	init_render_task(t_render_task *task, size_t res)
+{
+	task->render_finished = FALSE;
+	task->num_jobs = res * res;
+	task->thread_pool = tp_create(N_THREADS, task->num_jobs);
+	if (!(task->job_data_block = (t_tile_job_data*)(malloc(sizeof(t_tile_job_data) * task->num_jobs))))
+		exit_message("init_render_task: Failed to allocate memory for thread pool jobs!");
+	task->done_tiles = ft_queue_create(QUEUE_COPY, task->num_jobs, sizeof(t_tile_job_data));
+	pthread_mutex_init(&task->task_mutex, NULL);
+}
+
+void	cleanup_render_task(t_rt *rt, t_render_task *task)
+{
+	int i;
+
+	ft_queue_destroy(task->done_tiles);
+	task->done_tiles = NULL;
+	i = 0;
+	while (i < task->num_jobs)
+	{
+		destroy_mlx_img(rt->mlx, task->job_data_block[i].mlx_img);
+		i++;
+	}
+	free(task->job_data_block);
+	task->job_data_block = NULL;
+	tp_destroy(task->thread_pool);
+	task->thread_pool = NULL;
+	task->num_jobs = 0;
+	pthread_mutex_destroy(&task->task_mutex);
 }
 
 void	render_scene(t_rt *rt, t_scene *scene)
@@ -51,24 +82,24 @@ void	render_scene(t_rt *rt, t_scene *scene)
 	double cpu_time_used;
 	t_vec2i	cur;
 	t_vec2i tile_size;
-	// t_tile_job_data *job_data_block;
-	// pthread_mutex_t job_mutex;
-	// int num_jobs;
+
 	int ji;
 	int res;
 
-	rt->render_finished = FALSE;
 	res = 10;
-	rt->num_render_jobs = res * res;
-	if (rt->tp_render != NULL)
-		tp_destroy(rt->tp_render);
-	rt->tp_render = tp_create(N_THREADS, rt->num_render_jobs);
+	init_render_task(&rt->render_task, res);
 	tile_size = ft_make_vec2i(scene->scene_config.width / res, scene->scene_config.height / res);
-	if (!(rt->job_data_block = (t_tile_job_data*)(malloc(sizeof(t_tile_job_data) * rt->num_render_jobs))))
-		exit_message("Failed to allocate memory for thread pool jobs!");
+	// rt->render_finished = FALSE;
+	// res = 10;
+	// rt->num_render_jobs = res * res;
+	// if (rt->tp_render != NULL)
+		// tp_destroy(rt->tp_render);
+	// rt->tp_render = tp_create(N_THREADS, rt->num_render_jobs);
+	// if (!(rt->job_data_block = (t_tile_job_data*)(malloc(sizeof(t_tile_job_data) * rt->num_render_jobs))))
+		// exit_message("Failed to allocate memory for thread pool jobs!");
 	t_camera *camera = &(scene->cameras[scene->cur_camera]);
 	init_camera(camera->position, camera->target, camera);
-	rt->done_tiles = ft_queue_create(QUEUE_COPY, rt->num_render_jobs, sizeof(t_tile_job_data));
+	// rt->done_tiles = ft_queue_create(QUEUE_COPY, rt->num_render_jobs, sizeof(t_tile_job_data));
 	start = clock();
 	ji = 0;
 	cur.y = 0;
@@ -77,17 +108,17 @@ void	render_scene(t_rt *rt, t_scene *scene)
 		cur.x = 0;
 		while (cur.x < scene->scene_config.width)
 		{
-			rt->job_data_block[ji].rt = rt;
-			rt->job_data_block[ji].mlx = rt->mlx;
-			rt->job_data_block[ji].job_mutex = &rt->job_mutex;
-			rt->job_data_block[ji].mlx_img = create_mlx_img(rt->mlx, tile_size.x, tile_size.y);
-			rt->job_data_block[ji].scene = scene;
-			rt->job_data_block[ji].screen_coord = cur;
-			rt->job_data_block[ji].tile_size = tile_size;
-			rt->job_data_block[ji].tile_index = ji;
-			rt->job_data_block[ji].jobs = &rt->num_render_jobs;
-			rt->job_data_block[ji].camera = camera;
-			tp_add_job(rt->tp_render, render_tile_job, &rt->job_data_block[ji]);
+			rt->render_task.job_data_block[ji].rt = rt;
+			rt->render_task.job_data_block[ji].mlx = rt->mlx;
+			rt->render_task.job_data_block[ji].task_mutex = &rt->render_task.task_mutex;
+			rt->render_task.job_data_block[ji].mlx_img = create_mlx_img(rt->mlx, tile_size.x, tile_size.y);
+			rt->render_task.job_data_block[ji].scene = scene;
+			rt->render_task.job_data_block[ji].screen_coord = cur;
+			rt->render_task.job_data_block[ji].tile_size = tile_size;
+			rt->render_task.job_data_block[ji].tile_index = ji;
+			rt->render_task.job_data_block[ji].jobs = &rt->render_task.num_jobs;
+			rt->render_task.job_data_block[ji].camera = camera;
+			tp_add_job(rt->render_task.thread_pool, render_tile_job, &rt->render_task.job_data_block[ji]);
 			ji++;
 			cur.x += tile_size.x;
 		}
@@ -102,33 +133,37 @@ int update(void *arg)
 {
 	t_rt			*rt;
 	t_tile_job_data	*job;
-	int i;
+	t_render_task	*task;
 
 	rt = (t_rt*)arg;
+	task = &rt->render_task;
 	job = NULL;
-	while (rt->done_tiles != NULL && !ft_queue_isempty(rt->done_tiles))
+	while (task->done_tiles != NULL && !ft_queue_isempty(task->done_tiles))
 	{
-		job = (t_tile_job_data*)ft_queue_dequeue(rt->done_tiles);
+		pthread_mutex_lock(&task->task_mutex);
+		job = (t_tile_job_data*)ft_queue_dequeue(task->done_tiles);
 		if (job)
 		{
 			mlx_put_image_to_window(rt->mlx->mlx_ptr, rt->mlx->win_ptr, job->mlx_img->img, job->screen_coord.x, job->screen_coord.y);
 			// destroy_mlx_img(rt->mlx, job->mlx_img);
 			// free(job);
 		}
+		pthread_mutex_unlock(&task->task_mutex);
 	}
-	if (rt->render_finished && rt->done_tiles != NULL && ft_queue_isempty(rt->done_tiles))
+	if (task->render_finished && task->done_tiles != NULL && ft_queue_isempty(task->done_tiles))
 	{
-		ft_queue_destroy(rt->done_tiles);
-		rt->done_tiles = NULL;
-		i = 0;
-		while (i < rt->num_render_jobs)
-		{
-			destroy_mlx_img(rt->mlx, rt->job_data_block[i].mlx_img);
-			i++;
-		}
-		free(rt->job_data_block);
-		tp_destroy(rt->tp_render);
-		rt->tp_render = NULL;
+		// ft_queue_destroy(task->done_tiles);
+		// task->done_tiles = NULL;
+		// i = 0;
+		// while (i < task->num_jobs)
+		// {
+		// 	destroy_mlx_img(rt->mlx, task->job_data_block[i].mlx_img);
+		// 	i++;
+		// }
+		// free(task->job_data_block);
+		// tp_destroy(task->thread_pool);
+		// task->thread_pool = NULL;
+		cleanup_render_task(rt, task);
 	}
 	return (1);
 }

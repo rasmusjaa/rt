@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/08 13:03:38 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/09 09:04:01 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,16 +238,16 @@ typedef struct	s_tile_job_data
 	t_vec2i			tile_size;
 	int				tile_index;
 	int				*jobs;
-	pthread_mutex_t	*job_mutex;
+	pthread_mutex_t	*task_mutex;
 	t_camera		*camera;
 }					t_tile_job_data;
 
 typedef struct		s_render_task
 {
-	t_tp			*tp_render;
+	t_tp			*thread_pool;
 	t_tile_job_data *job_data_block;
-	pthread_mutex_t job_mutex;
-	int				num_render_jobs;
+	pthread_mutex_t task_mutex;
+	int				num_jobs;
 	t_queue			*done_tiles;
 	size_t			render_finished;
 }					t_render_task;
@@ -259,12 +259,13 @@ typedef struct		s_rt
 	t_scene 		**scenes;
 	size_t			num_scenes;
 	size_t 			cur_scene;
-	t_tp			*tp_render;
-	t_tile_job_data *job_data_block;
-	pthread_mutex_t job_mutex;
-	int				num_render_jobs;
-	t_queue			*done_tiles;
-	size_t			render_finished;
+	// t_tp			*tp_render;
+	// t_tile_job_data *job_data_block;
+	// pthread_mutex_t job_mutex;
+	// int				num_render_jobs;
+	// t_queue			*done_tiles;
+	// size_t			render_finished;
+	t_render_task	render_task;
 }					t_rt;
 
 typedef struct	s_raycast_hit
