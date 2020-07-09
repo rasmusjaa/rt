@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/07 17:19:46 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/08 15:37:13 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,7 @@ static char	*get_shape_name(t_shape_type type)
 void	check_shape_fields(t_scene *scene, char *line, int n)
 {
 	double		values[N_SHAPE_VALUES];
+	char		file[256];
 
 	get_fields(line, values, N_SHAPE_VALUES);
 	scene->shapes[n].type = get_shape_type(line);
@@ -145,12 +146,10 @@ void	check_shape_fields(t_scene *scene, char *line, int n)
 	scene->shapes[n].opacity = ft_clamp_d(values[18], 0, 1);
 	if (scene->shapes[n].type == MODEL)
 	{
-		char file[100];
 		ft_strcpy(file, get_shape_file(line, N_SHAPE_VALUES));
 		scene->shapes[n].mesh = obj_load(file);
-		ft_printf("file is %s\n", file);
+		ft_printf("loaded model from file %s\n", file);
 	}
-	ft_printf(" done here\n");
 }
 
 void	check_light_fields(t_scene *scene, char *line, int n)
@@ -198,9 +197,7 @@ int			handle_line(t_scene *scene, char *line)
 			// valo kolmanneks ja if (g_unique_objs[i].type == SHAPE)
 			// scene->shapes[n].type = g_unique_objs[i].type; -2 tai jotain jos haluu
 			// scene->shapes[n].name = g_unique_objs[i].obj_str;
-			ft_printf(" i %d, line %s n %d\n", i, line, n);
 			g_unique_objs[i].func(scene, line, n);
-			ft_printf(" done\n");
 		}
 		i++;
 	}

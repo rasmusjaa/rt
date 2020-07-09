@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mesh.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/03 14:56:36 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/06 13:27:18 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/08 11:33:44 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,10 @@ void	mesh_create_verts(t_mesh *m, size_t num_vertices)
 	if (m->vertices)
 		free(m->vertices);
 	if (!(m->vertices = (t_vec3*)malloc(sizeof(t_vec3) * num_vertices)))
+	{
 		ft_printf("mesh_create: failed to allocate memory for vertices!\n");
+		exit(EXIT_FAILURE);
+	}
 }
 
 void	mesh_create_normals(t_mesh *m, size_t num_normals)
@@ -58,7 +61,10 @@ void	mesh_create_normals(t_mesh *m, size_t num_normals)
 	if (m->normals)
 		free(m->normals);
 	if (!(m->normals = (t_vec3*)malloc(sizeof(t_vec3) * num_normals)))
+	{
 		ft_printf("mesh_create: failed to allocate memory for normals!\n");
+		exit(EXIT_FAILURE);
+	}
 }
 
 void	mesh_create_uvs(t_mesh *m, size_t num_uvs)
@@ -71,7 +77,10 @@ void	mesh_create_uvs(t_mesh *m, size_t num_uvs)
 	if (m->uvs)
 		free(m->uvs);
 	if (!(m->uvs = (t_vec2*)malloc(sizeof(t_vec2) * num_uvs)))
+	{
 		ft_printf("mesh_create: failed to allocate memory for uvs!\n");
+		exit(EXIT_FAILURE);
+	}
 }
 
 void	mesh_create_trifaces(t_mesh *m, size_t num_trifaces)
@@ -84,7 +93,10 @@ void	mesh_create_trifaces(t_mesh *m, size_t num_trifaces)
 	if (num_trifaces == 0)
 		return ;
 	if (!(m->trifaces = (t_triface*)malloc(sizeof(t_triface) * num_trifaces)))
+	{
 		ft_printf("mesh_create: failed to allocate memory for faces!\n");
+		exit(EXIT_FAILURE);
+	}
 }
 
 void	mesh_destroy(t_mesh *m)
@@ -103,7 +115,10 @@ void	mesh_destroy(t_mesh *m)
 void	mesh_set_vert(t_mesh *m, size_t i, t_vec3 v)
 {
 	if (!m || !m->vertices || i > m->num_vertices - 1)
+	{
 		ft_printf("mesh_set_vert: failed to set vertex!\n");
+		exit(EXIT_FAILURE);
+	}
 	else
 		m->vertices[i] = v;
 }
