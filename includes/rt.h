@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rt.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/08 15:54:31 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/09 13:45:52 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # include <fcntl.h>
 # include "thread_pool.h"
 # include "mesh.h"
+# include <sys/time.h>
 
 # ifndef __linux__
 
@@ -228,16 +229,48 @@ typedef struct		s_mlx
 	int			endian;
 }					t_mlx;
 
+typedef struct	s_tile_job_data
+{
+	struct s_rt		*rt;
+	t_mlx			*mlx;
+	t_scene			*scene;
+	t_mlx_img		*mlx_img;
+	t_vec2i			screen_coord;
+	t_vec2i			tile_size;
+	int				tile_index;
+	int				*jobs;
+	pthread_mutex_t	*task_mutex;
+	t_camera		*camera;
+}					t_tile_job_data;
+
+typedef struct		s_render_task
+{
+	struct timeval	start_time;
+	struct timeval	end_time;
+	t_tp			*thread_pool;
+	t_tile_job_data *job_data_block;
+	pthread_mutex_t task_mutex;
+	int				jobs;
+	int				num_jobs;
+	t_queue			*done_tiles;
+	size_t			render_finished;
+	size_t			render_started;
+}					t_render_task;
+
 typedef struct		s_rt
 {
 	t_mlx 			*mlx;
-	t_mlx_img		*mlx_img;
+	// t_mlx_img		*mlx_img;
 	t_scene 		**scenes;
 	size_t			num_scenes;
 	size_t 			cur_scene;
-	t_tp			*tp_render;
-	t_queue			*done_tiles;
-	size_t			render_finished;
+	// t_tp			*tp_render;
+	// t_tile_job_data *job_data_block;
+	// pthread_mutex_t job_mutex;
+	// int				num_render_jobs;
+	// t_queue			*done_tiles;
+	// size_t			render_finished;
+	t_render_task	render_task;
 }					t_rt;
 
 typedef struct	s_raycast_hit
@@ -253,19 +286,7 @@ typedef struct	s_raycast_hit
 	t_rgba		color;
 }				t_raycast_hit;
 
-typedef struct	s_tile_job_data
-{
-	t_rt			*rt;
-	t_mlx			*mlx;
-	t_scene			*scene;
-	t_mlx_img		*mlx_img;
-	t_vec2i			screen_coord;
-	t_vec2i			tile_size;
-	int				tile_index;
-	int				*jobs;
-	pthread_mutex_t	*job_mutex;
-	t_camera		*camera;
-}					t_tile_job_data;
+
 
 typedef struct		s_thread
 {
@@ -326,7 +347,7 @@ t_rgba			raycast(t_ray *ray, t_scene *scene);
 int				intersects_shape(t_ray *ray, t_shape *shape, t_raycast_hit *hit, int debug);
 t_vec3			calc_hit_normal(t_raycast_hit *hit);
 
-int				intersects_model(t_ray *ray, t_shape *model, t_raycast_hit *hit, int debug);
+int				intersects_model(t_ray *ray, t_shape *model, t_raycast_hit *hit);
 
 t_mesh			*obj_load(const char *filename);
 

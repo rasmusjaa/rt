@@ -6,7 +6,11 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 12:21:14 by wkorande          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2020/07/07 20:18:18 by wkorande         ###   ########.fr       */
+=======
+/*   Updated: 2020/07/09 13:40:13 by wkorande         ###   ########.fr       */
+>>>>>>> experimental
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +27,12 @@ t_rt	*rt_init(size_t num_scenes)
 		exit_message("Failed to malloc rt->scenes!");
 	rt->num_scenes = num_scenes;
 	rt->cur_scene = 0;
-	rt->done_tiles = NULL;
-	rt->tp_render = NULL;
-	rt->render_finished = FALSE;
+	// rt->done_tiles = NULL;
+	// rt->tp_render = NULL;
+	// rt->render_finished = FALSE;
+	// rt->num_render_jobs = 0;
+	// rt->job_data_block = NULL;
+	// pthread_mutex_init(&rt->job_mutex, NULL);
 	return (rt);
 }
 
@@ -57,7 +64,7 @@ void	rt_destroy_exit(t_rt *rt, int status)
 		i++;
 	}
 	free(rt->scenes);
-	tp_destroy(rt->tp_render);
+	// call render task cleanup
 	free(rt->mlx);
 	free(rt);
 	exit(status);
