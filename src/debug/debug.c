@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/08 11:39:28 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/09 23:55:54 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/10 00:31:01 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,12 +85,10 @@ t_vec2i	world_to_screen_point(t_camera *camera, t_vec3 world_point, t_vec2i wind
 {
 	t_vec3	dir;
 	t_vec2i	screen_point;
-	t_vec3	ipp;
 
 	dir = ft_normalize_vec3(ft_sub_vec3(world_point, camera->position));
-	ipp = dir;
-	screen_point.x = ((ipp.x + camera->aspect * 0.5) / camera->aspect) * window_size.x;
-	screen_point.y = window_size.y - ((ipp.y + 0.5) * window_size.y);
+	screen_point.x = (dir.x + 0.5) * window_size.x;
+	screen_point.y = (dir.y + 0.5) * window_size.y;
 	return (screen_point);
 }
 
@@ -117,20 +115,20 @@ void	draw_model_bounds(t_mlx *mlx, t_scene *scene)
 			t_vec2i p6 = world_to_screen_point(&scene->cameras[scene->cur_camera], b.max, window_size);
 			t_vec2i p7 = world_to_screen_point(&scene->cameras[scene->cur_camera], ft_make_vec3(b.min.x, b.max.y, b.max.z), window_size);
 
-			draw_line(mlx, p0, p1, 0x0000FF);
-			draw_line(mlx, p1, p2, 0x0000FF);
-			draw_line(mlx, p2, p3, 0x0000FF);
-			draw_line(mlx, p3, p0, 0x0000FF);
+			draw_line(mlx, p0, p1, 0xFFFFFF);
+			draw_line(mlx, p1, p2, 0xFFFFFF);
+			draw_line(mlx, p2, p3, 0xFFFFFF);
+			draw_line(mlx, p3, p0, 0xFFFFFF);
 
-			draw_line(mlx, p4, p5, 0x0000FF);
-			draw_line(mlx, p5, p6, 0x0000FF);
-			draw_line(mlx, p6, p7, 0x0000FF);
-			draw_line(mlx, p7, p4, 0x0000FF);
+			draw_line(mlx, p4, p5, 0xFFFFFF);
+			draw_line(mlx, p5, p6, 0xFFFFFF);
+			draw_line(mlx, p6, p7, 0xFFFFFF);
+			draw_line(mlx, p7, p4, 0xFFFFFF);
 
-			draw_line(mlx, p0, p4, 0xFF0000);
-			draw_line(mlx, p1, p5, 0x00FF00);
-			draw_line(mlx, p2, p6, 0x00FF00);
-			draw_line(mlx, p3, p7, 0xFF0000);
+			draw_line(mlx, p0, p4, 0xFFFFFF);
+			draw_line(mlx, p1, p5, 0xFFFFFF);
+			draw_line(mlx, p2, p6, 0xFFFFFF);
+			draw_line(mlx, p3, p7, 0xFFFFFF);
 		}
 		i++;
 	}
