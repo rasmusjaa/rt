@@ -6,7 +6,7 @@
 #    By: wkorande <willehard@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/01 15:48:04 by rjaakonm          #+#    #+#              #
-#    Updated: 2020/07/09 17:43:31 by wkorande         ###   ########.fr        #
+#    Updated: 2020/07/09 22:57:24 by wkorande         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,7 @@ SRCDIR = src
 
 SRC =	scene/read_csv.c\
 		debug/debug.c\
+		debug/draw_line.c\
 		event_hooks/keyboard.c \
 		event_hooks/mouse.c \
 		event_hooks/window.c \
