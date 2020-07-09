@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/09 09:44:38 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/09 13:38:02 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,15 +250,17 @@ typedef struct		s_render_task
 	t_tp			*thread_pool;
 	t_tile_job_data *job_data_block;
 	pthread_mutex_t task_mutex;
+	int				jobs;
 	int				num_jobs;
 	t_queue			*done_tiles;
 	size_t			render_finished;
+	size_t			render_started;
 }					t_render_task;
 
 typedef struct		s_rt
 {
 	t_mlx 			*mlx;
-	t_mlx_img		*mlx_img;
+	// t_mlx_img		*mlx_img;
 	t_scene 		**scenes;
 	size_t			num_scenes;
 	size_t 			cur_scene;
