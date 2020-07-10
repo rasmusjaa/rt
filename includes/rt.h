@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/09 17:42:02 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/10 19:15:41 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -324,7 +324,7 @@ int					key_release_hook(int key, t_rt *rt);
 int					close_hook(t_rt *rt);
 int					expose_hook(t_rt *rt);
 
-t_ray			get_camera_ray(t_scene *scene, t_camera *camera, t_vec2i screen_coord);
+t_ray			get_camera_ray(t_scene *scene, t_camera *camera, double screen_x, double screen_y);
 void			init_camera(t_vec3 origin, t_vec3 target, t_camera *camera);
 
 t_mlx_img		*create_mlx_img(t_mlx *mlx, int width, int height);

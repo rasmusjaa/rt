@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/09 15:05:29 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/09 09:11:20 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/10 19:16:27 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	mouse_press_hook(int button, int x, int y, t_rt *rt)
 		scene->help_ray = 1;
 		if (x >= 0 && y >= 0 && x < scene->scene_config.width && y < scene->scene_config.height)
 		{
-			t_ray r = get_camera_ray(scene, &scene->cameras[scene->cur_camera], ft_make_vec2i(x, y));
+			t_ray r = get_camera_ray(scene, &scene->cameras[scene->cur_camera], x, y);
 			raycast(&r, scene);
 		}
 		scene->help_ray = 0;

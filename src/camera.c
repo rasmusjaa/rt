@@ -14,32 +14,40 @@ void	init_camera(t_vec3 origin, t_vec3 target, t_camera *camera)
 	}
 }
 
-t_ray	get_camera_ray(t_scene *scene, t_camera *camera, t_vec2i screen_coord)
+t_ray	get_camera_ray(t_scene *scene, t_camera *camera, double screen_x, double screen_y)
 {
 	t_ray		ray;
-	t_vec3		v1;
-	t_vec3		v2;
+	t_vec3		r;
+	t_vec3		u;
 	t_vec2		target;
 
-	target.x = 2.0 * screen_coord.x / (scene->scene_config.width) - 1.0;
-	target.y = -2.0 * screen_coord.y / (scene->scene_config.height) + 1.0;
+	target.x = 2.0 * screen_x / (scene->scene_config.width) - 1.0;
+	target.y = -2.0 * screen_y / (scene->scene_config.height) + 1.0;
 	ray.origin = camera->position;
 	ray.direction = camera->forward;
-	v1 = ft_mul_vec3(camera->right, (target.x * camera->vertical));
-	v2 = ft_mul_vec3(camera->up, (target.y * camera->horizontal));
-	ray.direction = ft_add_vec3(ray.direction, v1);
-	ray.direction = ft_add_vec3(ray.direction, v2);
+	r = ft_mul_vec3(camera->right, target.x * camera->horizontal);
+	u = ft_mul_vec3(camera->up, target.y * camera->vertical);
+	ray.direction = ft_add_vec3(ray.direction, r);
+	ray.direction = ft_add_vec3(ray.direction, u);
 	ray.direction = ft_normalize_vec3(ray.direction);
 	return (ray);
 }
 
-    // t_vector		target;
-	// t_ray			ray;
-	// t_intersection	ix;
+// t_ray	get_camera_ray(t_scene *scene, t_camera *camera, double screen_x, double screen_y)
+// {
+// 	t_ray		ray;
+// 	t_vec3		v1;
+// 	t_vec3		v2;
+// 	t_vec2		target;
 
-	// target.x = 2.0 * x / (mlx->img_width - 1) - 1.0;
-	// target.y = -2.0 * y / (mlx->img_height - 1) + 1;
-	// ray = camera_ray(mlx->camera, target);
-	// ix = get_intersection(ray, mlx);
-
-
+// 	target.x = screen_x / (scene->scene_config.width) - 0.5;
+// 	target.y = -screen_y / (scene->scene_config.height) + 0.5;
+// 	ray.origin = camera->position;
+// 	ray.direction = camera->forward;
+// 	v1 = ft_mul_vec3(camera->right, (target.x));
+// 	v2 = ft_mul_vec3(camera->up, (target.y ));
+// 	ray.direction = ft_add_vec3(ray.direction, v1);
+// 	ray.direction = ft_add_vec3(ray.direction, v2);
+// 	ray.direction = ft_normalize_vec3(ray.direction);
+// 	return (ray);
+// }
