@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/15 12:46:47 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/09 19:30:36 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/10 21:46:59 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,6 +222,18 @@ int	intersects_bounds(t_ray *ray, t_bounds *b, int debug)
 	return (TRUE);
 }
 
+t_vec3 calc_smooth_normal(t_triface *tf, t_vec3 p)
+{
+	t_vec3 n;
+
+	double p0 = ft_len_vec3(ft_sub_vec3(p, tf->v[0]));
+	double p1 = ft_len_vec3(ft_sub_vec3(p, tf->v[1]));
+	double p2 = ft_len_vec3(ft_sub_vec3(p, tf->v[2]));
+
+	n = ft_add_vec3(ft_mul_vec3(tf->n[0], p0), ft_add_vec3(ft_mul_vec3(tf->n[1], p1), ft_mul_vec3(tf->n[2], p2)));
+	return (ft_normalize_vec3(n));
+}
+
 int intersects_octree_model(t_ray *ray, t_shape *model, t_octree *node, t_raycast_hit *hit, int debug)
 {
 	size_t i;
@@ -266,7 +278,7 @@ int intersects_octree_model(t_ray *ray, t_shape *model, t_octree *node, t_raycas
 					min_dist = cur_hit.distance;
 					cur_hit.shape = model;
 					*hit = cur_hit;
-					hit->normal = cur_hit.normal;
+					hit->normal = calc_smooth_normal(&node->contains_trifaces[i], cur_hit.point); // cur_hit.normal;
 				}
 			}
 			i++;
@@ -274,6 +286,8 @@ int intersects_octree_model(t_ray *ray, t_shape *model, t_octree *node, t_raycas
 	}
 	return (hit_found);
 }
+
+
 
 int intersects_model(t_ray *ray, t_shape *model, t_raycast_hit *hit, int debug)
 {
