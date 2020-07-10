@@ -2,8 +2,8 @@ SETTINGS;SHADOWS;SHADING;SPECULAR;REFRACTION;REFLECTION;BOUNCES;WIDTH;HEIGHT;;;;
 settings;1;1;1;1;1;5;800;800;;;;;;;;;;;
 CAMERAS;POS_X;POS_Y;POS_Z;TAR_X;TAR_Y;TAR_Z;ROT_X;ROT_Y;ROT_Z;FOV;TYPE;ASPECT;;;;;;;
 camera;0;5;5;0;0;0;;;;60;0;1;;;;;;;
-camera;0;0;10;0;0;0;;;;60;0;1;;;;;;;
+camera;0;0;5;0;0;0;;;;60;0;1;;;;;;;
 SHAPES;POS_X;POS_Y;POS_Z;TAR_X;TAR_Y;TAR_Z;ROT_X;ROT_Y;ROT_Z;SCA_X;SCA_Y;SCA_Z;COL_R;COL_G;COL_B;COL_A;RADIUS;ANGLE;OPACITY
-model;0;-10;0;0;1;0;0;0;0;1;1;1;0.1;0.5;0.9;1;2;45;1;resources/icosphere.obj
+model;0;-10;0;0;1;0;0;0;0;1;1;1;0.1;0.5;0.9;1;2;45;1;resources/monkey.obj
 LIGHTS;POS_X;POS_Y;POS_Z;COL_R;COL_G;COL_B;TYPE;INTENSITY;;;;;;;;;;;
 point;1.98;20;0;;;;;;;;;;;;;;;;

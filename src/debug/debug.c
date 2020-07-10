@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/08 11:39:28 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/10 20:22:25 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/10 20:39:43 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,9 @@ t_vec2i	world_to_screen_point(t_camera *camera, t_vec3 world_point, t_vec2i wind
 	return (screen_point);
 }
 
-void	draw_bounds(t_mlx *mlx, t_camera *camera, t_vec2i window_size, t_bounds b)
+void	draw_bounds(t_mlx *mlx, t_camera *camera, t_vec2i window_size, t_bounds b, t_rgba color)
 {
+	int c = ft_get_color(color);
 	t_vec2i p0 = world_to_screen_point(camera, b.min, window_size);
 	t_vec2i p1 = world_to_screen_point(camera, ft_make_vec3(b.max.x, b.min.y, b.min.z), window_size);
 	t_vec2i p2 = world_to_screen_point(camera, ft_make_vec3(b.max.x, b.max.y, b.min.z), window_size);
@@ -104,23 +105,23 @@ void	draw_bounds(t_mlx *mlx, t_camera *camera, t_vec2i window_size, t_bounds b)
 	t_vec2i p6 = world_to_screen_point(camera, b.max, window_size);
 	t_vec2i p7 = world_to_screen_point(camera, ft_make_vec3(b.min.x, b.max.y, b.max.z), window_size);
 
-	draw_line(mlx, p0, p1, 0xFFFFFF);
-	draw_line(mlx, p1, p2, 0xFFFFFF);
-	draw_line(mlx, p2, p3, 0xFFFFFF);
-	draw_line(mlx, p3, p0, 0xFFFFFF);
+	draw_line(mlx, p0, p1, c);
+	draw_line(mlx, p1, p2, c);
+	draw_line(mlx, p2, p3, c);
+	draw_line(mlx, p3, p0, c);
 
-	draw_line(mlx, p4, p5, 0xFFFFFF);
-	draw_line(mlx, p5, p6, 0xFFFFFF);
-	draw_line(mlx, p6, p7, 0xFFFFFF);
-	draw_line(mlx, p7, p4, 0xFFFFFF);
+	draw_line(mlx, p4, p5, c);
+	draw_line(mlx, p5, p6, c);
+	draw_line(mlx, p6, p7, c);
+	draw_line(mlx, p7, p4, c);
 
-	draw_line(mlx, p0, p4, 0xFFFFFF);
-	draw_line(mlx, p1, p5, 0xFFFFFF);
-	draw_line(mlx, p2, p6, 0xFFFFFF);
-	draw_line(mlx, p3, p7, 0xFFFFFF);
+	draw_line(mlx, p0, p4, c);
+	draw_line(mlx, p1, p5, c);
+	draw_line(mlx, p2, p6, c);
+	draw_line(mlx, p3, p7, c);
 }
 
-void 	draw_octree_bounds(t_octree *o, t_mlx *mlx, t_camera *camera, t_vec2i window_size)
+void 	draw_octree_bounds(t_octree *o, t_mlx *mlx, t_camera *camera, t_vec2i window_size, t_rgba color)
 {
 	if (!o)
 		return ;
@@ -128,10 +129,10 @@ void 	draw_octree_bounds(t_octree *o, t_mlx *mlx, t_camera *camera, t_vec2i wind
 	while (i < NUM_CHILDREN)
 	{
 		if (o->children[i])
-			draw_octree_bounds(o->children[i], mlx, camera, window_size);
+			draw_octree_bounds(o->children[i], mlx, camera, window_size, ft_mul_rgba(color, 0.7));
 		i++;
 	}
-	draw_bounds(mlx, camera, window_size, o->bounds);
+	draw_bounds(mlx, camera, window_size, o->bounds, color);
 }
 
 void	draw_model_bounds(t_mlx *mlx, t_scene *scene)
@@ -148,7 +149,7 @@ void	draw_model_bounds(t_mlx *mlx, t_scene *scene)
 		{
 			// draw_bounds(mlx, &scene->cameras[scene->cur_camera], window_size, b);
 			t_octree *o = scene->shapes[i].octree;
-			draw_octree_bounds(o, mlx, &scene->cameras[scene->cur_camera], window_size);
+			draw_octree_bounds(o, mlx, &scene->cameras[scene->cur_camera], window_size, ft_make_rgba(1.0, 1.0, 1.0, 1.0));
 		}
 		i++;
 	}
