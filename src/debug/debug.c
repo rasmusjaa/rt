@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/08 11:39:28 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/10 20:39:43 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/11 00:37:15 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ t_vec2i	world_to_screen_point(t_camera *camera, t_vec3 world_point, t_vec2i wind
 
 	dir = ft_normalize_vec3(ft_sub_vec3(world_point, camera->position));
 	screen_point.x = (dir.x + 0.5) * window_size.x;
-	screen_point.y = (dir.y + 0.5) * window_size.y;
+	screen_point.y = window_size.y - ((dir.y + 0.5) * window_size.y);
 	return (screen_point);
 }
 

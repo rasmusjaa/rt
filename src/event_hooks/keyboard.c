@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/09 15:06:46 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/09 13:39:29 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/10 23:15:16 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	key_press_hook(int key, t_rt *rt)
 	t_vec3 forward = ft_normalize_vec3(ft_sub_vec3(camera->target, camera->position));
 	t_vec3 right = ft_normalize_vec3(ft_cross_vec3(forward, camera->up));
 	ft_printf("scene %d, press key %d\n", rt->cur_scene, key);
-	if (key == KEY_UP || key == KEY_DOWN || key == KEY_LEFT || key == KEY_RIGHT)
+	if (key == KEY_UP || key == KEY_DOWN || key == KEY_LEFT || key == KEY_RIGHT || key == KEY_NUM_PLUS || key == KEY_NUM_MINUS)
 	{
 		if (rt->render_task.render_started && !rt->render_task.render_finished)
 		{
@@ -46,6 +46,16 @@ int	key_press_hook(int key, t_rt *rt)
 		{
 			camera->position = ft_add_vec3(camera->position, right);
 			camera->target = ft_add_vec3(camera->target, right);
+		}
+		else if (key == KEY_NUM_PLUS)
+		{
+			camera->position = ft_add_vec3(camera->position, camera->up);
+			camera->target = ft_add_vec3(camera->target, camera->up);
+		}
+		else if (key == KEY_NUM_MINUS)
+		{
+			camera->position = ft_add_vec3(camera->position, ft_mul_vec3(camera->up, -1));
+			camera->target = ft_add_vec3(camera->target, ft_mul_vec3(camera->up, -1));
 		}
 		render_scene(rt, scene);
 	}
