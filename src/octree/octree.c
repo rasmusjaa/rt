@@ -126,14 +126,7 @@ t_octree	*octree_create_node(t_bounds bounds, size_t num_tris, t_triface *trifac
 		}
 	}
 	else
-	{
-		while (i < 8)
-		{
-			node->children[i] = NULL;
-			i++;
-		}
 		node->is_last = TRUE;
-	}
 	return (node);
 }
 

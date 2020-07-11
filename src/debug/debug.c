@@ -126,11 +126,13 @@ void 	draw_octree_bounds(t_octree *o, t_mlx *mlx, t_camera *camera, t_vec2i wind
 	if (!o)
 		return ;
 	int i = 0;
-	while (i < NUM_CHILDREN)
+	if (!(o->is_last))
 	{
-		if (o->children[i])
+		while (i < NUM_CHILDREN)
+		{
 			draw_octree_bounds(o->children[i], mlx, camera, window_size, ft_mul_rgba(color, 0.7));
-		i++;
+			i++;
+		}
 	}
 	draw_bounds(mlx, camera, window_size, o->bounds, color);
 }
