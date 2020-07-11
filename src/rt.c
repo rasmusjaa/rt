@@ -42,6 +42,7 @@ void	destroy_scene(t_scene *scene)
 	{
 		if (scene->shapes[i].type == MODEL)
 			mesh_destroy(scene->shapes[i].mesh);
+			//octreen free tahan?
 		i++;
 	}
 	free(scene->cameras);

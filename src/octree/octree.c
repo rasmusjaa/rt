@@ -115,7 +115,8 @@ t_octree	*octree_create_node(t_bounds bounds, size_t num_tris, t_triface *trifac
 	}
 	// ft_printf("i %d j %d\n", i, j);
 	i = 0;
-	if (j > 30)
+	double bound_len = ft_len_vec3(ft_sub_vec3(bounds.max, bounds.min));
+	if (j > 10 && bound_len > 0.1) // bound_len scenen mukaan?
 	{
 		octree_calc_child_bounds(node);
 		while (i < 8)
@@ -125,7 +126,14 @@ t_octree	*octree_create_node(t_bounds bounds, size_t num_tris, t_triface *trifac
 		}
 	}
 	else
+	{
+		while (i < 8)
+		{
+			node->children[i] = NULL;
+			i++;
+		}
 		node->is_last = TRUE;
+	}
 	return (node);
 }
 
