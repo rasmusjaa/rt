@@ -17,19 +17,22 @@
 
 int			inside_bounds(t_triface	*triface, t_bounds bounds)
 {
-	if (triface->v[0].x >= bounds.min.x && triface->v[0].x <= bounds.max.x &&
-		triface->v[0].y >= bounds.min.y && triface->v[0].y <= bounds.max.y &&
-		triface->v[0].z >= bounds.min.z && triface->v[0].z <= bounds.max.z)
-		return (TRUE);
-	if (triface->v[1].x >= bounds.min.x && triface->v[1].x <= bounds.max.x &&
-		triface->v[1].y >= bounds.min.y && triface->v[1].y <= bounds.max.y &&
-		triface->v[1].z >= bounds.min.z && triface->v[1].z <= bounds.max.z)
-		return (TRUE);
-	if (triface->v[2].x >= bounds.min.x && triface->v[2].x <= bounds.max.x &&
-		triface->v[2].y >= bounds.min.y && triface->v[2].y <= bounds.max.y &&
-		triface->v[2].z >= bounds.min.z && triface->v[2].z <= bounds.max.z)
-		return (TRUE);
-	return (FALSE);
+	if ((bounds.min.x < triface->bounds.min.x &&
+		bounds.max.x < triface->bounds.min.x) ||
+		(bounds.min.x > triface->bounds.max.x &&
+		bounds.max.x > triface->bounds.max.x))
+		return (FALSE);
+	if ((bounds.min.y < triface->bounds.min.y &&
+		bounds.max.y < triface->bounds.min.y) ||
+		(bounds.min.y > triface->bounds.max.y &&
+		bounds.max.y > triface->bounds.max.y))
+		return (FALSE);
+	if ((bounds.min.z < triface->bounds.min.z &&
+		bounds.max.z < triface->bounds.min.z) ||
+		(bounds.min.z > triface->bounds.max.z &&
+		bounds.max.z > triface->bounds.max.z))
+		return (FALSE);
+	return (TRUE);
 }
 
 void	octree_calc_child_bounds(t_octree *node)

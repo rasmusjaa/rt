@@ -33,6 +33,7 @@ typedef struct	s_triface
 	t_vec2		uv[3];
 	t_vec3		normal;
 	t_vec3		e[3];
+	t_bounds	bounds;
 }				t_triface;
 
 typedef struct	s_mesh

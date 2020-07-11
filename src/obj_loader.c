@@ -49,10 +49,31 @@ static void read_mesh_info(t_mesh *m, const char *filename)
 	mesh_create_trifaces(m, m->num_trifaces);
 }
 
-/*
-** vertex/uv/normal
-** f 202/1/1 199/2/1 200/3/1
-*/
+void	triface_calc_bounds(t_triface *t)
+{
+	size_t i;
+
+	t->bounds.min = ft_make_vec3(MAX_BOUNDS, MAX_BOUNDS, MAX_BOUNDS);
+	t->bounds.max = ft_make_vec3(MIN_BOUNDS, MIN_BOUNDS, MIN_BOUNDS);
+	i = 0;
+	while (i < 3)
+	{
+		if (t->v[i].x < t->bounds.min.x)
+			t->bounds.min.x = t->v[i].x;
+		if (t->v[i].y < t->bounds.min.y)
+			t->bounds.min.y = t->v[i].y;
+		if (t->v[i].z < t->bounds.min.z)
+			t->bounds.min.z = t->v[i].z;
+
+		if (t->v[i].x > t->bounds.max.x)
+			t->bounds.max.x = t->v[i].x;
+		if (t->v[i].y > t->bounds.max.y)
+			t->bounds.max.y = t->v[i].y;
+		if (t->v[i].z > t->bounds.max.z)
+			t->bounds.max.z = t->v[i].z;
+		i++;
+	}
+}
 
 static void parse_face(t_mesh *m, size_t i, char *line)
 {
@@ -89,6 +110,7 @@ static void parse_face(t_mesh *m, size_t i, char *line)
 	m->trifaces[i].e[1] = ft_sub_vec3(m->trifaces[i].v[2], m->trifaces[i].v[1]);
 	m->trifaces[i].e[2] = ft_sub_vec3(m->trifaces[i].v[0], m->trifaces[i].v[2]);
 	m->trifaces[i].normal = /*ft_normalize_vec3(ft_cross_vec3(m->trifaces[i].e[0], ft_sub_vec3(m->trifaces[i].v[2], m->trifaces[i].v[0]))); */m->trifaces[i].n[0]; // this should not be here
+	triface_calc_bounds(&m->trifaces[i]);
 }
 
 t_mesh	*obj_load(const char *filename)
