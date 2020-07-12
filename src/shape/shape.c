@@ -190,6 +190,7 @@ int intersects_triangle(t_ray *ray, t_triface *triface, t_raycast_hit *hit)
 */
 int	intersects_bounds(t_ray *ray, t_bounds *b, int debug)
 {
+	// might have to add that if camera is in bounding box return true
 	double txmin = (b->min.x - ray->origin.x) / ray->direction.x;
 	double txmax = (b->max.x - ray->origin.x) / ray->direction.x;
 
@@ -217,9 +218,9 @@ int	intersects_bounds(t_ray *ray, t_bounds *b, int debug)
 
 	if ((tymin > tzmax)  || (tzmin > tymax))
 		return (FALSE);
+	return (TRUE);
 	if (debug)
 		return (TRUE);
-	return (TRUE);
 }
 
 t_vec3 calc_smooth_normal(t_triface *tf, t_vec3 p)
@@ -272,6 +273,8 @@ int intersects_octree_model(t_ray *ray, t_shape *model, t_octree *node, t_raycas
 		{
 			if (intersects_triangle(ray, &(node->contains_trifaces[i]), &cur_hit))
 			{
+				if (debug)
+					ft_printf("found triangle\n");
 				hit_found = TRUE;
 				if (cur_hit.distance < min_dist)
 				{
