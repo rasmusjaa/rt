@@ -215,7 +215,7 @@ int		main(int ac, char **av)
 	rt = rt_init(ac - 1);
 	i = 0;
 	if (ac == 1)
-		exit_message("Usage:");
+		exit_message("Usage: ");
 	while (i < ac - 1)
 	{
 		rt->scenes[i] = read_scene(av[i + 1]);
