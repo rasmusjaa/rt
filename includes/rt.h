@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/10 19:15:41 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/13 18:45:24 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -336,9 +336,12 @@ void			rt_destroy_exit(t_rt *rt, int status);
 void			render_scene(t_rt *rt, t_scene *scene);
 void			destroy_scene(t_scene *scene);
 
+// t_vec3			point_on_ray(t_ray *r, double t);
+// int				solve_quadratic(t_quadratic q, double *t1, double *t2);
+
 t_rgba			raycast(t_ray *ray, t_scene *scene);
-int				intersects_shape(t_ray *ray, t_shape *shape, t_raycast_hit *hit, int debug);
-t_vec3			calc_hit_normal(t_raycast_hit *hit);
+// int				intersects_shape(t_ray *ray, t_shape *shape, t_raycast_hit *hit, int debug);
+// t_vec3			calc_hit_normal(t_raycast_hit *hit);
 
 int				intersects_model(t_ray *ray, t_shape *model, t_raycast_hit *hit, int debug);
 
