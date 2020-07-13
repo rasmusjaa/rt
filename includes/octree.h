@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   octree.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/07 18:38:03 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/13 14:32:32 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/13 22:43:04 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ typedef struct	s_octree
 
 
 t_octree	*octree_create_node(t_bounds bounds, size_t num_tris, t_triface *trifaces);
+void		octree_destroy(t_octree *o);
 // t_octree_content *octree_content_create(void *data, size_t data_size);
 // void			octree_insert(t_octree *octree, t_octree *child, unsigned char octant);
 
