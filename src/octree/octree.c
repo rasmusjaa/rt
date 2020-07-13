@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   octree.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/07 18:41:21 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/09 19:55:23 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/13 14:31:32 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,6 @@
 #include "ft_printf.h"
 #include <stdlib.h>
 #include "libft.h"
-
-int			inside_bounds(t_triface	*triface, t_bounds bounds)
-{
-	if ((bounds.min.x < triface->bounds.min.x &&
-		bounds.max.x < triface->bounds.min.x) ||
-		(bounds.min.x > triface->bounds.max.x &&
-		bounds.max.x > triface->bounds.max.x))
-		return (FALSE);
-	if ((bounds.min.y < triface->bounds.min.y &&
-		bounds.max.y < triface->bounds.min.y) ||
-		(bounds.min.y > triface->bounds.max.y &&
-		bounds.max.y > triface->bounds.max.y))
-		return (FALSE);
-	if ((bounds.min.z < triface->bounds.min.z &&
-		bounds.max.z < triface->bounds.min.z) ||
-		(bounds.min.z > triface->bounds.max.z &&
-		bounds.max.z > triface->bounds.max.z))
-		return (FALSE);
-	return (TRUE);
-}
 
 void	octree_calc_child_bounds(t_octree *node)
 {
@@ -106,7 +86,7 @@ t_octree	*octree_create_node(t_bounds bounds, size_t num_tris, t_triface *trifac
 	j = 0;
 	while (i < num_tris)
 	{
-		if (inside_bounds(&trifaces[i], bounds))
+		if (inside_bounds(trifaces[i].bounds, bounds))
 		{
 			node->contains_trifaces[j] = trifaces[i];
 			j++;
