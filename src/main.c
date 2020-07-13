@@ -162,7 +162,7 @@ int update(void *arg)
 	{
 		gettimeofday(&task->end_time, NULL);
 
-		draw_model_bounds(rt->mlx, rt->scenes[rt->cur_scene]);
+	//	draw_model_bounds(rt->mlx, rt->scenes[rt->cur_scene]);
 
 		ft_printf("render task finished in in: %.4f s\n", (double)(task->end_time.tv_usec - task->start_time.tv_usec) / 1000000 + (double)(task->end_time.tv_sec - task->start_time.tv_sec));
 		cleanup_render_task(rt, task);

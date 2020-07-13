@@ -5,6 +5,6 @@ camera;0;8;0;0;0;0;;;;60;0;1;;;;;;;
 camera;7;2;4;1;2;0;;;;60;0;1;;;;;;;
 camera;0;0;10;0;0;0;;;;60;0;1;;;;;;;
 SHAPES;POS_X;POS_Y;POS_Z;TAR_X;TAR_Y;TAR_Z;ROT_X;ROT_Y;ROT_Z;SCA_X;SCA_Y;SCA_Z;COL_R;COL_G;COL_B;COL_A;RADIUS;ANGLE;OPACITY
-model;0;-10;0;0;1;0;0;0;0;1;1;1;0.1;0.5;0.9;1;2;45;1;resources/cat2.obj
+model;0;-10;0;0;1;0;0;0;0;1;1;1;0.3;0.3;0.3;1;2;45;1;resources/cat2.obj
 LIGHTS;POS_X;POS_Y;POS_Z;COL_R;COL_G;COL_B;TYPE;INTENSITY;;;;;;;;;;;
-point;1.98;20;0;;;;;;;;;;;;;;;;
+point;5;5;5;;;;;;;;;;;;;;;;

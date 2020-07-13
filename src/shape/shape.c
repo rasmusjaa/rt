@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shape.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/15 12:46:47 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/10 21:46:59 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/13 21:40:09 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -265,16 +265,12 @@ int intersects_octree_model(t_ray *ray, t_shape *model, t_octree *node, t_raycas
 	}
 	else
 	{
-		if (debug)
-			ft_printf("last\n");
 		min_dist = MAX_CLIP;
 		i = 0;
 		while (i < node->num_tris)
 		{
 			if (intersects_triangle(ray, &(node->contains_trifaces[i]), &cur_hit))
 			{
-				if (debug)
-					ft_printf("found triangle\n");
 				hit_found = TRUE;
 				if (cur_hit.distance < min_dist)
 				{
@@ -396,6 +392,8 @@ t_vec3 calc_hit_normal(t_raycast_hit *hit)
 		return (calc_hit_normal_cone(hit->shape, hit));
 	else if (hit->shape->type == CYLINDER)
 		return (calc_hit_normal_cylinder(hit->shape, hit));
+	else if (hit->shape->type == MODEL)
+		return hit->normal;
 	else
 	{
 		ft_printf("calc_hit_normal -- unknown shape type\n");
