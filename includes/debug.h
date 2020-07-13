@@ -1,31 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   octree_test.c                                      :+:      :+:    :+:   */
+/*   debug.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/07/07 18:55:12 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/09 17:45:56 by wkorande         ###   ########.fr       */
+/*   Created: 2020/07/09 22:49:46 by wkorande          #+#    #+#             */
+/*   Updated: 2020/07/09 23:31:48 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "octree.h"
-#include <stdlib.h>
+#ifndef DEBUG_H
+# define DEBUG_H
 
-int main(void)
-{
-	// t_octree *root;
+#include "vector.h"
+#include "rt.h"
 
-
-	// t_octree *tlf;
-	// t_octree *tlb;
-
-	// root = octree_create_node(NULL);
-
-	// tlf = octree_create_node(NULL);
-	// tlb = octree_create_node(NULL);
-	// octree_insert(root, tlf, TOP_LEFT_FRONT);
-
-	// octree_insert(root, tlb, TOP_RIGHT_FRONT);
-}
+void			draw_line(t_mlx *mlx, t_vec2i p0, t_vec2i p1, int color);
+t_vec2i world_to_screen_point(t_camera *camera, t_vec3 world_point, t_vec2i window_size);
+void	draw_model_bounds(t_mlx *mlx, t_scene *scene);
+void	print_vec3(char *s, t_vec3 v);
+void	print_rgba(char *s, t_rgba c);
+#endif

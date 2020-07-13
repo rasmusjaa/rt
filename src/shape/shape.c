@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/15 12:46:47 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/09 14:13:15 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/10 21:46:59 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,6 +190,7 @@ int intersects_triangle(t_ray *ray, t_triface *triface, t_raycast_hit *hit)
 */
 int	intersects_bounds(t_ray *ray, t_bounds *b, int debug)
 {
+	// might have to add that if camera is in bounding box return true
 	double txmin = (b->min.x - ray->origin.x) / ray->direction.x;
 	double txmax = (b->max.x - ray->origin.x) / ray->direction.x;
 
@@ -216,21 +217,80 @@ int	intersects_bounds(t_ray *ray, t_bounds *b, int debug)
 		return (FALSE);
 
 	if ((tymin > tzmax)  || (tzmin > tymax))
-       return (FALSE);
-
-	if (debug)
-	{
-		ft_printf("RAY\norigin x %f y %f z%f\ndirection x %f y %f z%f\n",
-		ray->origin.x, ray->origin.y, ray->origin.z,
-		ray->direction.x, ray->direction.y, ray->direction.z);
-		ft_printf("BOUNDS\nxmin %f xmax %f\nymin %f ymax %f\nzmin %f zmax %f\n\n",
-		b->min.x, b->max.x, b->min.y, b->max.y, b->min.z, b->max.z);
-		ft_printf("T\nxmin %f xmax %f\nymin %f ymax %f\nzmin %f zmax %f\n\n",
-		txmin, txmax, tymin, tymax, tzmin, tzmax);
-	}
-
+		return (FALSE);
 	return (TRUE);
+	if (debug)
+		return (TRUE);
 }
+
+t_vec3 calc_smooth_normal(t_triface *tf, t_vec3 p)
+{
+	t_vec3 n;
+
+	double p0 = ft_len_vec3(ft_sub_vec3(p, tf->v[0]));
+	double p1 = ft_len_vec3(ft_sub_vec3(p, tf->v[1]));
+	double p2 = ft_len_vec3(ft_sub_vec3(p, tf->v[2]));
+
+	n = ft_add_vec3(ft_mul_vec3(tf->n[0], p0), ft_add_vec3(ft_mul_vec3(tf->n[1], p1), ft_mul_vec3(tf->n[2], p2)));
+	return (ft_normalize_vec3(n));
+}
+
+int intersects_octree_model(t_ray *ray, t_shape *model, t_octree *node, t_raycast_hit *hit, int debug)
+{
+	size_t i;
+	t_raycast_hit cur_hit;
+	double min_dist;
+	int hit_found;
+
+	if (!intersects_bounds(ray, &(node->bounds), debug))
+		return (FALSE);
+
+	t_raycast_hit temp_hit;
+	temp_hit.distance = MAX_CLIP;
+
+	hit_found = FALSE;
+	if (!node->is_last)
+	{
+		i = 0;
+		while (i < NUM_CHILDREN)
+		{
+			if (intersects_octree_model(ray, model, node->children[i], &cur_hit, debug) && cur_hit.distance < temp_hit.distance)
+			{
+				temp_hit = cur_hit;
+				*hit = temp_hit;
+				hit_found = TRUE;
+			}
+			i++;
+		}
+	}
+	else
+	{
+		if (debug)
+			ft_printf("last\n");
+		min_dist = MAX_CLIP;
+		i = 0;
+		while (i < node->num_tris)
+		{
+			if (intersects_triangle(ray, &(node->contains_trifaces[i]), &cur_hit))
+			{
+				if (debug)
+					ft_printf("found triangle\n");
+				hit_found = TRUE;
+				if (cur_hit.distance < min_dist)
+				{
+					min_dist = cur_hit.distance;
+					cur_hit.shape = model;
+					*hit = cur_hit;
+					hit->normal = calc_smooth_normal(&node->contains_trifaces[i], cur_hit.point); // cur_hit.normal;
+				}
+			}
+			i++;
+		}
+	}
+	return (hit_found);
+}
+
+
 
 int intersects_model(t_ray *ray, t_shape *model, t_raycast_hit *hit, int debug)
 {
@@ -239,7 +299,6 @@ int intersects_model(t_ray *ray, t_shape *model, t_raycast_hit *hit, int debug)
 	double min_dist;
 	int hit_found;
 
-	// we should first check if ray intersects model bounds, then go through each triface
 	if (!intersects_bounds(ray, &(model->mesh->bounds), debug))
 		return (FALSE);
 	// else
@@ -247,7 +306,6 @@ int intersects_model(t_ray *ray, t_shape *model, t_raycast_hit *hit, int debug)
 	// 	hit->shape = model;
 	// 	return (TRUE);
 	// }
-
 
 	hit_found = FALSE;
 	min_dist = MAX_CLIP;
@@ -275,7 +333,7 @@ int	intersects_shape(t_ray *ray, t_shape *shape, t_raycast_hit *hit, int debug)
 	|| (shape->type == PLANE && intersects_plane(ray, shape, hit))
 	|| (shape->type == CONE && intersects_cone(ray, shape, hit))
 	|| (shape->type == CYLINDER && intersects_cylinder(ray, shape, hit))
-	|| (shape->type == MODEL && intersects_model(ray, shape, hit, debug)))
+	|| (shape->type == MODEL && intersects_octree_model(ray, shape, shape->octree, hit, debug)))
 	{
 		if (debug)
 				ft_printf("hit shape, hit point %f %f %f\n", hit->point.x, hit->point.y, hit->point.z);

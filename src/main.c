@@ -12,6 +12,7 @@
 
 #include "rt.h"
 #include "thread_pool.h"
+#include "debug.h"
 
 void	render_tile_job(void *data)
 {
@@ -27,7 +28,7 @@ void	render_tile_job(void *data)
 		cur.x = job_data->screen_coord.x;
 		while (cur.x < job_data->screen_coord.x + job_data->tile_size.x)
 		{
-			t_ray camera_ray = get_camera_ray(job_data->scene, job_data->camera, cur);
+			t_ray camera_ray = get_camera_ray(job_data->scene, job_data->camera, cur.x, cur.y);
 			t_rgba color = raycast(&camera_ray, job_data->scene);
 			put_pixel_mlx_img(job_data->mlx_img, cur.x - job_data->screen_coord.x, cur.y - job_data->screen_coord.y, ft_get_color(color));
 			cur.x++;
@@ -134,6 +135,8 @@ void	render_scene(t_rt *rt, t_scene *scene)
 
 }
 
+
+
 int update(void *arg)
 {
 	t_rt			*rt;
@@ -143,7 +146,7 @@ int update(void *arg)
 	rt = (t_rt*)arg;
 	task = &rt->render_task;
 	job = NULL;
-	while (task->done_tiles != NULL && !ft_queue_isempty(task->done_tiles))
+	while (task->render_started && task->done_tiles != NULL && !ft_queue_isempty(task->done_tiles))
 	{
 		pthread_mutex_lock(&task->task_mutex);
 		job = (t_tile_job_data*)ft_queue_dequeue(task->done_tiles);
@@ -158,18 +161,10 @@ int update(void *arg)
 	if (task->render_finished && task->done_tiles != NULL && ft_queue_isempty(task->done_tiles))
 	{
 		gettimeofday(&task->end_time, NULL);
+
+		draw_model_bounds(rt->mlx, rt->scenes[rt->cur_scene]);
+
 		ft_printf("render task finished in in: %.4f s\n", (double)(task->end_time.tv_usec - task->start_time.tv_usec) / 1000000 + (double)(task->end_time.tv_sec - task->start_time.tv_sec));
-		// ft_queue_destroy(task->done_tiles);
-		// task->done_tiles = NULL;
-		// i = 0;
-		// while (i < task->num_jobs)
-		// {
-		// 	destroy_mlx_img(rt->mlx, task->job_data_block[i].mlx_img);
-		// 	i++;
-		// }
-		// free(task->job_data_block);
-		// tp_destroy(task->thread_pool);
-		// task->thread_pool = NULL;
 		cleanup_render_task(rt, task);
 	}
 	return (1);

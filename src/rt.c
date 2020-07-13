@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/09 13:50:27 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/09 13:50:29 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/09 19:22:50 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ t_rt	*rt_init(size_t num_scenes)
 	// rt->num_render_jobs = 0;
 	// rt->job_data_block = NULL;
 	// pthread_mutex_init(&rt->job_mutex, NULL);
+	rt->render_task.render_started = FALSE;
 	return (rt);
 }
 
@@ -41,6 +42,7 @@ void	destroy_scene(t_scene *scene)
 	{
 		if (scene->shapes[i].type == MODEL)
 			mesh_destroy(scene->shapes[i].mesh);
+			//octreen free tahan?
 		i++;
 	}
 	free(scene->cameras);
