@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   model.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:31:38 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/13 18:41:00 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/14 14:48:43 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ int intersects_octree_model(t_ray *ray, t_shape *model, t_octree *node, t_raycas
 	if (!intersects_bounds(ray, &(node->bounds), debug))
 		return (FALSE);
 
-	t_raycast_hit temp_hit;
-	temp_hit.distance = MAX_CLIP;
+//	t_raycast_hit temp_hit;
+	cur_hit.distance = INFINITY;
 
 	hit_found = FALSE;
 	if (!node->is_last)
@@ -43,34 +43,37 @@ int intersects_octree_model(t_ray *ray, t_shape *model, t_octree *node, t_raycas
 		i = 0;
 		while (i < NUM_CHILDREN)
 		{
-			if (intersects_octree_model(ray, model, node->children[i], &cur_hit, debug) && cur_hit.distance < temp_hit.distance)
+			if (intersects_octree_model(ray, model, node->children[i], &cur_hit, debug))
 			{
-				temp_hit = cur_hit;
-				*hit = temp_hit;
-				hit_found = TRUE;
+				if (cur_hit.distance < 1 && debug)
+					ft_printf("problem\n");
+				if (cur_hit.distance < hit->distance)
+				{
+		//			temp_hit = cur_hit;
+					*hit = cur_hit;
+					hit_found = TRUE;
+				}
 			}
 			i++;
 		}
 	}
 	else
 	{
-		if (debug)
-			ft_printf("last\n");
 		min_dist = MAX_CLIP;
 		i = 0;
 		while (i < node->num_tris)
 		{
 			if (intersects_triangle(ray, &(node->contains_trifaces[i]), &cur_hit))
 			{
-				if (debug)
-					ft_printf("found triangle\n");
-				hit_found = TRUE;
-				if (cur_hit.distance < min_dist)
+				if (cur_hit.distance < 1 && debug)
+					ft_printf("problem\n");
+				if (cur_hit.distance < hit->distance)
 				{
-					min_dist = cur_hit.distance;
+				//	min_dist = hit->distance;
 					cur_hit.shape = model;
 					*hit = cur_hit;
-					hit->normal = cur_hit.normal;
+					hit_found = TRUE;
+	//				hit->normal = cur_hit.normal;
 				}
 			}
 			i++;
@@ -79,37 +82,37 @@ int intersects_octree_model(t_ray *ray, t_shape *model, t_octree *node, t_raycas
 	return (hit_found);
 }
 
-int intersects_model(t_ray *ray, t_shape *model, t_raycast_hit *hit, int debug)
-{
-	size_t i;
-	t_raycast_hit cur_hit;
-	double min_dist;
-	int hit_found;
+// int intersects_model(t_ray *ray, t_shape *model, t_raycast_hit *hit, int debug)
+// {
+// 	size_t i;
+// 	t_raycast_hit cur_hit;
+// 	double min_dist;
+// 	int hit_found;
 
-	if (!intersects_bounds(ray, &(model->mesh->bounds), debug))
-		return (FALSE);
-	// else
-	// {
-	// 	hit->shape = model;
-	// 	return (TRUE);
-	// }
+// 	if (!intersects_bounds(ray, &(model->mesh->bounds), debug))
+// 		return (FALSE);
+// 	// else
+// 	// {
+// 	// 	hit->shape = model;
+// 	// 	return (TRUE);
+// 	// }
 
-	hit_found = FALSE;
-	min_dist = MAX_CLIP;
-	i = 0;
-	while (i < model->mesh->num_trifaces)
-	{
-		if (intersects_triangle(ray, &(model->mesh->trifaces[i]), &cur_hit))
-		{
-			hit_found = TRUE;
-			if (cur_hit.distance < min_dist)
-			{
-				min_dist = cur_hit.distance;
-				*hit = cur_hit;
-				hit->shape = model;
-			}
-		}
-		i++;
-	}
-	return (hit_found);
-}
+// 	hit_found = FALSE;
+// 	min_dist = MAX_CLIP;
+// 	i = 0;
+// 	while (i < model->mesh->num_trifaces)
+// 	{
+// 		if (intersects_triangle(ray, &(model->mesh->trifaces[i]), &cur_hit))
+// 		{
+// 			hit_found = TRUE;
+// 			if (cur_hit.distance < min_dist)
+// 			{
+// 				min_dist = cur_hit.distance;
+// 				*hit = cur_hit;
+// 				hit->shape = model;
+// 			}
+// 		}
+// 		i++;
+// 	}
+// 	return (hit_found);
+// }

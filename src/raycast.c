@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/14 10:16:24 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/14 14:54:12 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int	trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit, int stop_at_first)
 	int		hit_found;
 
 	min_dist = INFINITY;
+	cur_hit.distance = INFINITY;
 	hit_found = FALSE;
 	i = 0;
 	while (i < scene->num_shapes)
@@ -96,7 +97,7 @@ static double		spot_shading(t_light light, t_raycast_hit hit, t_scene *scene)
 	else
 		intensity = light.intensity / 10 * (1 / (1 + distance + ft_pow(distance, 2)));
 	if (scene->help_ray == 1)
-		ft_printf("dot %f intensity %d\n", d, intensity); //
+		ft_printf(" ray surface dot %f\n", d); //
 //	d *= intensity;
 	d = ft_clamp_d(d, 0, 1);
 	return (d);
@@ -169,6 +170,8 @@ t_rgba			raycast(t_ray *ray, t_scene *scene)
 	init_hit_info(&hit);
 
 	color = ft_make_rgba(0.2, 0.2, 0.2, 1.0); // ambient
+	if (scene->help_ray == 1)
+			ft_printf("trace this\n"); //
 	if (trace(ray, scene, &hit, FALSE) != FALSE)
 	{
 		// laske normaali ja muu hit info  
