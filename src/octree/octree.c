@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   octree.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/07 18:41:21 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/13 22:45:38 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/14 12:24:26 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,6 @@ void	octree_destroy(t_octree *o)
 		while (i < NUM_CHILDREN)
 			octree_destroy(o->children[i++]);			
 	}
-	free(o->trifaces);
 	free(o->contains_trifaces);
 	free(o);
 }
