@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:38:15 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/14 18:04:59 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/14 19:05:57 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,6 @@ int intersects_triangle(t_ray *ray, t_triface *triface, t_raycast_hit *hit)
 	{
 		hit->distance = hit->t;
 		hit->normal = triface->normal;
-		if (hit->distance < 1)
-			ft_printf("problem with triangle:");
-			print_vec3("min bounds", triface->bounds.min);
 		return (TRUE);
 	}
 	return (FALSE);

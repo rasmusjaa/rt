@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/07 18:41:21 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/14 12:24:26 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/14 18:55:13 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ t_octree	*octree_create_node(t_bounds bounds, size_t num_tris, t_triface *trifac
 		}
 		i++;
 	}
+	node->num_tris = j;
 	// ft_printf("i %d j %d\n", i, j);
 	i = 0;
 	double bound_len = ft_len_vec3(ft_sub_vec3(bounds.max, bounds.min));
@@ -123,7 +124,9 @@ void	octree_destroy(t_octree *o)
 			octree_destroy(o->children[i++]);			
 	}
 	free(o->contains_trifaces);
+	o->contains_trifaces = NULL;
 	free(o);
+	o = NULL;
 }
 
 
