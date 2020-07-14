@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/14 14:54:12 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/14 18:08:09 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit, int stop_at_first)
 				return (TRUE);
 			if (stop_at_first != 2 || cur_hit.distance < hit->light_dist) // to not accept shadow if shadow is behind light
 			{
-				hit_found = TRUE; 
+				hit_found = TRUE;
 				if (cur_hit.distance < min_dist)
 				{
 					*hit = cur_hit;
@@ -47,14 +47,6 @@ int	trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit, int stop_at_first)
 		}
 		i++;
 	}
-	// if (!hit_found && intersects_model(ray, &scene->model, &cur_hit, scene->help_ray))
-	// {
-	// 	hit_found = TRUE;
-	// 	hit->shape = NULL;
-	// 	*hit = cur_hit;
-	// 	if (scene->help_ray == 1)
-	// 		ft_printf("closest dist %f\n", hit->distance);
-	// }
 	return (hit_found);
 }
 
@@ -81,43 +73,29 @@ int	trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit, int stop_at_first)
 // 	return (color);
 // }
 
-static double		spot_shading(t_light light, t_raycast_hit hit, t_scene *scene)
+static double		calc_diffuse(t_light light, t_raycast_hit hit, t_scene *scene)
 {
 	double	d;
 	double	distance;
 	double	intensity;
-	t_vec3	light_ray;
+	t_vec3	light_dir;
 
-	light_ray = ft_sub_vec3(light.position, hit.point);
-	distance = ft_len_vec3(light_ray);
-	light_ray = ft_normalize_vec3(light_ray);
-	d = ft_dot_vec3(light_ray, hit.normal);
-	if (light.type == 1)
+	if (light.type == DIRECTIONAL)
+		light_dir = ft_sub_vec3(light.position, hit.point); // light needs a target field or rotation that we can calculate a direction from
+	else
+		light_dir = ft_sub_vec3(light.position, hit.point);
+	distance = ft_len_vec3(light_dir);
+	light_dir = ft_normalize_vec3(light_dir);
+	d = ft_dot_vec3(light_dir, hit.normal);
+	if (light.type == DIRECTIONAL)
 		intensity = light.intensity / 1000;
 	else
 		intensity = light.intensity / 10 * (1 / (1 + distance + ft_pow(distance, 2)));
 	if (scene->help_ray == 1)
 		ft_printf(" ray surface dot %f\n", d); //
 //	d *= intensity;
-	d = ft_clamp_d(d, 0, 1);
-	return (d);
-	
-}
+	return (ft_clamp_d(d, 0, 1));
 
-static int		in_shadow(t_light light, t_raycast_hit hit, t_scene *scene)
-{
-	t_ray	ray;
-	t_raycast_hit new_hit;
-	
-	ray.origin = hit.point;
-	ray.direction = ft_sub_vec3(light.position, hit.point);
-	new_hit.light_dist = ft_len_vec3(ray.direction);
-	if (scene->help_ray)
-		ft_printf("testing shadow of %f %f %f\n", hit.point.x, hit.point.y, hit.point.z);
-	ray.direction = ft_normalize_vec3(ray.direction);
-	if (trace(&ray, scene, &new_hit, 2) == TRUE)
-		return (1);
-	return (0);
 }
 
 static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
@@ -126,28 +104,19 @@ static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
 	size_t		i;
 	size_t		shadow;
 	double		d;
-	
+
 	i = 0;
 	shadow = 0;
 	d = 0;
 	if (hit->shape)
 	{
 		c = hit->shape->color;
-		// if (hit->shape->type == MODEL)
-		// {
-		// 	c = ft_make_rgba(hit->normal.x * 0.5 + 0.5, hit->normal.y * 0.5 + 0.5, hit->normal.z * 0.5 + 0.5, 1.0);
-		// //	t_rgba c = ft_make_rgba(1.0- ft_inv_lerp_d(hit->distance, 4, 6), 0, 0, 1);
-		// 	return (c);
-		// }
 		while ( i < scene->num_lights)
 		{
-			shadow = in_shadow(scene->lights[i], *hit, scene);
-			if (shadow == 1)
+			if (in_shadow(scene->lights[i], *hit, scene))
 				return (ft_make_rgba(0, 0, 0, 1.0)); // vaihda laskukaavaan
-			if (shadow == 0)
-			{
-				d += spot_shading(scene->lights[i], *hit, scene);
-			}
+			else
+				d += calc_diffuse(scene->lights[i], *hit, scene);
 			i++;
 		}
 		if (scene->help_ray == 1)
@@ -174,7 +143,7 @@ t_rgba			raycast(t_ray *ray, t_scene *scene)
 			ft_printf("trace this\n"); //
 	if (trace(ray, scene, &hit, FALSE) != FALSE)
 	{
-		// laske normaali ja muu hit info  
+		// laske normaali ja muu hit info
 		hit.normal = calc_hit_normal(&hit);
 		color = shade(scene, &hit);
 	}
