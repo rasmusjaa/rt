@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   octree.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/07 18:41:21 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/13 14:31:32 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/13 22:45:38 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,23 @@ t_octree	*octree_create_node(t_bounds bounds, size_t num_tris, t_triface *trifac
 	else
 		node->is_last = TRUE;
 	return (node);
+}
+
+void	octree_destroy(t_octree *o)
+{
+	int i;
+
+	if (!o)
+		return ;
+	i = 0;
+	if (!o->is_last)
+	{
+		while (i < NUM_CHILDREN)
+			octree_destroy(o->children[i++]);			
+	}
+	free(o->trifaces);
+	free(o->contains_trifaces);
+	free(o);
 }
 
 

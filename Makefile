@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+         #
+#    By: wkorande <willehard@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/01 15:48:04 by rjaakonm          #+#    #+#              #
-#    Updated: 2020/07/13 14:31:55 by rjaakonm         ###   ########.fr        #
+#    Updated: 2020/07/13 18:44:56 by wkorande         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,12 @@ SRC =	scene/read_csv.c\
 		rt.c\
 		raycast.c\
 		shape/shape.c\
+		shape/sphere.c\
+		shape/plane.c\
+		shape/cone.c\
+		shape/cylinder.c\
+		shape/triangle.c\
+		shape/model.c\
 		thread_pool/tp.c\
 		thread_pool/tp_job.c\
 		thread_pool/tp_queue.c\
