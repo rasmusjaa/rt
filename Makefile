@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+         #
+#    By: wkorande <willehard@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/01 15:48:04 by rjaakonm          #+#    #+#              #
-#    Updated: 2020/07/14 11:42:23 by rjaakonm         ###   ########.fr        #
+#    Updated: 2020/07/14 16:51:50 by wkorande         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ SRC =	scene/read_csv.c\
 		event_hooks/mouse.c \
 		event_hooks/window.c \
 		camera.c\
+		light.c\
 		mlx_image.c\
 		main.c\
 		rt.c\

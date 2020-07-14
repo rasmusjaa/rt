@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/14 14:27:27 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/14 16:51:26 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,20 +97,6 @@ static double		calc_diffuse(t_light light, t_raycast_hit hit, t_scene *scene)
 
 }
 
-static int		in_shadow(t_light light, t_raycast_hit hit, t_scene *scene)
-{
-	t_ray			shadow_ray;
-	t_raycast_hit	new_hit;
-
-	shadow_ray.origin = hit.point;
-	shadow_ray.direction = ft_sub_vec3(light.position, hit.point);
-	new_hit.light_dist = ft_len_vec3(shadow_ray.direction);
-	if (scene->help_ray)
-		ft_printf("testing shadow of %f %f %f\n", hit.point.x, hit.point.y, hit.point.z);
-	shadow_ray.direction = ft_normalize_vec3(shadow_ray.direction);
-	return (trace(&shadow_ray, scene, &new_hit, 2));
-}
-
 static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
 {
 	t_rgba		c;
@@ -124,12 +110,6 @@ static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
 	if (hit->shape)
 	{
 		c = hit->shape->color;
-		// if (hit->shape->type == MODEL)
-		// {
-		// 	c = ft_make_rgba(hit->normal.x * 0.5 + 0.5, hit->normal.y * 0.5 + 0.5, hit->normal.z * 0.5 + 0.5, 1.0);
-		// //	t_rgba c = ft_make_rgba(1.0- ft_inv_lerp_d(hit->distance, 4, 6), 0, 0, 1);
-		// 	return (c);
-		// }
 		while ( i < scene->num_lights)
 		{
 			if (in_shadow(scene->lights[i], *hit, scene))

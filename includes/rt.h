@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/14 14:28:50 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/14 16:52:55 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@
 # define MIN_COORD -100
 # define MAX_COORD 100
 # define MIN_CLIP 0.00001
-# define MAX_CLIP 100
+# define MAX_CLIP 1000
 # define MIN_SCALE -10
 # define MAX_SCALE 10
 # define MIN_RADIUS 0.001
@@ -338,7 +338,8 @@ void			destroy_scene(t_scene *scene);
 
 
 t_rgba			raycast(t_ray *ray, t_scene *scene);
-
+int				trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit, int stop_at_first);
+int				in_shadow(t_light light, t_raycast_hit hit, t_scene *scene);
 t_mesh			*obj_load(const char *filename);
 
 #endif
