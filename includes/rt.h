@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/14 16:52:55 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/14 17:45:37 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,6 +277,9 @@ typedef struct	s_raycast_hit
 	double		distance;
 	double		light_dist;
 	t_rgba		color;
+	int			depth;
+	t_vec3		idir;
+	t_ray		ray;
 }				t_raycast_hit;
 
 
@@ -337,7 +340,7 @@ void			render_scene(t_rt *rt, t_scene *scene);
 void			destroy_scene(t_scene *scene);
 
 
-t_rgba			raycast(t_ray *ray, t_scene *scene);
+t_rgba			raycast(t_ray *ray, t_scene *scene, int depth);
 int				trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit, int stop_at_first);
 int				in_shadow(t_light light, t_raycast_hit hit, t_scene *scene);
 t_mesh			*obj_load(const char *filename);
