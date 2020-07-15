@@ -6,7 +6,11 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
+<<<<<<< Updated upstream
 /*   Updated: 2020/07/14 18:08:09 by rjaakonm         ###   ########.fr       */
+=======
+/*   Updated: 2020/07/15 17:55:23 by rjaakonm         ###   ########.fr       */
+>>>>>>> Stashed changes
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +70,22 @@ int	trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit, int stop_at_first)
 // 	t_raycasthit	reflect_hit;
 // 	t_rgba			color;
 
+<<<<<<< Updated upstream
 // 	reflect_ray.origin = ft_add_vec3(point, ft_mul_vec3(normal, REFLECT_BIAS));
 // 	reflect_ray.direction = ft_normalize_vec3(ft_reflect_vec3(idir, normal));
 // 	color = raycast(&reflect_ray, scene, &reflect_hit, depth + 1);
 // 	//hit->color = ft_lerp_rgba(hit->color, reflect_hit.color, hit->object->reflect);
 // 	return (color);
 // }
+=======
+	reflect_ray.origin = ft_add_vec3(point, ft_mul_vec3(normal, EPSILON));
+	reflect_ray.direction = ft_normalize_vec3(ft_reflect_vec3(idir, normal));
+	color = raycast(&reflect_ray, scene, depth + 1);
+	if (scene->help_ray == 1)
+		print_rgba("reflect color", color);
+	return (color);
+}
+>>>>>>> Stashed changes
 
 static double		calc_diffuse(t_light light, t_raycast_hit hit, t_scene *scene)
 {
@@ -93,14 +107,17 @@ static double		calc_diffuse(t_light light, t_raycast_hit hit, t_scene *scene)
 		intensity = light.intensity / 10 * (1 / (1 + distance + ft_pow(distance, 2)));
 	if (scene->help_ray == 1)
 		ft_printf(" ray surface dot %f\n", d); //
-//	d *= intensity;
 	return (ft_clamp_d(d, 0, 1));
 
 }
 
 static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
 {
-	t_rgba		c;
+	t_rgba		ambient;
+	t_rgba		light;
+	t_rgba		object_c;
+	t_rgba		rc;
+	double		reflect;
 	size_t		i;
 	size_t		shadow;
 	double		d;
@@ -108,23 +125,38 @@ static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
 	i = 0;
 	shadow = 0;
 	d = 0;
+	ambient = scene->scene_config.ambient;
+	object_c = hit->shape->color;
+	reflect = scene->scene_config.reflection == 1 ? hit->shape->reflection : 0;
 	if (hit->shape)
 	{
-		c = hit->shape->color;
 		while ( i < scene->num_lights)
 		{
-			if (in_shadow(scene->lights[i], *hit, scene))
-				return (ft_make_rgba(0, 0, 0, 1.0)); // vaihda laskukaavaan
-			else
-				d += calc_diffuse(scene->lights[i], *hit, scene);
+			light = ft_make_rgba(0, 0, 0, 1);
+			if (scene->scene_config.shadows == 1 && (!in_shadow(scene->lights[i], *hit, scene)))
+			{
+				light = scene->lights[i].color;
+				d += scene->scene_config.shading == 1 ? calc_diffuse(scene->lights[i], *hit, scene) : 0;
+				light = ft_mul_rgba(light, d);
+			}
+			ambient = ft_add_rgba(ambient, light);
 			i++;
 		}
+<<<<<<< Updated upstream
 		if (scene->help_ray == 1)
 			ft_printf("color times %f\n", d); //
 		c = ft_mul_rgba(c, d);
 		return (c);
+=======
+		rc = calc_reflect(scene, hit->point, hit->ray.direction, hit->normal, hit->depth);
+		rc = ft_mul_rgba(rc, reflect);
+		//c = ft_add_rgba(c, rc);
+		object_c = ft_blend_rgba(ft_mul_rgba(ambient, ft_intensity_rgba(ambient)), object_c);
+		object_c = ft_blend_rgba(object_c, rc);
+		return (object_c);
+>>>>>>> Stashed changes
 	}
-	return (ft_make_rgba(0.1, 0.1, 0.1, 1.0));
+	return (ambient);
 }
 
 static void		init_hit_info(t_raycast_hit *hit)
@@ -136,6 +168,7 @@ t_rgba			raycast(t_ray *ray, t_scene *scene)
 {
 	t_rgba color;
 	t_raycast_hit hit;
+<<<<<<< Updated upstream
 	init_hit_info(&hit);
 
 	color = ft_make_rgba(0.2, 0.2, 0.2, 1.0); // ambient
@@ -144,6 +177,16 @@ t_rgba			raycast(t_ray *ray, t_scene *scene)
 	if (trace(ray, scene, &hit, FALSE) != FALSE)
 	{
 		// laske normaali ja muu hit info
+=======
+
+	color = scene->scene_config.ambient;
+	if (depth > MAX_BOUNCES)
+		return (color); // red for now should be ambient?
+	init_hit_info(&hit);
+	if (trace(ray, scene, &hit, FALSE) != FALSE)
+	{
+		hit.depth = depth;
+>>>>>>> Stashed changes
 		hit.normal = calc_hit_normal(&hit);
 		color = shade(scene, &hit);
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_csv.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/09 18:11:19 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/15 18:01:57 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ char	*get_shape_file(char *line, int num_values)
 		if (line[i] == ';')
 		{
 			field++;
-			if (field == num_values)
+			if (field == num_values && line[i + 1])
 			{
 				return (&line[i + 1]);
 			}
@@ -83,6 +83,7 @@ void	check_scene_fields(t_scene *scene, char *line, int n)
 	scene->scene_config.bounces = round(ft_clamp_d(values[5], MIN_BOUNCES, MAX_BOUNCES));
 	scene->scene_config.width = round(ft_clamp_d(values[6], MIN_WIDTH, MAX_WIDTH));
 	scene->scene_config.height = round(ft_clamp_d(values[7], MIN_HEIGHT, MAX_HEIGHT));
+	scene->scene_config.ambient = ft_make_rgba(0.1, 0.1, 0.1, 1);
 }
 
 void	check_camera_fields(t_scene *scene, char *line, int n)
@@ -132,6 +133,7 @@ void	check_shape_fields(t_scene *scene, char *line, int n)
 {
 	double		values[N_SHAPE_VALUES];
 	char		file[256];
+	char		*file_pointer;
 
 	get_fields(line, values, N_SHAPE_VALUES);
 	scene->shapes[n].type = get_shape_type(line);
@@ -144,9 +146,13 @@ void	check_shape_fields(t_scene *scene, char *line, int n)
 	scene->shapes[n].radius = ft_clamp_d(values[16], MIN_RADIUS, MAX_RADIUS);
 	scene->shapes[n].angle = ft_clamp_d(values[17], MIN_ANGLE, MAX_ANGLE);
 	scene->shapes[n].opacity = ft_clamp_d(values[18], 0, 1);
+	scene->shapes[n].reflection = ft_clamp_d(values[19], 0, 1);
 	if (scene->shapes[n].type == MODEL)
 	{
-		ft_strcpy(file, get_shape_file(line, N_SHAPE_VALUES));
+		file_pointer = get_shape_file(line, N_SHAPE_VALUES);
+		if (file_pointer == NULL)
+			exit_message("no model on model line");
+		ft_strcpy(file, file_pointer);
 		scene->shapes[n].mesh = obj_load(file);
 		scene->shapes[n].octree = octree_create_node(scene->shapes[n].mesh->bounds, scene->shapes[n].mesh->num_trifaces, scene->shapes[n].mesh->trifaces);
 		ft_printf("loaded model from file %s\n", file);
