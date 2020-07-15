@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shape.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/15 12:46:47 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/14 10:18:48 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/14 13:31:02 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int	intersects_shape(t_ray *ray, t_shape *shape, t_raycast_hit *hit, int debug)
 	|| (shape->type == MODEL && intersects_octree_model(ray, shape, shape->octree, hit, debug)))
 	{
 		if (debug)
-				ft_printf("hit shape, hit point %f %f %f\n", hit->point.x, hit->point.y, hit->point.z);
+				ft_printf("hit shape type %d, hit point %f %f %f\n", shape->type, hit->point.x, hit->point.y, hit->point.z);
 		hit->shape = shape;
 		return (TRUE);
 	}

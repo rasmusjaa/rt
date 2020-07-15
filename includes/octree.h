@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   octree.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/07 18:38:03 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/13 22:43:04 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/14 12:24:47 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ typedef struct	s_octree
 	t_bounds			child_bounds[NUM_CHILDREN];
 	// t_octree_content	*content;
 	size_t				num_tris;
-	t_triface			*trifaces;
+//	t_triface			*trifaces;
 	t_triface			*contains_trifaces;
 	t_bounds			bounds;
 	int					is_last;

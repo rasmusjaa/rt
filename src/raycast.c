@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/14 10:16:24 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/14 18:06:12 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int	trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit, int stop_at_first)
 	int		hit_found;
 
 	min_dist = INFINITY;
+	cur_hit.distance = INFINITY;
 	hit_found = FALSE;
 	i = 0;
 	while (i < scene->num_shapes)
@@ -34,7 +35,7 @@ int	trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit, int stop_at_first)
 				return (TRUE);
 			if (stop_at_first != 2 || cur_hit.distance < hit->light_dist) // to not accept shadow if shadow is behind light
 			{
-				hit_found = TRUE; 
+				hit_found = TRUE;
 				if (cur_hit.distance < min_dist)
 				{
 					*hit = cur_hit;
@@ -46,14 +47,6 @@ int	trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit, int stop_at_first)
 		}
 		i++;
 	}
-	// if (!hit_found && intersects_model(ray, &scene->model, &cur_hit, scene->help_ray))
-	// {
-	// 	hit_found = TRUE;
-	// 	hit->shape = NULL;
-	// 	*hit = cur_hit;
-	// 	if (scene->help_ray == 1)
-	// 		ft_printf("closest dist %f\n", hit->distance);
-	// }
 	return (hit_found);
 }
 
@@ -67,56 +60,40 @@ int	trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit, int stop_at_first)
 // 	color->attenuation = 0.0;
 // }
 
-// static t_rgba	calc_reflect(t_scene *scene, t_vec3 point, t_vec3 idir, t_vec3 normal, int depth)
-// {
-// 	t_ray			reflect_ray;
-// 	t_raycasthit	reflect_hit;
-// 	t_rgba			color;
+static t_rgba	calc_reflect(t_scene *scene, t_vec3 point, t_vec3 idir, t_vec3 normal, int depth)
+{
+	t_ray			reflect_ray;
+	t_rgba			color;
 
-// 	reflect_ray.origin = ft_add_vec3(point, ft_mul_vec3(normal, REFLECT_BIAS));
-// 	reflect_ray.direction = ft_normalize_vec3(ft_reflect_vec3(idir, normal));
-// 	color = raycast(&reflect_ray, scene, &reflect_hit, depth + 1);
-// 	//hit->color = ft_lerp_rgba(hit->color, reflect_hit.color, hit->object->reflect);
-// 	return (color);
-// }
+	reflect_ray.origin = ft_add_vec3(point, ft_mul_vec3(normal, EPSILON));
+	reflect_ray.direction = ft_normalize_vec3(ft_reflect_vec3(idir, normal));
+	color = raycast(&reflect_ray, scene, depth + 1);
+	return (color);
+}
 
-static double		spot_shading(t_light light, t_raycast_hit hit, t_scene *scene)
+static double		calc_diffuse(t_light light, t_raycast_hit hit, t_scene *scene)
 {
 	double	d;
 	double	distance;
 	double	intensity;
-	t_vec3	light_ray;
+	t_vec3	light_dir;
 
-	light_ray = ft_sub_vec3(light.position, hit.point);
-	distance = ft_len_vec3(light_ray);
-	light_ray = ft_normalize_vec3(light_ray);
-	d = ft_dot_vec3(light_ray, hit.normal);
-	if (light.type == 1)
+	if (light.type == DIRECTIONAL)
+		light_dir = ft_sub_vec3(light.position, hit.point); // light needs a target field or rotation that we can calculate a direction from
+	else
+		light_dir = ft_sub_vec3(light.position, hit.point);
+	distance = ft_len_vec3(light_dir);
+	light_dir = ft_normalize_vec3(light_dir);
+	d = ft_dot_vec3(light_dir, hit.normal);
+	if (light.type == DIRECTIONAL)
 		intensity = light.intensity / 1000;
 	else
 		intensity = light.intensity / 10 * (1 / (1 + distance + ft_pow(distance, 2)));
 	if (scene->help_ray == 1)
-		ft_printf("dot %f intensity %d\n", d, intensity); //
+		ft_printf(" ray surface dot %f\n", d); //
 //	d *= intensity;
-	d = ft_clamp_d(d, 0, 1);
-	return (d);
-	
-}
+	return (ft_clamp_d(d, 0, 1));
 
-static int		in_shadow(t_light light, t_raycast_hit hit, t_scene *scene)
-{
-	t_ray	ray;
-	t_raycast_hit new_hit;
-	
-	ray.origin = hit.point;
-	ray.direction = ft_sub_vec3(light.position, hit.point);
-	new_hit.light_dist = ft_len_vec3(ray.direction);
-	if (scene->help_ray)
-		ft_printf("testing shadow of %f %f %f\n", hit.point.x, hit.point.y, hit.point.z);
-	ray.direction = ft_normalize_vec3(ray.direction);
-	if (trace(&ray, scene, &new_hit, 2) == TRUE)
-		return (1);
-	return (0);
 }
 
 static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
@@ -125,34 +102,28 @@ static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
 	size_t		i;
 	size_t		shadow;
 	double		d;
-	
+
 	i = 0;
 	shadow = 0;
 	d = 0;
 	if (hit->shape)
 	{
 		c = hit->shape->color;
-		// if (hit->shape->type == MODEL)
-		// {
-		// 	c = ft_make_rgba(hit->normal.x * 0.5 + 0.5, hit->normal.y * 0.5 + 0.5, hit->normal.z * 0.5 + 0.5, 1.0);
-		// //	t_rgba c = ft_make_rgba(1.0- ft_inv_lerp_d(hit->distance, 4, 6), 0, 0, 1);
-		// 	return (c);
-		// }
 		while ( i < scene->num_lights)
 		{
-			shadow = in_shadow(scene->lights[i], *hit, scene);
-			if (shadow == 1)
+			if (in_shadow(scene->lights[i], *hit, scene))
 				return (ft_make_rgba(0, 0, 0, 1.0)); // vaihda laskukaavaan
-			if (shadow == 0)
-			{
-				d += spot_shading(scene->lights[i], *hit, scene);
-			}
+			else
+				d += calc_diffuse(scene->lights[i], *hit, scene);
 			i++;
 		}
 		if (scene->help_ray == 1)
-			ft_printf("color times %f\n", d); //
-		c = ft_mul_rgba(c, d);
-		return (c);
+			ft_printf("color times %f\n", d);
+		t_rgba rc = calc_reflect(scene, hit->point, hit->ray.direction, hit->normal, hit->depth + 1);
+		double reflect = 0.5;
+		rc = ft_mul_rgba(rc, reflect);
+		c = ft_add_rgba(c, rc);
+		return (ft_mul_rgba(c, d));
 	}
 	return (ft_make_rgba(0.1, 0.1, 0.1, 1.0));
 }
@@ -162,17 +133,21 @@ static void		init_hit_info(t_raycast_hit *hit)
 	hit->shape = NULL;
 }
 
-t_rgba			raycast(t_ray *ray, t_scene *scene)
+t_rgba			raycast(t_ray *ray, t_scene *scene, int depth)
 {
 	t_rgba color;
 	t_raycast_hit hit;
-	init_hit_info(&hit);
+	t_rgba ambient = ft_make_rgba(0.2, 0.2, 0.2, 1.0);
 
-	color = ft_make_rgba(0.2, 0.2, 0.2, 1.0); // ambient
+	if (depth > MAX_BOUNCES)
+		return (ambient); // red for now should be ambient?
+	init_hit_info(&hit);
+	hit.depth = depth;
+	color = ambient; // ambient
 	if (trace(ray, scene, &hit, FALSE) != FALSE)
 	{
-		// laske normaali ja muu hit info  
 		hit.normal = calc_hit_normal(&hit);
+		hit.ray = *ray;
 		color = shade(scene, &hit);
 	}
 	return (ft_clamp_rgba(color));

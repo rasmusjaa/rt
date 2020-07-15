@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shape.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:22:43 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/13 18:45:22 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/14 19:04:00 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ int		intersects_cone(t_ray *ray, t_shape *cone, t_raycast_hit *hit);
 int		intersects_cylinder(t_ray *ray, t_shape *cyl, t_raycast_hit *hit);
 int		intersects_triangle(t_ray *ray, t_triface *triface, t_raycast_hit *hit);
 int		intersects_bounds(t_ray *ray, t_bounds *b, int debug);
-int		intersects_triangle(t_ray *ray, t_triface *triface, t_raycast_hit *hit);
 int		intersects_model(t_ray *ray, t_shape *model, t_raycast_hit *hit, int debug);
 int		intersects_octree_model(t_ray *ray, t_shape *model, t_octree *node, t_raycast_hit *hit, int debug);
 
