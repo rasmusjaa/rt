@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/15 18:16:56 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/15 18:21:01 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ int	trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit, int stop_at_first)
 static t_rgba	calc_reflect(t_scene *scene, t_vec3 point, t_vec3 idir, t_vec3 normal, int depth)
 {
 	t_ray			reflect_ray;
-	t_raycast_hit	reflect_hit;
 	t_rgba			color;
 
 	reflect_ray.origin = ft_add_vec3(point, ft_mul_vec3(normal, EPSILON));
@@ -157,6 +156,7 @@ t_rgba			raycast(t_ray *ray, t_scene *scene, int depth)
 	{
 		hit.depth = depth;
 		hit.normal = calc_hit_normal(&hit);
+		hit.ray = *ray;
 		color = shade(scene, &hit);
 	}
 	return (ft_clamp_rgba(color));

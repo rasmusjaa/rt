@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/15 18:17:25 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/15 18:20:43 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,8 +279,9 @@ typedef struct	s_raycast_hit
 	double		distance;
 	double		light_dist;
 	t_rgba		color;
-	t_ray		ray;
 	int			depth;
+	t_vec3		idir;
+	t_ray		ray;
 }				t_raycast_hit;
 
 
