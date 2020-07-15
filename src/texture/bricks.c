@@ -1,7 +1,16 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include "mlx.h"
-#include <math.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   bricks.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sluhtala <sluhtala@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/07/15 17:48:47 by sluhtala          #+#    #+#             */
+/*   Updated: 2020/07/15 17:48:59 by sluhtala         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "rt.h"
 #define W 400
 #define H 400
 
@@ -26,13 +35,13 @@ static double dmodulo(double d, double m)
 	return (mod);
 }
 
-double brick_texture(double u, double v)
+t_rgba	brick_texture(double u, double v)
 {
 	int rows = 10;
-	double col1 = 0.6;
-	double col2 = 0;
+	t_rgba col1 = ft_make_rgba(0.6, 0.6, 0.6, 1);
+	t_rgba col2 = ft_make_rgba(0, 0, 0, 1);
 	double line = 0.01;
-
+	
 
 	double lines = rows - 1;
 	double rs = ((1.0 - lines * line)) / (double)rows;

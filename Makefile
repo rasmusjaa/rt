@@ -6,7 +6,7 @@
 #    By: wkorande <willehard@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/01 15:48:04 by rjaakonm          #+#    #+#              #
-#    Updated: 2020/07/14 16:51:50 by wkorande         ###   ########.fr        #
+#    Updated: 2020/07/15 18:03:45 by sluhtala         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,12 @@ SRC =	scene/read_csv.c\
 		mesh.c\
 		obj_loader.c\
 		octree/octree.c\
-		octree/bounds.c
+		octree/bounds.c\
+		texture/material.c\
+		texture/texture.c\
+		texture/bricks.c\
+		texture/checker.c\
+	
 
 SRCS = $(addprefix $(SRCDIR)/, $(SRC))
 

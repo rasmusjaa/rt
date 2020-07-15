@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 14:59:56 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/06/11 17:07:442 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/15 18:11:28 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,6 +223,8 @@ int		main(int ac, char **av)
 		i++;
 	}
 	t_scene *scene = rt->scenes[rt->cur_scene];
+	//test to assign material and texture
+	material_temp_function(&scene[0]);
 	init_mlx(rt, scene->scene_config.width, scene->scene_config.height);
 	hooks_and_loop(rt);
 	mlx_loop(rt->mlx->mlx_ptr);

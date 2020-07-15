@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/14 17:45:37 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/15 17:57:32 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # include "thread_pool.h"
 # include "mesh.h"
 # include "octree.h"
+# include "materials.h"
 # include <sys/time.h>
 
 # ifndef __linux__
@@ -119,6 +120,8 @@ typedef enum	e_shape_type
 	MODEL
 }				t_shape_type;
 
+typedef struct s_texture t_texture;
+typedef struct s_material t_material;
 
 typedef struct		s_shape
 {
@@ -128,6 +131,7 @@ typedef struct		s_shape
 	t_vec3			target;
 	t_vec3			rotation;
 	t_vec3			scale;
+	t_material		*material;
 	t_rgba			color;
 	double			radius;
 	double			angle;
@@ -185,6 +189,7 @@ typedef struct		s_object
 	void			*data;
 }					t_object;
 
+
 typedef struct		s_scene
 {
 	t_scene_config	scene_config;
@@ -198,6 +203,10 @@ typedef struct		s_scene
 	t_shape			*shapes;
 	size_t			num_shapes;
 	int				help_ray;
+	t_material		*materials;
+	size_t			num_materials;
+	t_texture		*textures;
+	size_t			num_textures;
 }					t_scene;
 
 typedef struct	s_mlx_img
