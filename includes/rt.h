@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/15 18:20:43 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/15 19:38:32 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@
 # define EPSILON 0.0001
 # define N_OBJ_TYPES 4
 # define N_UNIQUE_OBJS 9
-# define N_SCENE_VALUES 8
+# define N_SCENE_VALUES 12
 # define N_CAMERA_VALUES 12
 # define N_SHAPE_VALUES 20
 # define N_LIGHT_VALUES 8

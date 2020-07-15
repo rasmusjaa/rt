@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/15 18:21:01 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/15 19:34:25 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ static double		calc_diffuse(t_light light, t_raycast_hit hit, t_scene *scene)
 static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
 {
 	t_rgba		ambient;
+	t_rgba		total_light;
 	t_rgba		light;
 	t_rgba		object_c;
 	t_rgba		rc;
@@ -111,6 +112,7 @@ static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
 	i = 0;
 	shadow = 0;
 	d = 0;
+	total_light = ft_make_rgba(0, 0, 0, 1);
 	ambient = scene->scene_config.ambient;
 	object_c = hit->shape->color;
 	reflect = scene->scene_config.reflection == 1 ? hit->shape->reflection : 0;
@@ -118,24 +120,27 @@ static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
 	{
 		while ( i < scene->num_lights)
 		{
-			light = ft_make_rgba(0, 0, 0, 1);
-			if (scene->scene_config.shadows == 1 && (!in_shadow(scene->lights[i], *hit, scene)))
-			{
+			if (scene->scene_config.shadows == 0)
+				light = ft_make_rgba(1, 1, 1, 1);
+			else if (!in_shadow(scene->lights[i], *hit, scene))
 				light = scene->lights[i].color;
-				d += scene->scene_config.shading == 1 ? calc_diffuse(scene->lights[i], *hit, scene) : 0;
-				light = ft_mul_rgba(light, d);
-			}
-			ambient = ft_add_rgba(ambient, light);
+			else
+				light = ft_make_rgba(0, 0, 0, 1);
+			d = scene->scene_config.shading == 1 ? calc_diffuse(scene->lights[i], *hit, scene) : 1;
+			light = ft_mul_rgba(light, d);
+			total_light = ft_add_rgba(total_light, light);
 			i++;
 		}
+		total_light = ft_add_rgba(total_light, ambient);
+		total_light = ft_mul_rgba_rgba(ft_mul_rgba(total_light, ft_intensity_rgba(total_light)), object_c); // ilman tata mustavalkoseks
 		rc = calc_reflect(scene, hit->point, hit->ray.direction, hit->normal, hit->depth);
-		rc = ft_mul_rgba(rc, reflect);
-		//c = ft_add_rgba(c, rc);
-		object_c = ft_blend_rgba(ft_mul_rgba(ambient, ft_intensity_rgba(ambient)), object_c);
-		object_c = ft_blend_rgba(object_c, rc);
-		return (object_c);
+		total_light = ft_lerp_rgba(total_light, rc, reflect);
+	//	total_light = ft_blend_rgba(total_light, rc);
+		if (scene->help_ray)
+			print_rgba("color", total_light);
+		return (total_light);
 	}
-	return (ambient);
+	return (total_light);
 }
 
 static void		init_hit_info(t_raycast_hit *hit)

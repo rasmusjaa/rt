@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/15 18:01:57 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/15 19:38:09 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	check_scene_fields(t_scene *scene, char *line, int n)
 	scene->scene_config.bounces = round(ft_clamp_d(values[5], MIN_BOUNCES, MAX_BOUNCES));
 	scene->scene_config.width = round(ft_clamp_d(values[6], MIN_WIDTH, MAX_WIDTH));
 	scene->scene_config.height = round(ft_clamp_d(values[7], MIN_HEIGHT, MAX_HEIGHT));
-	scene->scene_config.ambient = ft_make_rgba(0.1, 0.1, 0.1, 1);
+	scene->scene_config.ambient = ft_clamp_rgba(ft_make_rgba(values[8], values[9], values[10], values[11]));
 }
 
 void	check_camera_fields(t_scene *scene, char *line, int n)
