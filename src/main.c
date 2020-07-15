@@ -29,7 +29,7 @@ void	render_tile_job(void *data)
 		while (cur.x < job_data->screen_coord.x + job_data->tile_size.x)
 		{
 			t_ray camera_ray = get_camera_ray(job_data->scene, job_data->camera, cur.x, cur.y);
-			t_rgba color = raycast(&camera_ray, job_data->scene);
+			t_rgba color = raycast(&camera_ray, job_data->scene, 0);
 			put_pixel_mlx_img(job_data->mlx_img, cur.x - job_data->screen_coord.x, cur.y - job_data->screen_coord.y, ft_get_color(color));
 			cur.x++;
 		}

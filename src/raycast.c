@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/14 18:08:09 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/14 18:06:12 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,18 +60,16 @@ int	trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit, int stop_at_first)
 // 	color->attenuation = 0.0;
 // }
 
-// static t_rgba	calc_reflect(t_scene *scene, t_vec3 point, t_vec3 idir, t_vec3 normal, int depth)
-// {
-// 	t_ray			reflect_ray;
-// 	t_raycasthit	reflect_hit;
-// 	t_rgba			color;
+static t_rgba	calc_reflect(t_scene *scene, t_vec3 point, t_vec3 idir, t_vec3 normal, int depth)
+{
+	t_ray			reflect_ray;
+	t_rgba			color;
 
-// 	reflect_ray.origin = ft_add_vec3(point, ft_mul_vec3(normal, REFLECT_BIAS));
-// 	reflect_ray.direction = ft_normalize_vec3(ft_reflect_vec3(idir, normal));
-// 	color = raycast(&reflect_ray, scene, &reflect_hit, depth + 1);
-// 	//hit->color = ft_lerp_rgba(hit->color, reflect_hit.color, hit->object->reflect);
-// 	return (color);
-// }
+	reflect_ray.origin = ft_add_vec3(point, ft_mul_vec3(normal, EPSILON));
+	reflect_ray.direction = ft_normalize_vec3(ft_reflect_vec3(idir, normal));
+	color = raycast(&reflect_ray, scene, depth + 1);
+	return (color);
+}
 
 static double		calc_diffuse(t_light light, t_raycast_hit hit, t_scene *scene)
 {
@@ -120,9 +118,12 @@ static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
 			i++;
 		}
 		if (scene->help_ray == 1)
-			ft_printf("color times %f\n", d); //
-		c = ft_mul_rgba(c, d);
-		return (c);
+			ft_printf("color times %f\n", d);
+		t_rgba rc = calc_reflect(scene, hit->point, hit->ray.direction, hit->normal, hit->depth + 1);
+		double reflect = 0.5;
+		rc = ft_mul_rgba(rc, reflect);
+		c = ft_add_rgba(c, rc);
+		return (ft_mul_rgba(c, d));
 	}
 	return (ft_make_rgba(0.1, 0.1, 0.1, 1.0));
 }
@@ -132,19 +133,21 @@ static void		init_hit_info(t_raycast_hit *hit)
 	hit->shape = NULL;
 }
 
-t_rgba			raycast(t_ray *ray, t_scene *scene)
+t_rgba			raycast(t_ray *ray, t_scene *scene, int depth)
 {
 	t_rgba color;
 	t_raycast_hit hit;
-	init_hit_info(&hit);
+	t_rgba ambient = ft_make_rgba(0.2, 0.2, 0.2, 1.0);
 
-	color = ft_make_rgba(0.2, 0.2, 0.2, 1.0); // ambient
-	if (scene->help_ray == 1)
-			ft_printf("trace this\n"); //
+	if (depth > MAX_BOUNCES)
+		return (ambient); // red for now should be ambient?
+	init_hit_info(&hit);
+	hit.depth = depth;
+	color = ambient; // ambient
 	if (trace(ray, scene, &hit, FALSE) != FALSE)
 	{
-		// laske normaali ja muu hit info
 		hit.normal = calc_hit_normal(&hit);
+		hit.ray = *ray;
 		color = shade(scene, &hit);
 	}
 	return (ft_clamp_rgba(color));
