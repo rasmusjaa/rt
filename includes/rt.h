@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/16 14:58:38 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/16 15:19:30 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,7 @@ typedef struct		s_shape
 	t_shape_type	type;
 	t_vec3			position;
 	t_vec3			target;
+	t_vec3			normal;
 	t_vec3			rotation;
 	t_vec3			scale;
 	t_rgba			color;

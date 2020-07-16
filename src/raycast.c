@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/16 14:05:51 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/16 15:49:57 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ static t_rgba	calc_reflect(t_scene *scene, t_vec3 point, t_vec3 idir, t_vec3 nor
 	t_ray			reflect_ray;
 	t_rgba			color;
 
+	if (ft_dot_vec3(idir, normal) > 0)
+		normal = ft_invert_vec3(normal);
 	reflect_ray.origin = ft_add_vec3(point, ft_mul_vec3(normal, EPSILON));
 	reflect_ray.direction = ft_normalize_vec3(ft_reflect_vec3(idir, normal));
 	color = raycast(&reflect_ray, scene, depth + 1);
@@ -141,8 +143,8 @@ static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
 				ft_printf("shadow softness: %f\n", s);
 			i++;
 		}
+		total_light = ft_mul_rgba_rgba(total_light, object_c); // ilman tata mustavalkoseks
 		total_light = ft_add_rgba(total_light, ambient);
-		total_light = ft_mul_rgba_rgba(ft_mul_rgba(total_light, ft_intensity_rgba(total_light)), object_c); // ilman tata mustavalkoseks
 		rc = calc_reflect(scene, hit->point, hit->ray.direction, hit->normal, hit->depth);
 		total_light = ft_lerp_rgba(total_light, rc, reflect);
 		if (scene->help_ray)
@@ -150,7 +152,7 @@ static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
 	//	return (ft_mul_rgba(total_light, 1.0 - s));
 		return (total_light);
 	}
-	return (total_light);
+	return (ambient);
 }
 
 static void		init_hit_info(t_raycast_hit *hit)

@@ -6,11 +6,12 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/16 14:24:56 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/16 15:20:52 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
+#include "shape.h"
 #include <math.h>
 #include <time.h>
 #include <sys/stat.h>
@@ -158,6 +159,9 @@ void	check_shape_fields(t_scene *scene, char *line, int n)
 		scene->shapes[n].octree = octree_create_node(scene->shapes[n].mesh->bounds, scene->shapes[n].mesh->num_trifaces, scene->shapes[n].mesh->trifaces);
 		ft_printf("loaded model from file %s\n", file);
 	}
+	if (scene->shapes[n].type == PLANE)
+		scene->shapes[n].normal = calc_plane_normal(scene->shapes[n].position, scene->shapes[n].target);
+
 }
 
 void	check_light_fields(t_scene *scene, char *line, int n)
