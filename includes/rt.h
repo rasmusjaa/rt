@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rt.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/15 17:57:32 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/16 14:33:29 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@
 # define N_UNIQUE_OBJS 9
 # define N_SCENE_VALUES 8
 # define N_CAMERA_VALUES 12
-# define N_SHAPE_VALUES 19
+# define N_SHAPE_VALUES 20
 # define N_LIGHT_VALUES 8
 
 # define MIN_WIDTH 320
@@ -136,6 +136,7 @@ typedef struct		s_shape
 	double			radius;
 	double			angle;
 	double			opacity;
+	double			reflection;
 	t_mesh			*mesh;
 	t_octree		*octree;
 }					t_shape;
@@ -152,6 +153,7 @@ typedef	struct		s_scene_config
 	int				bounces;
 	int				width;
 	int				height;
+	t_rgba			ambient;
 }					t_scene_config;
 
 typedef struct		s_camera
