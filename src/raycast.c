@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/16 15:25:50 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/16 16:02:15 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ static t_rgba	calc_refract(t_scene *scene, t_vec3 idir, t_raycast_hit hit, doubl
 	t_ray			refract_ray;
 	t_rgba			color;
 
-	refract_ray.origin = ft_add_vec3(hit.point, ft_mul_vec3(hit.normal, EPSILON));
+	refract_ray.origin = hit.point; // ft_add_vec3(hit.point, ft_mul_vec3(ft_invert_vec3(hit.normal), EPSILON));
 	refract_ray.direction = ft_normalize_vec3(ft_refract_vec3(idir, hit.normal, ior));
 	color = raycast(&refract_ray, scene, depth + 1);
 	if (scene->help_ray == 1)
