@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/15 19:34:25 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/16 12:30:53 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,8 @@ static double		calc_diffuse(t_light light, t_raycast_hit hit, t_scene *scene)
 
 }
 
+double	calc_shadow(t_light light, t_raycast_hit hit, t_scene *scene);
+
 static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
 {
 	t_rgba		ambient;
@@ -106,11 +108,12 @@ static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
 	t_rgba		rc;
 	double		reflect;
 	size_t		i;
-	size_t		shadow;
 	double		d;
+	double		s;
+
+	s = 0;
 
 	i = 0;
-	shadow = 0;
 	d = 0;
 	total_light = ft_make_rgba(0, 0, 0, 1);
 	ambient = scene->scene_config.ambient;
@@ -129,15 +132,19 @@ static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
 			d = scene->scene_config.shading == 1 ? calc_diffuse(scene->lights[i], *hit, scene) : 1;
 			light = ft_mul_rgba(light, d);
 			total_light = ft_add_rgba(total_light, light);
+			s += scene->lights[i].radius != 0 ? calc_shadow(scene->lights[i], *hit, scene) : 0;
+			total_light = ft_mul_rgba(total_light, 1.0 - s);
+			if (scene->help_ray)
+				ft_printf("s: %f\n", s);
 			i++;
 		}
 		total_light = ft_add_rgba(total_light, ambient);
 		total_light = ft_mul_rgba_rgba(ft_mul_rgba(total_light, ft_intensity_rgba(total_light)), object_c); // ilman tata mustavalkoseks
 		rc = calc_reflect(scene, hit->point, hit->ray.direction, hit->normal, hit->depth);
 		total_light = ft_lerp_rgba(total_light, rc, reflect);
-	//	total_light = ft_blend_rgba(total_light, rc);
 		if (scene->help_ray)
 			print_rgba("color", total_light);
+		return (ft_mul_rgba(total_light, 1.0 - s));
 		return (total_light);
 	}
 	return (total_light);

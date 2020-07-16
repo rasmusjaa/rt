@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/15 19:38:32 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/16 12:23:34 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@
 # define N_SCENE_VALUES 12
 # define N_CAMERA_VALUES 12
 # define N_SHAPE_VALUES 20
-# define N_LIGHT_VALUES 8
+# define N_LIGHT_VALUES 9
 
 # define MIN_WIDTH 320
 # define MIN_HEIGHT 200
@@ -179,6 +179,7 @@ typedef struct		s_light
 	t_rgba			color;
 	t_light_type	type;
 	double			intensity;
+	double			radius;
 }					t_light;
 
 typedef struct		s_object
