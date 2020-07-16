@@ -6,7 +6,7 @@
 /*   By: sluhtala <sluhtala@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/15 14:09:34 by sluhtala          #+#    #+#             */
-/*   Updated: 2020/07/16 16:29:18 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/16 18:46:53 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ typedef struct		s_material
 	double			refra_index;
 	double			reflection;	
 	double			transparency;
+	double			uv_scale_x;
+	double			uv_scale_y;
 }					t_material;
 
 typedef struct s_scene t_scene;
