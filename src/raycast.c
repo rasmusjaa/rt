@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/16 12:30:53 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/16 12:40:27 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ t_rgba			raycast(t_ray *ray, t_scene *scene, int depth)
 	t_raycast_hit hit;
 
 	color = scene->scene_config.ambient;
-	if (depth > MAX_BOUNCES)
+	if (depth > scene->scene_config.bounces)
 		return (color); // red for now should be ambient?
 	init_hit_info(&hit);
 	if (trace(ray, scene, &hit, FALSE) != FALSE)
