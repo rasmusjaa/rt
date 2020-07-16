@@ -45,7 +45,7 @@ SRC =	scene/read_csv.c\
 		texture/texture.c\
 		texture/bricks.c\
 		texture/checker.c\
-	
+		texture/texture_mapping.c	
 
 SRCS = $(addprefix $(SRCDIR)/, $(SRC))
 

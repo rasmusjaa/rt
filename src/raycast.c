@@ -148,6 +148,13 @@ t_rgba			raycast(t_ray *ray, t_scene *scene, int depth)
 	{
 		hit.normal = calc_hit_normal(&hit);
 		hit.ray = *ray;
+	// testing textures...
+		if (hit.shape->material != NULL)
+		{
+			t_vec2 uv = sphere_uv(ft_sub_vec3(hit.point, hit.shape->position));
+			hit.shape->color = hit.shape->material->texture->texture_function(uv.x, uv.y);
+		} 
+	// ...
 		color = shade(scene, &hit);
 	}
 	return (ft_clamp_rgba(color));

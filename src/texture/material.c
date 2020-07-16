@@ -16,7 +16,7 @@
 void	material_temp_function(t_scene *scene)
 {
 	t_rgba col1 = ft_make_rgba(1,1,1,1);
-	t_rgba col2 = ft_make_rgba(0,0,0,1);
+	t_rgba col2 = ft_make_rgba(0,0,0,0);
 	t_rgba col3 = ft_make_rgba(1,0,0,1);
 
 	if (!scene)
@@ -26,7 +26,6 @@ void	material_temp_function(t_scene *scene)
 
 	scene->textures[0] = new_texture(1, CHECKER, NULL, col1, col2, col3); 
 	scene->materials[0] = new_material(1, ft_make_rgba(1, 0, 0, 1), scene->textures);
-	
 }
 
 void	allocate_materials(t_scene *scene, size_t amount)
