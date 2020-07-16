@@ -202,7 +202,7 @@ static void	init_mlx(t_rt *rt, int win_width, int win_height)
 	if (!(rt->mlx = (t_mlx *)malloc(sizeof(t_mlx))))
 		exit_message("Failed to malloc mlx!");
 	rt->mlx->mlx_ptr = mlx_init();
-	rt->mlx->win_ptr = mlx_new_window(rt->mlx->mlx_ptr, win_width, win_height, "RT");
+	rt->mlx->win_ptr = mlx_new_window(rt->mlx->mlx_ptr, win_width + 300, win_height, "RT");
 	// rt->mlx_img = create_mlx_image(rt->mlx, win_width, win_height);
 	mlx_string_put(rt->mlx->mlx_ptr, rt->mlx->win_ptr, (win_width / 2) - 110, win_height / 2, 0xFFFFFF, "PRESS SPACE TO RENDER");
 }
