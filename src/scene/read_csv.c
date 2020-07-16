@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/16 15:20:52 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/16 17:06:50 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +149,7 @@ void	check_shape_fields(t_scene *scene, char *line, int n)
 	scene->shapes[n].angle = ft_clamp_d(values[17], MIN_ANGLE, MAX_ANGLE);
 	scene->shapes[n].opacity = ft_clamp_d(values[18], 0, 1);
 	scene->shapes[n].reflection = ft_clamp_d(values[19], 0, 1);
+	scene->shapes[n].refraction = ft_clamp_d(values[20], 0, 1);
 	if (scene->shapes[n].type == MODEL)
 	{
 		file_pointer = get_shape_file(line, N_SHAPE_VALUES);

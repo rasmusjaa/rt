@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:24:54 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/16 15:24:46 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/16 18:04:29 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,5 @@ t_vec3	calc_plane_normal(t_vec3 position, t_vec3 target)
 		target.y = position.y + 1;
 	normal = ft_sub_vec3(target, position);
 	normal = ft_normalize_vec3(normal);
-
 	return (normal);
 }
