@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/15 17:55:23 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/16 10:47:51 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,8 @@ static double		calc_diffuse(t_light light, t_raycast_hit hit, t_scene *scene)
 
 }
 
+double	calc_shadow(t_light light, t_raycast_hit hit, t_scene *scene);
+
 static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
 {
 	t_rgba		ambient;
@@ -105,11 +107,12 @@ static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
 	t_rgba		rc;
 	double		reflect;
 	size_t		i;
-	size_t		shadow;
 	double		d;
+	double		s;
+
+	s = 0;
 
 	i = 0;
-	shadow = 0;
 	d = 0;
 	ambient = scene->scene_config.ambient;
 	object_c = hit->shape->color;
@@ -119,12 +122,12 @@ static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
 		while ( i < scene->num_lights)
 		{
 			light = ft_make_rgba(0, 0, 0, 1);
-			if (scene->scene_config.shadows == 1 && (!in_shadow(scene->lights[i], *hit, scene)))
-			{
-				light = scene->lights[i].color;
-				d += scene->scene_config.shading == 1 ? calc_diffuse(scene->lights[i], *hit, scene) : 0;
-				light = ft_mul_rgba(light, d);
-			}
+			light = scene->lights[i].color;
+			d += calc_diffuse(scene->lights[i], *hit, scene);
+			s += calc_shadow(scene->lights[i], *hit, scene);
+			if (scene->help_ray)
+				ft_printf("s: %f\n", s);
+			light = ft_mul_rgba(light, d);
 			ambient = ft_add_rgba(ambient, light);
 			i++;
 		}
@@ -133,7 +136,7 @@ static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
 		//c = ft_add_rgba(c, rc);
 		object_c = ft_blend_rgba(ft_mul_rgba(ambient, ft_intensity_rgba(ambient)), object_c);
 		object_c = ft_blend_rgba(object_c, rc);
-		return (object_c);
+		return (ft_mul_rgba(object_c, 1.0 - s));
 	}
 	return (ambient);
 }
