@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/16 16:28:50 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/16 16:59:26 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,8 @@ static double		calc_diffuse(t_light light, t_raycast_hit hit, t_scene *scene)
 	if (light.type == DIRECTIONAL)
 		intensity = light.intensity / 1000;
 	else
-		intensity = light.intensity / 10 * (1 / (1 + distance + ft_pow(distance, 2)));
+		intensity = light.intensity / (40 * M_PI * distance);
+	d = d * intensity;
 	if (scene->help_ray == 1)
 		ft_printf(" ray surface dot %f\n", d); //
 	return (ft_clamp_d(d, 0, 1));
