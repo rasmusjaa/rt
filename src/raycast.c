@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/16 13:04:34 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/16 15:25:50 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,16 +60,51 @@ int	trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit, int stop_at_first)
 // 	color->attenuation = 0.0;
 // }
 
-static t_rgba	calc_reflect(t_scene *scene, t_vec3 point, t_vec3 idir, t_vec3 normal, int depth)
+// static t_rgba	calc_reflect(t_scene *scene, t_vec3 point, t_vec3 idir, t_vec3 normal, int depth)
+// {
+// 	t_ray			reflect_ray;
+// 	t_rgba			color;
+
+// 	reflect_ray.origin = ft_add_vec3(point, ft_mul_vec3(normal, EPSILON));
+// 	reflect_ray.direction = ft_normalize_vec3(ft_reflect_vec3(idir, normal));
+// 	color = raycast(&reflect_ray, scene, depth + 1);
+// 	if (scene->help_ray == 1)
+// 		print_rgba("reflect color", color);
+// 	return (color);
+// }
+
+t_vec3			ft_refract_vec3(t_vec3 i, t_vec3 normal, double ior)
 {
-	t_ray			reflect_ray;
+	double cosi = ft_clamp_d(ft_dot_vec3(i, normal), -1, 1);
+	double etai = 1, etat = ior;
+	t_vec3 n = normal;
+	if (cosi < 0)
+	{
+		cosi = -cosi;
+	}
+	else
+	{
+		ft_swap_d(&etai, &etat);
+		n = ft_invert_vec3(normal);
+	}
+	double eta = etai / etat;
+	double k = 1 - eta * eta * (1 - cosi * cosi);
+	return k < 0 ? ft_make_vec3(0,0,0) : ft_add_vec3(ft_mul_vec3(i, eta), ft_mul_vec3(n, (eta * cosi - sqrtf(k))));
+}
+
+static t_rgba	calc_refract(t_scene *scene, t_vec3 idir, t_raycast_hit hit, double ior, int depth)
+{
+	t_ray			refract_ray;
 	t_rgba			color;
 
-	reflect_ray.origin = ft_add_vec3(point, ft_mul_vec3(normal, EPSILON));
-	reflect_ray.direction = ft_normalize_vec3(ft_reflect_vec3(idir, normal));
-	color = raycast(&reflect_ray, scene, depth + 1);
+	refract_ray.origin = ft_add_vec3(hit.point, ft_mul_vec3(hit.normal, EPSILON));
+	refract_ray.direction = ft_normalize_vec3(ft_refract_vec3(idir, hit.normal, ior));
+	color = raycast(&refract_ray, scene, depth + 1);
 	if (scene->help_ray == 1)
-		print_rgba("reflect color", color);
+	{
+		print_rgba("refract color", color);
+		print_vec3("rdir: ", refract_ray.direction);
+	}
 	return (color);
 }
 
@@ -143,7 +178,8 @@ static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
 		}
 		total_light = ft_add_rgba(total_light, ambient);
 		total_light = ft_mul_rgba_rgba(ft_mul_rgba(total_light, ft_intensity_rgba(total_light)), object_c); // ilman tata mustavalkoseks
-		rc = calc_reflect(scene, hit->point, hit->ray.direction, hit->normal, hit->depth);
+		// rc = calc_reflect(scene, hit->point, hit->ray.direction, hit->normal, hit->depth);
+		rc = calc_refract(scene, hit->ray.direction, *hit, 1.33, hit->depth);
 		total_light = ft_lerp_rgba(total_light, rc, reflect);
 		if (scene->help_ray)
 			print_rgba("color", total_light);
