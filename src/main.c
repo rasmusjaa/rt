@@ -104,7 +104,7 @@ void	render_scene(t_rt *rt, t_scene *scene)
 	// if (!(rt->job_data_block = (t_tile_job_data*)(malloc(sizeof(t_tile_job_data) * rt->num_render_jobs))))
 		// exit_message("Failed to allocate memory for thread pool jobs!");
 	t_camera *camera = &(scene->cameras[scene->cur_camera]);
-	init_camera(camera->position, camera->target, camera);
+	init_camera(camera->position, camera->target, camera, scene);
 	// rt->done_tiles = ft_queue_create(QUEUE_COPY, rt->num_render_jobs, sizeof(t_tile_job_data));
 	gettimeofday(&rt->render_task.start_time, NULL);
 	ji = 0;
@@ -135,8 +135,6 @@ void	render_scene(t_rt *rt, t_scene *scene)
 
 }
 
-
-
 int update(void *arg)
 {
 	t_rt			*rt;
@@ -151,19 +149,13 @@ int update(void *arg)
 		pthread_mutex_lock(&task->task_mutex);
 		job = (t_tile_job_data*)ft_queue_dequeue(task->done_tiles);
 		if (job)
-		{
 			mlx_put_image_to_window(rt->mlx->mlx_ptr, rt->mlx->win_ptr, job->mlx_img->img, job->screen_coord.x, job->screen_coord.y);
-			// destroy_mlx_img(rt->mlx, job->mlx_img);
-			// free(job);
-		}
 		pthread_mutex_unlock(&task->task_mutex);
 	}
 	if (task->render_finished && task->done_tiles != NULL && ft_queue_isempty(task->done_tiles))
 	{
 		gettimeofday(&task->end_time, NULL);
-
 	//	draw_model_bounds(rt->mlx, rt->scenes[rt->cur_scene]);
-
 		ft_printf("render task finished in in: %.4f s\n", (double)(task->end_time.tv_usec - task->start_time.tv_usec) / 1000000 + (double)(task->end_time.tv_sec - task->start_time.tv_sec));
 		cleanup_render_task(rt, task);
 	}
@@ -189,11 +181,20 @@ void	reload_scene(t_rt *rt)
 {
 	t_scene *scene;
 	char	*file;
+	int		width;
+	int		height;
 
 	scene = rt->scenes[rt->cur_scene];
 	file = scene->scene_config.filepath;
+	width = scene->scene_config.width;
+	height = scene->scene_config.height;
+	ft_printf("old width %d height %d\n", width, height);
 	destroy_scene(scene);
 	rt->scenes[rt->cur_scene] = read_scene(file);
+	rt->scenes[rt->cur_scene]->scene_config.width = width;
+	rt->scenes[rt->cur_scene]->scene_config.height = height;
+	ft_printf("old width %d height %d\n", rt->scenes[rt->cur_scene]->scene_config.width, rt->scenes[rt->cur_scene]->scene_config.height);
+
 	render_scene(rt, rt->scenes[rt->cur_scene]);
 }
 

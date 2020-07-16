@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/16 13:17:15 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/16 14:24:56 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ void	check_camera_fields(t_scene *scene, char *line, int n)
 	scene->cameras[n].fov = ft_clamp_d(values[9], MIN_FOV, MAX_FOV);
 	scene->cameras[n].type = round(ft_clamp_d0(values[10], 0, CAMERA_TYPES - 1));
 	scene->cameras[n].aspect = ft_clamp_d(values[11], MIN_ASPECT, MAX_ASPECT);
+	scene->cameras[n].aspect = scene->cameras[n].aspect;
 }
 
 static t_shape_type	get_shape_type(char *line)
@@ -202,10 +203,7 @@ int			handle_line(t_scene *scene, char *line)
 		if (ft_strncmp(line, g_unique_objs[i].obj_str, ft_strlen(g_unique_objs[i].obj_str)) == 0) // sama kun alemmassa
 		{
 			scene->num_all[g_unique_objs[i].type]--;
-			n = scene->num_all[(int)g_unique_objs[i].type]; // onks taa etta saa luettuu ne kaanteisesti vaan arrayhin kun objektien arvo kuitenkin muualkin talles?
-			// valo kolmanneks ja if (g_unique_objs[i].type == SHAPE)
-			// scene->shapes[n].type = g_unique_objs[i].type; -2 tai jotain jos haluu
-			// scene->shapes[n].name = g_unique_objs[i].obj_str;
+			n = scene->num_all[(int)g_unique_objs[i].type];
 			g_unique_objs[i].func(scene, line, n);
 		}
 		i++;
@@ -287,12 +285,5 @@ t_scene		*read_scene(char *file)
 		free(line);
 	}
 	close(fd);
-
-	// scene->model.position = ft_make_vec3(0,0,0);
-	// scene->model.rotation  = ft_make_vec3(0,0,0);
-	// scene->model.scale  = ft_make_vec3(1,1,1);
-	// scene->model.color = ft_make_rgba(0.5, 0.8, 0.1, 1.0);
-	// scene->model.mesh = obj_load("monkey.obj");
-
 	return (scene);
 }

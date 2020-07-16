@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/16 13:15:35 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/16 14:58:38 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,10 @@
 # define N_SHAPE_VALUES 20
 # define N_LIGHT_VALUES 10
 
-# define MIN_WIDTH 320
-# define MIN_HEIGHT 200
-# define MAX_WIDTH 1920
-# define MAX_HEIGHT 1080
+# define MIN_WIDTH 800
+# define MIN_HEIGHT 800
+# define MAX_WIDTH 1600
+# define MAX_HEIGHT 1200
 # define MIN_COORD -100
 # define MAX_COORD 100
 # define MIN_CLIP 0.00001
@@ -332,7 +332,7 @@ int					close_hook(t_rt *rt);
 int					expose_hook(t_rt *rt);
 
 t_ray			get_camera_ray(t_scene *scene, t_camera *camera, double screen_x, double screen_y);
-void			init_camera(t_vec3 origin, t_vec3 target, t_camera *camera);
+void			init_camera(t_vec3 origin, t_vec3 target, t_camera *camera, t_scene *scene);
 
 t_mlx_img		*create_mlx_img(t_mlx *mlx, int width, int height);
 void			destroy_mlx_img(t_mlx *mlx, t_mlx_img *mlx_img);
