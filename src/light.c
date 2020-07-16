@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/14 16:48:51 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/16 13:13:53 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/16 16:22:13 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int		in_shadow(t_light light, t_raycast_hit hit, t_scene *scene)
 	if (scene->help_ray)
 		ft_printf("testing shadow of %f %f %f\n", hit.point.x, hit.point.y, hit.point.z);
 	shadow_ray.direction = ft_normalize_vec3(shadow_ray.direction);
-	return (trace(&shadow_ray, scene, &new_hit, 2));
+	return (trace(&shadow_ray, scene, &new_hit, TRUE));
 }
 
 double	calc_shadow(t_light light, t_raycast_hit hit, t_scene *scene)

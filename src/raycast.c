@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/16 15:49:57 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/16 16:28:50 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,17 @@ int	trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit, int stop_at_first)
 	{
 		if (intersects_shape(ray, &scene->shapes[i], &cur_hit, scene->help_ray))
 		{
-			if (stop_at_first == 1) // tarviiks muuhun vai oliks varjoo varten?
+			if (stop_at_first && cur_hit.distance < hit->light_dist)
 				return (TRUE);
-			if (stop_at_first != 2 || cur_hit.distance < hit->light_dist) // to not accept shadow if shadow is behind light
+			if (!stop_at_first || cur_hit.distance < hit->light_dist)
 			{
 				hit_found = TRUE;
 				if (cur_hit.distance < min_dist)
 				{
 					*hit = cur_hit;
 					min_dist = cur_hit.distance;
-					if (scene->help_ray == 1)
-						ft_printf("closest distance %f\n", min_dist);
+					// if (scene->help_ray == 1)
+					// 	ft_printf("closest distance %f\n", min_dist);
 				}
 			}
 		}
@@ -49,16 +49,6 @@ int	trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit, int stop_at_first)
 	}
 	return (hit_found);
 }
-
-// static void		init_color_data(t_color_data *color, t_scene *scene,
-// 									t_hit *hit)
-// {
-// 	color->ambient = ft_mul_rgba(hit->object->color,
-// 		ft_intensity_rgba(scene->ambient_color));
-// 	color->diffuse = ft_make_rgba(0, 0, 0, 1);
-// 	color->specular = ft_make_rgba(0, 0, 0, 1);
-// 	color->attenuation = 0.0;
-// }
 
 static t_rgba	calc_reflect(t_scene *scene, t_vec3 point, t_vec3 idir, t_vec3 normal, int depth)
 {
@@ -70,8 +60,6 @@ static t_rgba	calc_reflect(t_scene *scene, t_vec3 point, t_vec3 idir, t_vec3 nor
 	reflect_ray.origin = ft_add_vec3(point, ft_mul_vec3(normal, EPSILON));
 	reflect_ray.direction = ft_normalize_vec3(ft_reflect_vec3(idir, normal));
 	color = raycast(&reflect_ray, scene, depth + 1);
-	if (scene->help_ray == 1)
-		print_rgba("reflect color", color);
 	return (color);
 }
 
@@ -139,17 +127,16 @@ static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
 			light = ft_mul_rgba(light, d);
 			total_light = ft_add_rgba(total_light, light);
 			total_light = ft_mul_rgba(total_light, 1.0 - s);
-			if (scene->help_ray)
-				ft_printf("shadow softness: %f\n", s);
+			// if (scene->help_ray)
+			// 	ft_printf("shadow softness: %f\n", s);
 			i++;
 		}
 		total_light = ft_mul_rgba_rgba(total_light, object_c); // ilman tata mustavalkoseks
 		total_light = ft_add_rgba(total_light, ambient);
 		rc = calc_reflect(scene, hit->point, hit->ray.direction, hit->normal, hit->depth);
 		total_light = ft_lerp_rgba(total_light, rc, reflect);
-		if (scene->help_ray)
-			print_rgba("color", total_light);
-	//	return (ft_mul_rgba(total_light, 1.0 - s));
+		// if (scene->help_ray)
+		// 	print_rgba("color", total_light);
 		return (total_light);
 	}
 	return (ambient);
@@ -167,7 +154,7 @@ t_rgba			raycast(t_ray *ray, t_scene *scene, int depth)
 
 	color = scene->scene_config.ambient;
 	if (depth > scene->scene_config.bounces)
-		return (color); // red for now should be ambient?
+		return (color);
 	init_hit_info(&hit);
 	if (trace(ray, scene, &hit, FALSE) != FALSE)
 	{
