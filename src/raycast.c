@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/16 12:40:27 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/16 13:04:34 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,17 +125,20 @@ static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
 		{
 			if (scene->scene_config.shadows == 0)
 				light = ft_make_rgba(1, 1, 1, 1);
-			else if (!in_shadow(scene->lights[i], *hit, scene))
-				light = scene->lights[i].color;
 			else
-				light = ft_make_rgba(0, 0, 0, 1);
+			{
+				light = scene->lights[i].color;
+				if (scene->lights[i].radius >= 1)
+					s = calc_shadow(scene->lights[i], *hit, scene);
+				else if (in_shadow(scene->lights[i], *hit, scene))
+					light = ft_make_rgba(0, 0, 0, 1);
+			}
 			d = scene->scene_config.shading == 1 ? calc_diffuse(scene->lights[i], *hit, scene) : 1;
 			light = ft_mul_rgba(light, d);
 			total_light = ft_add_rgba(total_light, light);
-			s += scene->lights[i].radius != 0 ? calc_shadow(scene->lights[i], *hit, scene) : 0;
 			total_light = ft_mul_rgba(total_light, 1.0 - s);
 			if (scene->help_ray)
-				ft_printf("s: %f\n", s);
+				ft_printf("shadow softness: %f\n", s);
 			i++;
 		}
 		total_light = ft_add_rgba(total_light, ambient);
@@ -144,7 +147,7 @@ static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
 		total_light = ft_lerp_rgba(total_light, rc, reflect);
 		if (scene->help_ray)
 			print_rgba("color", total_light);
-		return (ft_mul_rgba(total_light, 1.0 - s));
+	//	return (ft_mul_rgba(total_light, 1.0 - s));
 		return (total_light);
 	}
 	return (total_light);
