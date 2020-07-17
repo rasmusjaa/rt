@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/16 17:07:04 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/17 19:37:51 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@
 # define N_UNIQUE_OBJS 9
 # define N_SCENE_VALUES 12
 # define N_CAMERA_VALUES 12
-# define N_SHAPE_VALUES 21
+# define N_SHAPE_VALUES 22
 # define N_LIGHT_VALUES 10
 
 # define MIN_WIDTH 800
@@ -135,6 +135,7 @@ typedef struct		s_shape
 	double			opacity;
 	double			reflection;
 	double			refraction;
+	double			shine;
 	t_mesh			*mesh;
 	t_octree		*octree;
 }					t_shape;

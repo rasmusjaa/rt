@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/17 16:47:07 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/17 19:45:24 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,10 +121,48 @@ static double		calc_diffuse(t_light light, t_raycast_hit hit, t_scene *scene)
 	else
 		intensity = light.intensity * ((double)1 / (distance * distance));
 	if (scene->help_ray == 1)
-		ft_printf(" ray surface dot %f intensity %f, distance %f\n", d, intensity, distance); //
+		ft_printf("ray surface dot %f intensity %f, distance %f\n", d, intensity, distance); //
 	d = d * intensity;
 	return (ft_clamp_d(d, 0, 1));
+}
 
+double	ft_pow_d(double n, unsigned int p)
+{
+	double res;
+
+	res = 1;
+	while (p--)
+		res *= n;
+	return (res);
+}
+
+static t_rgba		calc_specular(t_scene *scene, t_raycast_hit hit, t_camera cam)
+{
+	size_t		i;
+	int		falloff; // (0-256)
+	t_rgba	total_color;
+	t_rgba	color;
+	t_vec3	v[2];
+
+	i = 0;
+	total_color = ft_make_rgba(0, 0, 0, 1);
+	while (i < scene->num_lights)
+	{
+		v[0] = ft_sub_vec3(scene->lights[i].position, hit.point);
+		v[0] = ft_normalize_vec3(ft_reflect_vec3(v[0], hit.normal));
+		v[1] = ft_normalize_vec3(ft_sub_vec3(hit.point, cam.position));
+		double dot = ft_dot_vec3(v[0], v[1]);
+		if (dot > 0)
+		{
+			falloff = (7 - scene->lights[i].radius) * 10;
+			color = scene->lights[i].color;
+			double pow = ft_pow_d(dot, falloff);
+			color = ft_mul_rgba(color, hit.shape->shine * pow);
+			total_color = ft_add_rgba(total_color, color);
+		}
+		i++;
+	}
+	return (total_color);
 }
 
 double	calc_shadow(t_light light, t_raycast_hit hit, t_scene *scene);
@@ -136,11 +174,11 @@ static t_rgba	color_from_lights(t_scene *scene, t_raycast_hit *hit)
 	t_rgba		total_light;
 	double		s;
 
-	s = 0;
 	i = 0;
 	total_light = ft_make_rgba(0, 0, 0, 1);
 	while ( i < scene->num_lights)
 	{
+		s = 0;
 		light = scene->lights[i].color;
 		if (scene->scene_config.shadows)
 			s = calc_shadow(scene->lights[i], *hit, scene);
@@ -150,7 +188,7 @@ static t_rgba	color_from_lights(t_scene *scene, t_raycast_hit *hit)
 		total_light = ft_add_rgba(total_light, light);
 		i++;
 	}
-	return (total_light);
+	return (ft_clamp_rgba(total_light));
 }
 
 static t_rgba	color_from_shape(t_rgba color, t_scene *scene, t_raycast_hit *hit)
@@ -169,7 +207,7 @@ static t_rgba	color_from_shape(t_rgba color, t_scene *scene, t_raycast_hit *hit)
 		rec = calc_reflect(scene, hit->point, hit->ray.direction, hit->normal, hit->depth);
 		color = ft_lerp_rgba(color, rec, hit->shape->reflection);
 	}
-	return (color);
+	return (ft_clamp_rgba(color));
 }
 
 static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
@@ -182,8 +220,10 @@ static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
 		return (ambient);
 	color = color_from_lights(scene, hit);
 	color = color_from_shape(color, scene, hit);
+	if (scene->scene_config.specular && hit->shape->shine > EPSILON)
+		color = ft_add_rgba(color, calc_specular(scene, *hit, scene->cameras[scene->cur_camera]));
 	color = ft_add_rgba(color, ambient);
-	return (color);
+	return (ft_clamp_rgba(color));
 }
 
 typedef struct		s_color_info
