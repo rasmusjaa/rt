@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/15 17:54:32 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/17 19:37:51 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,15 @@
 # define EPSILON 0.0001
 # define N_OBJ_TYPES 4
 # define N_UNIQUE_OBJS 9
-# define N_SCENE_VALUES 8
+# define N_SCENE_VALUES 12
 # define N_CAMERA_VALUES 12
-# define N_SHAPE_VALUES 20
-# define N_LIGHT_VALUES 8
+# define N_SHAPE_VALUES 22
+# define N_LIGHT_VALUES 10
 
-# define MIN_WIDTH 320
-# define MIN_HEIGHT 200
-# define MAX_WIDTH 1920
-# define MAX_HEIGHT 1080
+# define MIN_WIDTH 800
+# define MIN_HEIGHT 800
+# define MAX_WIDTH 1600
+# define MAX_HEIGHT 1200
 # define MIN_COORD -100
 # define MAX_COORD 100
 # define MIN_CLIP 0.00001
@@ -126,6 +126,7 @@ typedef struct		s_shape
 	t_shape_type	type;
 	t_vec3			position;
 	t_vec3			target;
+	t_vec3			normal;
 	t_vec3			rotation;
 	t_vec3			scale;
 	t_rgba			color;
@@ -133,6 +134,8 @@ typedef struct		s_shape
 	double			angle;
 	double			opacity;
 	double			reflection;
+	double			refraction;
+	double			shine;
 	t_mesh			*mesh;
 	t_octree		*octree;
 }					t_shape;
@@ -179,6 +182,8 @@ typedef struct		s_light
 	t_rgba			color;
 	t_light_type	type;
 	double			intensity;
+	double			radius;
+	double			leds;
 }					t_light;
 
 typedef struct		s_object
@@ -330,7 +335,7 @@ int					close_hook(t_rt *rt);
 int					expose_hook(t_rt *rt);
 
 t_ray			get_camera_ray(t_scene *scene, t_camera *camera, double screen_x, double screen_y);
-void			init_camera(t_vec3 origin, t_vec3 target, t_camera *camera);
+void			init_camera(t_vec3 origin, t_vec3 target, t_camera *camera, t_scene *scene);
 
 t_mlx_img		*create_mlx_img(t_mlx *mlx, int width, int height);
 void			destroy_mlx_img(t_mlx *mlx, t_mlx_img *mlx_img);

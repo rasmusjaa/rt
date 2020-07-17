@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: wkorande <willehard@gmail.com>             +#+  +:+       +#+         #
+#    By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/01 15:48:04 by rjaakonm          #+#    #+#              #
-#    Updated: 2020/07/14 16:51:50 by wkorande         ###   ########.fr        #
+#    Updated: 2020/07/17 16:49:16 by rjaakonm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
