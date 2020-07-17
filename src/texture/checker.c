@@ -12,15 +12,23 @@
 
 #include "rt.h"
 
+static double dmodulo(double d, double m)
+{
+	double mod;
+
+	mod = (d) - (floor((d) / (double)m) * m);
+	return (mod);
+}
+
 t_rgba checker_texture(double v, double u)
 {
-	float size = 0.03;
+	float size = 0.1;
 	t_rgba col1 = ft_make_rgba(1, 1, 1, 1);
 	t_rgba col2 = ft_make_rgba(0, 0, 0, 1);
 
-	if ((int)(u*1000) % (int)((size * 2)*1000) < (int)(size*1000))
+	if (dmodulo(u, size * 2) < size)
 	{
-		if ((int)(v * 1000) % (int)((size * 2) * 1000) < (int)(size*1000))
+		if (dmodulo(v, size * 2) < size)
 		{
 			return col1;
 		}
@@ -31,7 +39,7 @@ t_rgba checker_texture(double v, double u)
 	}	
 	else 
 	{
-		if ((int)(v*1000) % (int)((size * 2) * 1000) < (int)(size*1000))
+		if (dmodulo(v, size * 2) < size)
 		{
 			return col2;
 		}

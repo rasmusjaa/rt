@@ -162,10 +162,12 @@ t_rgba			raycast(t_ray *ray, t_scene *scene, int depth)
 		{
 			//t_vec2 uv = sphere_uv(ft_sub_vec3(hit.point, hit.shape->position));
 			//t_vec3 hit_pnt = ft_rotate_vec3(hit.point, ft_make_vec3(0,0,-90));
-			t_vec2 uv = plane_uv(ft_sub_vec3(hit.point, hit.shape->position));
-			uv.x /= 10;
-			uv.y /= 10;
-		
+			//t_vec2 uv = plane_uv(ft_sub_vec3(hit.point, hit.shape->position));
+			t_vec2 uv;
+			double dp = ft_dot_vec3(hit.normal, ft_make_vec3(0,1,0));
+			t_vec3 rotated = ft_rotate_vec3(hit.point, ft_make_vec3(0, 0,(dp+1)/2.0*180));
+			uv.x = rotated.x / 10;
+			uv.y = rotated.z / 10;
 			hit.shape->color = hit.shape->material->texture->texture_function(uv.x, uv.y);
 		} 
 	// ...

@@ -13,7 +13,7 @@
 #include "materials.h"
 
 
-void	material_temp_function(t_scene *scene, int procedural_type)
+void	material_temp_function(t_scene *scene)
 {
 	t_rgba col1 = ft_make_rgba(1,1,1,1);
 	t_rgba col2 = ft_make_rgba(0,0,0,0);
@@ -21,11 +21,15 @@ void	material_temp_function(t_scene *scene, int procedural_type)
 
 	if (!scene)
 		return ;
-	allocate_materials(scene, 1);
-	allocate_textures(scene, 1);
+	allocate_materials(scene, 2);
+	allocate_textures(scene, 2);
 
-	scene->textures[0] = new_texture(1, procedural_type, NULL, col1, col2, col3); 
+	scene->textures[0] = new_texture(1, CHECKER, NULL, col1, col2, col3); 
 	scene->materials[0] = new_material(1, ft_make_rgba(1, 0, 0, 1), scene->textures);
+	
+	scene->textures[1] = new_texture(2, BRICKS, NULL, col1, col2, col3); 
+	scene->materials[1] = new_material(2, ft_make_rgba(1, 0, 0, 1), scene->textures + 1);
+
 }
 
 void	allocate_materials(t_scene *scene, size_t amount)

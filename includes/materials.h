@@ -58,5 +58,5 @@ t_rgba		brick_texture(double u, double v);
 double		perlin_noise(double x, double y, unsigned char ***g);
 t_rgba		checker_texture(double x, double y);
 
-void	material_temp_function(t_scene *scene, int procedural_type);
+void	material_temp_function(t_scene *scene);
 #endif
