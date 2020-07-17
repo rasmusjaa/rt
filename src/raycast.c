@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/17 17:03:25 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/17 18:34:26 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,13 +228,25 @@ static t_rgba shade(t_scene *scene, t_raycast_hit *hit)
 		out.diffuse += calc_diffuse(scene->lights[i], *hit, scene) / (double)scene->num_lights;
 		i++;
 	}
-	out.reflect = calc_reflect(scene, *hit, hit->ray.direction, hit->normal, hit->depth);
-	out.refract = calc_refract(scene, hit->ray.direction, *hit, 1.33, hit->depth);
-	out.fresnel = calc_fresnel(hit->normal, hit->ray.direction, 2.5);
-	if (scene->help_ray && hit->ray.source_shape == NULL)
-		ft_printf("fresnel: %f\n", out.fresnel);
+
 	out.color = ft_mul_rgba(hit->shape->color, out.diffuse);
-	return (ft_lerp_rgba(out.color, out.reflect, hit->shape->reflection * out.fresnel));
+	// out.refract = calc_refract(scene, hit->ray.direction, *hit, 1.33, hit->depth);
+
+	if (hit->shape->refraction > 0)
+	{
+		out.refract = calc_refract(scene, hit->ray.direction, *hit, 1.5, hit->depth);
+
+		out.color = ft_lerp_rgba(out.color, out.refract, hit->shape->refraction);
+	}
+
+	if (hit->shape->reflection > 0)
+	{
+		out.reflect = calc_reflect(scene, *hit, hit->ray.direction, hit->normal, hit->depth);
+		// out.fresnel = calc_fresnel(hit->shape->reflection, 1.0, 5.33, hit->normal, hit->ray.direction);
+		out.fresnel = calc_fresnel(hit->normal, hit->ray.direction, 1.33);
+		out.color = ft_lerp_rgba(out.color, out.reflect, out.fresnel);
+	}
+	return (out.color);
 }
 static void init_hit_info(t_raycast_hit *hit)
 {
