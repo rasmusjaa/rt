@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   rt.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
 /*   Updated: 2020/07/17 19:37:51 by rjaakonm         ###   ########.fr       */
@@ -174,6 +174,7 @@ typedef struct		s_ray
 {
 	t_vec3			origin;
 	t_vec3			direction;
+	t_shape			*source_shape;
 }					t_ray;
 
 typedef struct		s_light
