@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/17 16:15:53 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/17 16:47:07 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,16 +52,6 @@ int	trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit, int stop_at_first)
 	}
 	return (hit_found);
 }
-
-// static void		init_color_data(t_color_data *color, t_scene *scene,
-// 									t_hit *hit)
-// {
-// 	color->ambient = ft_mul_rgba(hit->object->color,
-// 		ft_intensity_rgba(scene->ambient_color));
-// 	color->diffuse = ft_make_rgba(0, 0, 0, 1);
-// 	color->specular = ft_make_rgba(0, 0, 0, 1);
-// 	color->attenuation = 0.0;
-// }
 
 static t_rgba	calc_reflect(t_scene *scene, t_vec3 point, t_vec3 idir, t_vec3 normal, int depth)
 {
@@ -129,10 +119,10 @@ static double		calc_diffuse(t_light light, t_raycast_hit hit, t_scene *scene)
 	if (light.type == DIRECTIONAL)
 		intensity = light.intensity / 1000;
 	else
-		intensity = light.intensity / (40 * M_PI * distance);
-	d = d * intensity;
+		intensity = light.intensity * ((double)1 / (distance * distance));
 	if (scene->help_ray == 1)
-		ft_printf(" ray surface dot %f\n", d); //
+		ft_printf(" ray surface dot %f intensity %f, distance %f\n", d, intensity, distance); //
+	d = d * intensity;
 	return (ft_clamp_d(d, 0, 1));
 
 }
