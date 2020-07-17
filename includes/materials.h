@@ -6,7 +6,7 @@
 /*   By: sluhtala <sluhtala@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/15 14:09:34 by sluhtala          #+#    #+#             */
-/*   Updated: 2020/07/16 18:46:53 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/17 16:16:18 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,11 @@ void	allocate_materials(t_scene *scene, size_t amount);
 
 t_vec2		cylinder_uv(t_vec3 point, double max, double min);
 t_vec2		sphere_uv(t_vec3 point);
+t_vec2		plane_uv(t_vec3 point);
 
 t_rgba		brick_texture(double u, double v);
 double		perlin_noise(double x, double y, unsigned char ***g);
 t_rgba		checker_texture(double x, double y);
 
-void	material_temp_function(t_scene *scene);
+void	material_temp_function(t_scene *scene, int procedural_type);
 #endif

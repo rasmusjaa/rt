@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/16 15:17:28 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/17 17:04:54 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,12 @@ t_rgba			raycast(t_ray *ray, t_scene *scene, int depth)
 	// testing textures...
 		if (hit.shape->material != NULL)
 		{
-			t_vec2 uv = sphere_uv(ft_sub_vec3(hit.point, hit.shape->position));
+			//t_vec2 uv = sphere_uv(ft_sub_vec3(hit.point, hit.shape->position));
+			//t_vec3 hit_pnt = ft_rotate_vec3(hit.point, ft_make_vec3(0,0,-90));
+			t_vec2 uv = plane_uv(ft_sub_vec3(hit.point, hit.shape->position));
+			uv.x /= 10;
+			uv.y /= 10;
+		
 			hit.shape->color = hit.shape->material->texture->texture_function(uv.x, uv.y);
 		} 
 	// ...

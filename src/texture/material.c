@@ -6,14 +6,14 @@
 /*   By: sluhtala <sluhtala@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/15 14:24:30 by sluhtala          #+#    #+#             */
-/*   Updated: 2020/07/15 18:01:39 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/17 16:07:56 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "materials.h"
 
 
-void	material_temp_function(t_scene *scene)
+void	material_temp_function(t_scene *scene, int procedural_type)
 {
 	t_rgba col1 = ft_make_rgba(1,1,1,1);
 	t_rgba col2 = ft_make_rgba(0,0,0,0);
@@ -24,7 +24,7 @@ void	material_temp_function(t_scene *scene)
 	allocate_materials(scene, 1);
 	allocate_textures(scene, 1);
 
-	scene->textures[0] = new_texture(1, CHECKER, NULL, col1, col2, col3); 
+	scene->textures[0] = new_texture(1, procedural_type, NULL, col1, col2, col3); 
 	scene->materials[0] = new_material(1, ft_make_rgba(1, 0, 0, 1), scene->textures);
 }
 

@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 14:59:56 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/15 18:11:28 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/17 16:10:07 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,13 +224,13 @@ int		main(int ac, char **av)
 	}
 	t_scene *scene = rt->scenes[rt->cur_scene];
 	//test to assign material and texture
-	material_temp_function(&scene[0]);
+	material_temp_function(&scene[0], CHECKER);
 	if (scene->num_shapes > 0)
 	{
 		
 		for(int i = 0; i < (int)scene->num_shapes; i++)
 		{
-			if (scene->shapes[i].type == 0)
+			if (scene->shapes[i].type == PLANE)
 				scene->shapes[i].material = scene->materials;
 			else 
 				scene->shapes[i].material = NULL;

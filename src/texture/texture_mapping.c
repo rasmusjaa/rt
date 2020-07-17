@@ -28,3 +28,12 @@ t_vec2    cylinder_uv(t_vec3 point, double max, double min)
     uv.y = (normal.y - min) / (max - min);
     return (uv);
 }
+
+t_vec2	plane_uv(t_vec3 point)
+{
+	t_vec2 uv;
+
+	uv.x = point.x - floor(point.x);
+	uv.y = point.z - floor(point.z);
+	return (uv);
+}
