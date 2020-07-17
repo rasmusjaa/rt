@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/16 18:22:55 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/17 16:15:53 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,68 +139,96 @@ static double		calc_diffuse(t_light light, t_raycast_hit hit, t_scene *scene)
 
 double	calc_shadow(t_light light, t_raycast_hit hit, t_scene *scene);
 
-static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
+static t_rgba	color_from_lights(t_scene *scene, t_raycast_hit *hit)
 {
-	t_rgba		ambient;
-	t_rgba		total_light;
-	t_rgba		light;
-	t_rgba		object_c;
-	t_rgba		rec;
-	t_rgba		rac;
-	double		reflect;
-	double		refract;
 	size_t		i;
-	double		d;
+	t_rgba		light;
+	t_rgba		total_light;
 	double		s;
 
 	s = 0;
-
 	i = 0;
-	d = 0;
 	total_light = ft_make_rgba(0, 0, 0, 1);
-	ambient = scene->scene_config.ambient;
-	if (!hit->shape) // refraction ongelma?
-		return (ambient);
-	object_c = hit->shape->color;
-	reflect = scene->scene_config.reflection == 1 ? hit->shape->reflection : 0;
-	refract = scene->scene_config.refraction == 1 ? hit->shape->refraction : 0;
-	if (hit->shape)
+	while ( i < scene->num_lights)
 	{
-		while ( i < scene->num_lights)
-		{
-			if (scene->scene_config.shadows == 0)
-				light = ft_make_rgba(1, 1, 1, 1);
-			else
-			{
-				light = scene->lights[i].color;
-				if (scene->lights[i].radius >= 1)
-					s = calc_shadow(scene->lights[i], *hit, scene);
-				else if (in_shadow(scene->lights[i], *hit, scene))
-					light = ft_make_rgba(0, 0, 0, 1);
-			}
-			d = scene->scene_config.shading == 1 ? calc_diffuse(scene->lights[i], *hit, scene) : 1;
-			light = ft_mul_rgba(light, d);
-			total_light = ft_add_rgba(total_light, light);
-			total_light = ft_mul_rgba(total_light, 1.0 - s);
-			// if (scene->help_ray)
-			// 	ft_printf("shadow softness: %f\n", s);
-			i++;
-		}
-		total_light = ft_mul_rgba_rgba(total_light, object_c); // ilman tata mustavalkoseks
-		total_light = ft_add_rgba(total_light, ambient);
-		rec = calc_reflect(scene, hit->point, hit->ray.direction, hit->normal, hit->depth);
-		if (scene->scene_config.refraction > EPSILON)
-		{
-			rac = calc_refract(scene, hit->ray.direction, *hit, 1.33, hit->depth);
-			total_light = ft_lerp_rgba(total_light, rac, refract);
-		}
-		total_light = ft_lerp_rgba(total_light, rec, reflect);
-		// if (scene->help_ray)
-		// 	print_rgba("color", total_light);
-		return (total_light);
+		light = scene->lights[i].color;
+		if (scene->scene_config.shadows)
+			s = calc_shadow(scene->lights[i], *hit, scene);
+		if (s < 1 && scene->scene_config.shading)
+			light = ft_mul_rgba(light, calc_diffuse(scene->lights[i], *hit, scene));
+		light = ft_mul_rgba(light, 1.0 - s);
+		total_light = ft_add_rgba(total_light, light);
+		i++;
 	}
-	return (ambient);
+	return (total_light);
 }
+
+static t_rgba	color_from_shape(t_rgba color, t_scene *scene, t_raycast_hit *hit)
+{
+	t_rgba		rec;
+	t_rgba		rac;
+	
+	color = ft_mul_rgba_rgba(color, hit->shape->color); // ilman tata mustavalkoseks
+	if (scene->scene_config.refraction && hit->shape->refraction > EPSILON)
+	{
+		rac = calc_refract(scene, hit->ray.direction, *hit, 1.33, hit->depth);
+		color = ft_lerp_rgba(color, rac, hit->shape->refraction);
+	}
+	if (scene->scene_config.reflection && hit->shape->reflection > EPSILON)
+	{
+		rec = calc_reflect(scene, hit->point, hit->ray.direction, hit->normal, hit->depth);
+		color = ft_lerp_rgba(color, rec, hit->shape->reflection);
+	}
+	return (color);
+}
+
+static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
+{
+	t_rgba		ambient;
+	t_rgba		color;
+	
+	ambient = scene->scene_config.ambient;
+	if (!hit->shape)
+		return (ambient);
+	color = color_from_lights(scene, hit);
+	color = color_from_shape(color, scene, hit);
+	color = ft_add_rgba(color, ambient);
+	return (color);
+}
+
+typedef struct		s_color_info
+{
+	double			diffuse;
+	double			shadow;
+	t_rgba			specular;
+	t_rgba			reflect;
+	t_rgba			refract;
+	t_rgba			color; // final color
+}					t_color_info;
+
+// static t_rgba shade(t_scene *scene, t_raycast_hit *hit)
+// {
+// 	t_rgba ambient;
+// 	t_color_info out;
+// 	size_t i;
+
+// 	out.shadow = 0;
+// 	out.diffuse = 0;
+// 	i = 0;
+// 	ambient = scene->scene_config.ambient;
+// 	if (!hit->shape) // refraction ongelma?
+// 		return (ambient);
+// 	while (i < scene->num_lights)
+// 	{
+// 		out.shadow += calc_shadow(scene->lights[i], *hit, scene);
+// 		out.diffuse += calc_diffuse(scene->lights[i], *hit, scene);
+// 		i++;
+// 	}
+// 	out.reflect = calc_reflect(scene, hit->point, hit->ray.direction, hit->normal, hit->depth);
+// 	out.refract = calc_refract(scene, hit->ray.direction, *hit, 1.33, hit->depth);
+// 	out.color = ft_mul_rgba(ft_mul_rgba(hit->shape->color, out.diffuse), 1.0 - out.shadow);
+// 	return (ft_lerp_rgba(out.color, out.reflect, hit->shape->reflection));
+// }
 
 static void		init_hit_info(t_raycast_hit *hit)
 {
