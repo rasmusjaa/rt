@@ -6,7 +6,7 @@
 #    By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/01 15:48:04 by rjaakonm          #+#    #+#              #
-#    Updated: 2020/07/13 14:31:55 by rjaakonm         ###   ########.fr        #
+#    Updated: 2020/07/17 16:49:16 by rjaakonm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,11 +21,18 @@ SRC =	scene/read_csv.c\
 		event_hooks/mouse.c \
 		event_hooks/window.c \
 		camera.c\
+		light.c\
 		mlx_image.c\
 		main.c\
 		rt.c\
 		raycast.c\
 		shape/shape.c\
+		shape/sphere.c\
+		shape/plane.c\
+		shape/cone.c\
+		shape/cylinder.c\
+		shape/triangle.c\
+		shape/model.c\
 		thread_pool/tp.c\
 		thread_pool/tp_job.c\
 		thread_pool/tp_queue.c\
@@ -81,6 +88,6 @@ re: fclean all
 
 run:
 	$(CC) $(CFLAGS) $(INCL) $(SRCS) $(LIB) -o $(NAME)
-	./RT resources/scene5.csv
+	./RT resources/scene6.csv
 
 .PHONY: all libftmake clean fclean re run debug

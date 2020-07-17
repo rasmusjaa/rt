@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rt.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/10 19:15:41 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/17 19:37:51 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,19 +42,19 @@
 # define EPSILON 0.0001
 # define N_OBJ_TYPES 4
 # define N_UNIQUE_OBJS 9
-# define N_SCENE_VALUES 8
+# define N_SCENE_VALUES 12
 # define N_CAMERA_VALUES 12
-# define N_SHAPE_VALUES 19
-# define N_LIGHT_VALUES 8
+# define N_SHAPE_VALUES 22
+# define N_LIGHT_VALUES 10
 
-# define MIN_WIDTH 320
-# define MIN_HEIGHT 200
-# define MAX_WIDTH 1920
-# define MAX_HEIGHT 1080
+# define MIN_WIDTH 800
+# define MIN_HEIGHT 800
+# define MAX_WIDTH 1600
+# define MAX_HEIGHT 1200
 # define MIN_COORD -100
 # define MAX_COORD 100
 # define MIN_CLIP 0.00001
-# define MAX_CLIP 100
+# define MAX_CLIP 1000
 # define MIN_SCALE -10
 # define MAX_SCALE 10
 # define MIN_RADIUS 0.001
@@ -126,12 +126,16 @@ typedef struct		s_shape
 	t_shape_type	type;
 	t_vec3			position;
 	t_vec3			target;
+	t_vec3			normal;
 	t_vec3			rotation;
 	t_vec3			scale;
 	t_rgba			color;
 	double			radius;
 	double			angle;
 	double			opacity;
+	double			reflection;
+	double			refraction;
+	double			shine;
 	t_mesh			*mesh;
 	t_octree		*octree;
 }					t_shape;
@@ -148,6 +152,7 @@ typedef	struct		s_scene_config
 	int				bounces;
 	int				width;
 	int				height;
+	t_rgba			ambient;
 }					t_scene_config;
 
 typedef struct		s_camera
@@ -177,6 +182,8 @@ typedef struct		s_light
 	t_rgba			color;
 	t_light_type	type;
 	double			intensity;
+	double			radius;
+	double			leds;
 }					t_light;
 
 typedef struct		s_object
@@ -271,12 +278,15 @@ typedef struct	s_raycast_hit
 	t_vec3		point;
 	t_vec3		normal;
 	t_shape		*shape;
-	// t_model		*model;
 	t_vec3		light_dir;
 	double		t;
 	double		t2;
 	double		distance;
+	double		light_dist;
 	t_rgba		color;
+	int			depth;
+	t_vec3		idir;
+	t_ray		ray;
 }				t_raycast_hit;
 
 
@@ -325,7 +335,7 @@ int					close_hook(t_rt *rt);
 int					expose_hook(t_rt *rt);
 
 t_ray			get_camera_ray(t_scene *scene, t_camera *camera, double screen_x, double screen_y);
-void			init_camera(t_vec3 origin, t_vec3 target, t_camera *camera);
+void			init_camera(t_vec3 origin, t_vec3 target, t_camera *camera, t_scene *scene);
 
 t_mlx_img		*create_mlx_img(t_mlx *mlx, int width, int height);
 void			destroy_mlx_img(t_mlx *mlx, t_mlx_img *mlx_img);
@@ -336,12 +346,10 @@ void			rt_destroy_exit(t_rt *rt, int status);
 void			render_scene(t_rt *rt, t_scene *scene);
 void			destroy_scene(t_scene *scene);
 
-t_rgba			raycast(t_ray *ray, t_scene *scene);
-int				intersects_shape(t_ray *ray, t_shape *shape, t_raycast_hit *hit, int debug);
-t_vec3			calc_hit_normal(t_raycast_hit *hit);
 
-int				intersects_model(t_ray *ray, t_shape *model, t_raycast_hit *hit, int debug);
-
+t_rgba			raycast(t_ray *ray, t_scene *scene, int depth);
+int				trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit, int stop_at_first);
+int				in_shadow(t_light light, t_raycast_hit hit, t_scene *scene);
 t_mesh			*obj_load(const char *filename);
 
 #endif
