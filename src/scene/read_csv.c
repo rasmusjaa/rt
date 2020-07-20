@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/20 18:18:55 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/20 18:41:41 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ void	check_camera_fields(t_scene *scene, char *line, int n)
 	get_fields(line, values, N_CAMERA_VALUES);
 	scene->cameras[n].position = ft_clamp_vec3(ft_make_vec3(values[0], values[1], values[2]), MIN_COORD, MAX_COORD);
 	scene->cameras[n].target = ft_clamp_vec3(ft_make_vec3(values[3], values[4], values[5]), MIN_COORD, MAX_COORD);
-	scene->cameras[n].rotation = ft_clamp_vec3(ft_make_vec3(values[6], values[7], values[8]), 0, 360);
+	scene->cameras[n].rotation = ft_clamp_vec3(ft_make_vec3(-values[6], -values[7], -values[8]), 0, 360);
 	scene->cameras[n].fov = ft_clamp_d(values[9], MIN_FOV, MAX_FOV);
 	scene->cameras[n].type = round(ft_clamp_d0(values[10], 0, CAMERA_TYPES - 1));
 	scene->cameras[n].aspect = ft_clamp_d(values[11], MIN_ASPECT, MAX_ASPECT);
@@ -145,7 +145,7 @@ void	check_shape_fields(t_scene *scene, char *line, int n)
 	shape->name = get_shape_name(shape->type); // eiks taa kannata yhdistaa ylempaan ku looppaa saman asian? tai alemmas kun on kaikki tyypit iffil
 	shape->position = ft_clamp_vec3(ft_make_vec3(values[0], values[1], values[2]), MIN_COORD, MAX_COORD);
 	shape->target = ft_clamp_vec3(ft_make_vec3(values[3], values[4], values[5]), MIN_COORD, MAX_COORD);
-	shape->rotation = ft_clamp_vec3(ft_make_vec3(values[6], values[7], values[8]), 0, 360);
+	shape->rotation = ft_clamp_vec3(ft_make_vec3(-values[6], -values[7], -values[8]), 0, 360);
 	shape->scale = ft_clamp_d(values[9], MIN_SCALE, MAX_SCALE);
 	shape->color = ft_clamp_rgba(ft_make_rgba(values[10], values[11], values[12], values[13]));
 	shape->radius = shape->scale * ft_clamp_d(values[14], MIN_RADIUS, MAX_RADIUS);
