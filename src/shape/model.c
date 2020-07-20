@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:31:38 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/14 19:07:06 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/20 18:14:57 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,38 +70,3 @@ int intersects_octree_model(t_ray *ray, t_shape *model, t_octree *node, t_raycas
 	}
 	return (hit_found);
 }
-
-// int intersects_model(t_ray *ray, t_shape *model, t_raycast_hit *hit, int debug)
-// {
-// 	size_t i;
-// 	t_raycast_hit cur_hit;
-// 	double min_dist;
-// 	int hit_found;
-
-// 	if (!intersects_bounds(ray, &(model->mesh->bounds), debug))
-// 		return (FALSE);
-// 	// else
-// 	// {
-// 	// 	hit->shape = model;
-// 	// 	return (TRUE);
-// 	// }
-
-// 	hit_found = FALSE;
-// 	min_dist = MAX_CLIP;
-// 	i = 0;
-// 	while (i < model->mesh->num_trifaces)
-// 	{
-// 		if (intersects_triangle(ray, &(model->mesh->trifaces[i]), &cur_hit))
-// 		{
-// 			hit_found = TRUE;
-// 			if (cur_hit.distance < min_dist)
-// 			{
-// 				min_dist = cur_hit.distance;
-// 				*hit = cur_hit;
-// 				hit->shape = model;
-// 			}
-// 		}
-// 		i++;
-// 	}
-// 	return (hit_found);
-// }

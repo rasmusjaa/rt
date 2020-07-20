@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/18 00:06:25 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/20 18:23:32 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,19 +264,24 @@ static t_rgba	color_from_shape(t_rgba color, t_scene *scene, t_raycast_hit *hit)
 {
 	t_rgba		rec;
 	t_rgba		rac;
+	double		refraction;
 	double		fresnel;
 	int			rec_calced;
 	
 	color = ft_mul_rgba_rgba(color, hit->shape->color); // ilman tata mustavalkoseks
 	rec_calced = FALSE;
-	if (scene->scene_config.refraction && hit->shape->refraction > EPSILON)
+	if (scene->scene_config.opacity && hit->shape->opacity < 1 - EPSILON)
 	{
-		fresnel = calc_fresnel(hit->normal, hit->ray.direction, 1.33);
-		rac = calc_refract(scene, hit->ray.direction, *hit, 1.33, hit->depth);
-		rec = calc_reflect(scene, *hit, hit->ray.direction, hit->normal, hit->depth);
-		rec_calced = TRUE;
-		rac = ft_lerp_rgba(rac, rec, fresnel);
-		color = ft_lerp_rgba(color, rac, hit->shape->refraction);
+		refraction = scene->scene_config.refraction ? hit->shape->refraction : 1;
+		rac = calc_refract(scene, hit->ray.direction, *hit, refraction, hit->depth);
+		if (scene->scene_config.refraction && refraction > 1 + EPSILON)
+		{
+			fresnel = calc_fresnel(hit->normal, hit->ray.direction, refraction);
+			rec = calc_reflect(scene, *hit, hit->ray.direction, hit->normal, hit->depth);
+			rec_calced = TRUE;
+			rac = ft_lerp_rgba(rac, rec, fresnel);
+		}
+		color = ft_lerp_rgba(color, rac, 1 - hit->shape->opacity);
 	}
 	if (scene->scene_config.reflection && hit->shape->reflection > EPSILON)
 	{

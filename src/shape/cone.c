@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cone.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:27:12 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/13 18:28:49 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/20 16:28:42 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_vec3	calc_hit_normal_cone(t_shape *cone, t_raycast_hit *hit)
 	t_vec3 cp;
 	t_vec3 v;
 
-	v = ft_normalize_vec3(ft_sub_vec3(cone->target, cone->position));
+	v = cone->target;
 	cp = ft_sub_vec3(hit->point, cone->position);
 	n = ft_sub_vec3(cp, ft_mul_vec3(v,
 		(ft_len_vec3(cp) / cos(cone->radius))));
@@ -34,7 +34,7 @@ int	intersects_cone(t_ray *ray, t_shape *cone, t_raycast_hit *hit)
 
 	theta_sqr = ft_deg_to_rad(cone->angle) * ft_deg_to_rad(cone->angle);
 
-	v = ft_normalize_vec3(ft_sub_vec3(cone->target, cone->position));
+	v = cone->target;
 	oc = ft_sub_vec3(ray->origin, cone->position);
 	q.a = ft_dot_vec3(ray->direction, v);
 	q.a = ft_dot_vec3(ray->direction, ray->direction) -

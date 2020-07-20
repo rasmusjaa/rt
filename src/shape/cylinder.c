@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cylinder.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:29:03 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/13 18:41:01 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/20 18:18:00 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_vec3	calc_hit_normal_cylinder(t_shape *c, t_raycast_hit *hit)
 	t_vec3 v;
 	double d;
 
-	dir = ft_normalize_vec3(ft_sub_vec3(c->target, c->position));
+	dir = c->target;
 	c_to_hit = ft_sub_vec3(hit->point, c->position);
 	d = ft_dot_vec3(dir, c_to_hit);
 	v = ft_add_vec3(c->position, ft_mul_vec3(dir, d));
@@ -33,7 +33,7 @@ int	intersects_cylinder(t_ray *ray, t_shape *cyl, t_raycast_hit *hit)
 	t_vec3		ocxv;	// cross product of ray origin and cylinder direction
 	t_vec3		dxv;	// cross product of ray direction and cylinder direction
 
-	v = ft_sub_vec3(cyl->position, cyl->target);
+	v = cyl->target;
 	ocxv = ft_cross_vec3(ft_sub_vec3(ray->origin, cyl->position), v);
 	dxv = ft_cross_vec3(ray->direction, v);
 	q.a = ft_dot_vec3(dxv, dxv);

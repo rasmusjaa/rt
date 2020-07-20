@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rt.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/17 19:37:51 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/20 18:14:28 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@
 # define EPSILON 0.0001
 # define N_OBJ_TYPES 4
 # define N_UNIQUE_OBJS 9
-# define N_SCENE_VALUES 12
+# define N_SCENE_VALUES 13
 # define N_CAMERA_VALUES 12
-# define N_SHAPE_VALUES 22
+# define N_SHAPE_VALUES 20
 # define N_LIGHT_VALUES 10
 
 # define MIN_WIDTH 800
@@ -55,7 +55,7 @@
 # define MAX_COORD 100
 # define MIN_CLIP 0.00001
 # define MAX_CLIP 1000
-# define MIN_SCALE -10
+# define MIN_SCALE 0.00001
 # define MAX_SCALE 10
 # define MIN_RADIUS 0.001
 # define MAX_RADIUS 100
@@ -126,9 +126,9 @@ typedef struct		s_shape
 	t_shape_type	type;
 	t_vec3			position;
 	t_vec3			target;
-	t_vec3			normal;
+//	t_vec3			normal;
 	t_vec3			rotation;
-	t_vec3			scale;
+	double			scale;
 	t_rgba			color;
 	double			radius;
 	double			angle;
@@ -147,6 +147,7 @@ typedef	struct		s_scene_config
 	int				shadows;
 	int				shading;
 	int				specular;
+	int				opacity;
 	int				refraction;
 	int				reflection;
 	int				bounces;
@@ -351,6 +352,6 @@ void			destroy_scene(t_scene *scene);
 t_rgba			raycast(t_ray *ray, t_scene *scene, int depth);
 int				trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit, int stop_at_first);
 int				in_shadow(t_light light, t_raycast_hit hit, t_scene *scene);
-t_mesh			*obj_load(const char *filename);
+t_mesh			*obj_load(const char *filename, t_shape shape);
 
 #endif
