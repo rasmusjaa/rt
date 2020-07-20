@@ -6,7 +6,7 @@ void	init_camera(t_vec3 origin, t_vec3 target, t_camera *camera, t_scene *scene)
 {
 	if (camera->type == PERSPECTIVE)
 	{
-		camera->forward = ft_normalize_vec3(ft_sub_vec3(target, origin));
+		camera->forward = ft_normalize_vec3(ft_rotate_vec3(ft_sub_vec3(target, origin), camera->rotation));
 		camera->right = ft_normalize_vec3(ft_cross_vec3(camera->forward, ft_make_vec3(0, 1, -EPSILON)));
 		camera->up = ft_normalize_vec3(ft_cross_vec3(camera->right, camera->forward));
 		camera->horizontal = tan((camera->fov * M_PI / 180.0) / 2);
