@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/21 18:51:59 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/21 19:45:01 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ static t_rgba calc_reflect(t_scene *scene, t_raycast_hit hit, t_vec3 idir, t_vec
 	t_ray reflect_ray;
 	t_rgba color;
 
-	reflect_ray.origin = ft_add_vec3(hit.point, ft_mul_vec3(normal, EPSILON));
+	reflect_ray.origin = hit.point;// ft_add_vec3(hit.point, ft_mul_vec3(normal, EPSILON));
 	reflect_ray.direction = ft_normalize_vec3(ft_reflect_vec3(idir, normal));
 	reflect_ray.is_shadow = FALSE;
 	color = raycast(&reflect_ray, scene, depth + 1);
@@ -184,7 +184,11 @@ static double calc_diffuse(t_light light, t_raycast_hit hit, t_scene *scene)
 	else
 		intensity = light.intensity * ((double)1 / (distance * distance));
 	if (scene->help_ray == 1)
+	{
+		print_vec3("shape normal", hit.normal);
+		print_vec3("light dir", light_dir);
 		ft_printf("ray surface dot %f intensity %f, distance %f\n", d, intensity, distance); //
+	}
 	d = d * intensity;
 	return (ft_clamp_d(d, 0, 1));
 }
