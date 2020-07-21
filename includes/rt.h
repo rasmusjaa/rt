@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/21 14:51:39 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/21 18:04:40 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,6 +176,8 @@ typedef struct		s_ray
 	t_vec3			origin;
 	t_vec3			direction;
 	t_shape			*source_shape;
+	double			shadow;
+	int				is_shadow;
 }					t_ray;
 
 typedef struct		s_light
@@ -348,10 +350,11 @@ void			rt_destroy_exit(t_rt *rt, int status);
 void			render_scene(t_rt *rt, t_scene *scene);
 void			destroy_scene(t_scene *scene);
 
-
 t_rgba			raycast(t_ray *ray, t_scene *scene, int depth);
-int				trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit, int stop_at_first);
-double			in_shadow(t_light light, t_raycast_hit hit, t_scene *scene);
+int				trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit);
 t_mesh			*obj_load(const char *filename, t_shape shape);
+
+double			in_shadow(t_light light, t_raycast_hit hit, t_scene *scene);
+double			calc_shadow(t_light light, t_raycast_hit hit, t_scene *scene);
 
 #endif

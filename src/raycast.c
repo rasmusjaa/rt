@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/21 16:36:09 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/21 18:06:15 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@
 #include "libft.h"
 #include <math.h>
 
-int trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit, int stop_at_first)
+int trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit)
 {
 	t_raycast_hit cur_hit;
-	double min_dist;
-	size_t i;
-	int hit_found;
+	double	min_dist;
+	size_t	i;
+	int		hit_found;
 
 	min_dist = INFINITY;
 	cur_hit.distance = INFINITY;
@@ -31,15 +31,15 @@ int trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit, int stop_at_first)
 	{
 		if (intersects_shape(ray, &scene->shapes[i], &cur_hit, scene->help_ray))
 		{
-			if (stop_at_first)
+			if (ray->is_shadow)
 			{
 				if (cur_hit.distance < hit->light_dist)
 				{
-					*hit = cur_hit;
-					return TRUE;
+					ray->shadow += cur_hit.shape->opacity * (1 - ray->shadow);
+					hit_found = TRUE;
 				}
 			}
-			else // to not accept shadow if shadow is behind light
+			else
 			{
 				if (cur_hit.distance < min_dist)
 				{
@@ -55,16 +55,6 @@ int trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit, int stop_at_first)
 	}
 	return (hit_found);
 }
-
-// static void		init_color_data(t_color_data *color, t_scene *scene,
-// 									t_hit *hit)
-// {
-// 	color->ambient = ft_mul_rgba(hit->object->color,
-// 		ft_intensity_rgba(scene->ambient_color));
-// 	color->diffuse = ft_make_rgba(0, 0, 0, 1);
-// 	color->specular = ft_make_rgba(0, 0, 0, 1);
-// 	color->attenuation = 0.0;
-// }
 
 // static double calc_fresnel(double amt, double n1, double n2, t_vec3 normal, t_vec3 idir)
 // {
@@ -95,7 +85,6 @@ double ft_clamp_range(double v, double min, double max)
 	return(v);
 }
 
-// void fresnel(const Vec3f &I, const Vec3f &N, const float &ior, float &kr)
 static double calc_fresnel(t_vec3 normal, t_vec3 idir, double ior)
 {
 	double kr;
@@ -132,6 +121,7 @@ static t_rgba calc_reflect(t_scene *scene, t_raycast_hit hit, t_vec3 idir, t_vec
 
 	reflect_ray.origin = ft_add_vec3(hit.point, ft_mul_vec3(normal, EPSILON));
 	reflect_ray.direction = ft_normalize_vec3(ft_reflect_vec3(idir, normal));
+	reflect_ray.is_shadow = FALSE;
 	color = raycast(&reflect_ray, scene, depth + 1);
 	if (scene->help_ray == 1)
 		print_rgba("reflect color", color);
@@ -165,6 +155,7 @@ static t_rgba calc_refract(t_scene *scene, t_vec3 idir, t_raycast_hit hit, doubl
 	refract_ray.origin = hit.point; //ft_add_vec3(hit.point, ft_mul_vec3(ft_invert_vec3(hit.normal), EPSILON));
 	refract_ray.direction = ft_refract_vec3(idir, hit.normal, ior);
 	refract_ray.direction = ft_normalize_vec3(refract_ray.direction);
+	refract_ray.is_shadow = FALSE;
 	color = raycast(&refract_ray, scene, depth + 1);
 	if (scene->help_ray == 1)
 	{
@@ -236,8 +227,6 @@ static t_rgba		calc_specular(t_scene *scene, t_raycast_hit hit, t_camera cam)
 	}
 	return (total_color);
 }
-
-double	calc_shadow(t_light light, t_raycast_hit hit, t_scene *scene);
 
 static t_rgba	color_from_lights(t_scene *scene, t_raycast_hit *hit)
 {
@@ -321,35 +310,6 @@ typedef struct		s_color_info
 	t_rgba			color; // final color
 }					t_color_info;
 
-// static t_rgba shade(t_scene *scene, t_raycast_hit *hit)
-// {
-// 	t_rgba ambient;
-// 	t_color_info out;
-// 	size_t i;
-
-// 	out.shadow = 0;
-// 	out.diffuse = 0;
-// 	i = 0;
-// 	ambient = scene->scene_config.ambient;
-// 	if (!hit->shape) // refraction ongelma?
-// 		return (ambient);
-// 	while (i < scene->num_lights)
-// 	{
-// 		out.shadow += calc_shadow(scene->lights[i], *hit, scene);
-// 		out.diffuse += calc_diffuse(scene->lights[i], *hit, scene);
-// 		i++;
-// 	}
-// 	out.reflect = calc_reflect(scene, hit->point, hit->ray.direction, hit->normal, hit->depth);
-// 	out.refract = calc_refract(scene, hit->ray.direction, *hit, 1.33, hit->depth);
-// 	out.color = ft_mul_rgba(ft_mul_rgba(hit->shape->color, out.diffuse), 1.0 - out.shadow);
-// 	return (ft_lerp_rgba(out.color, out.reflect, hit->shape->reflection));
-// }
-
-static void		init_hit_info(t_raycast_hit *hit)
-{
-	hit->shape = NULL;
-}
-
 t_rgba raycast(t_ray *ray, t_scene *scene, int depth)
 {
 	t_rgba color;
@@ -358,8 +318,8 @@ t_rgba raycast(t_ray *ray, t_scene *scene, int depth)
 	color = scene->scene_config.ambient;
 	if (depth > scene->scene_config.bounces)
 		return (color);
-	init_hit_info(&hit);
-	if (trace(ray, scene, &hit, FALSE))
+	hit.shape = NULL;
+	if (trace(ray, scene, &hit))
 	{
 		hit.depth = depth;
 		hit.normal = calc_hit_normal(&hit);

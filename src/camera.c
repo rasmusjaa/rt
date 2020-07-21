@@ -32,5 +32,6 @@ t_ray	get_camera_ray(t_scene *scene, t_camera *camera, double screen_x, double s
 	ray.direction = ft_add_vec3(ray.direction, u);
 	ray.direction = ft_normalize_vec3(ray.direction);
 	ray.source_shape = NULL;
+	ray.is_shadow = FALSE;
 	return (ray);
 }
