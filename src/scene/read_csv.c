@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/20 18:41:41 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/21 18:14:02 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,7 @@ void	check_shape_fields(t_scene *scene, char *line, int n)
 	shape->angle = ft_clamp_d(values[15], MIN_ANGLE, MAX_ANGLE);
 	shape->opacity = ft_clamp_d(values[16], 0, 1);
 	shape->reflection = ft_clamp_d(values[17], 0, 1);
-	shape->refraction = ft_clamp_d(values[18], 1, 2);
+	shape->refraction = ft_clamp_d(values[18], 1, 5);
 	shape->shine = ft_clamp_d(values[19], 0, 1);
 	if (shape->type == MODEL)
 	{

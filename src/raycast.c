@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/21 18:06:15 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/21 18:51:59 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit)
 		{
 			if (ray->is_shadow)
 			{
-				if (cur_hit.distance < hit->light_dist)
+				if (cur_hit.distance < hit->light_dist && cur_hit.shape != ray->source_shape)
 				{
 					ray->shadow += cur_hit.shape->opacity * (1 - ray->shadow);
 					hit_found = TRUE;
@@ -152,7 +152,7 @@ static t_rgba calc_refract(t_scene *scene, t_vec3 idir, t_raycast_hit hit, doubl
 	t_ray refract_ray;
 	t_rgba color;
 
-	refract_ray.origin = hit.point; //ft_add_vec3(hit.point, ft_mul_vec3(ft_invert_vec3(hit.normal), EPSILON));
+	refract_ray.origin = hit.point;// ft_add_vec3(hit.point, ft_mul_vec3(ft_invert_vec3(hit.normal), EPSILON));
 	refract_ray.direction = ft_refract_vec3(idir, hit.normal, ior);
 	refract_ray.direction = ft_normalize_vec3(refract_ray.direction);
 	refract_ray.is_shadow = FALSE;
@@ -178,7 +178,7 @@ static double calc_diffuse(t_light light, t_raycast_hit hit, t_scene *scene)
 		light_dir = ft_sub_vec3(light.position, hit.point);
 	distance = ft_len_vec3(light_dir);
 	light_dir = ft_normalize_vec3(light_dir);
-	d = ft_dot_vec3(light_dir, hit.normal);
+	d = ft_clamp_d(ft_dot_vec3(light_dir, hit.normal), 0, 1) + (1.0 - hit.shape->opacity);
 	if (light.type == DIRECTIONAL)
 		intensity = light.intensity / 1000;
 	else
