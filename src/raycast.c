@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/20 18:23:32 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/21 16:36:09 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,10 @@ int trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit, int stop_at_first)
 			if (stop_at_first)
 			{
 				if (cur_hit.distance < hit->light_dist)
+				{
+					*hit = cur_hit;
 					return TRUE;
+				}
 			}
 			else // to not accept shadow if shadow is behind light
 			{
@@ -159,7 +162,7 @@ static t_rgba calc_refract(t_scene *scene, t_vec3 idir, t_raycast_hit hit, doubl
 	t_ray refract_ray;
 	t_rgba color;
 
-	refract_ray.origin = hit.point; // ft_add_vec3(hit.point, ft_mul_vec3(ft_invert_vec3(hit.normal), EPSILON));
+	refract_ray.origin = hit.point; //ft_add_vec3(hit.point, ft_mul_vec3(ft_invert_vec3(hit.normal), EPSILON));
 	refract_ray.direction = ft_refract_vec3(idir, hit.normal, ior);
 	refract_ray.direction = ft_normalize_vec3(refract_ray.direction);
 	color = raycast(&refract_ray, scene, depth + 1);
@@ -267,7 +270,7 @@ static t_rgba	color_from_shape(t_rgba color, t_scene *scene, t_raycast_hit *hit)
 	double		refraction;
 	double		fresnel;
 	int			rec_calced;
-	
+
 	color = ft_mul_rgba_rgba(color, hit->shape->color); // ilman tata mustavalkoseks
 	rec_calced = FALSE;
 	if (scene->scene_config.opacity && hit->shape->opacity < 1 - EPSILON)
@@ -296,7 +299,7 @@ static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
 {
 	t_rgba		ambient;
 	t_rgba		color;
-	
+
 	ambient = scene->scene_config.ambient;
 	if (!hit->shape)
 		return (ambient);

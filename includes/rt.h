@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/20 18:14:28 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/21 14:51:39 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -351,7 +351,7 @@ void			destroy_scene(t_scene *scene);
 
 t_rgba			raycast(t_ray *ray, t_scene *scene, int depth);
 int				trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit, int stop_at_first);
-int				in_shadow(t_light light, t_raycast_hit hit, t_scene *scene);
+double			in_shadow(t_light light, t_raycast_hit hit, t_scene *scene);
 t_mesh			*obj_load(const char *filename, t_shape shape);
 
 #endif
