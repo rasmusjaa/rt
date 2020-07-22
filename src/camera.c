@@ -4,15 +4,12 @@
 
 void	init_camera(t_vec3 origin, t_vec3 target, t_camera *camera, t_scene *scene)
 {
-	if (camera->type == PERSPECTIVE)
-	{
-		camera->forward = ft_normalize_vec3(ft_rotate_vec3(ft_sub_vec3(target, origin), camera->rotation));
-		camera->right = ft_normalize_vec3(ft_cross_vec3(camera->forward, ft_make_vec3(0, 1, -EPSILON)));
-		camera->up = ft_normalize_vec3(ft_cross_vec3(camera->right, camera->forward));
-		camera->horizontal = tan((camera->fov * M_PI / 180.0) / 2);
-		camera->aspect = camera->aspect * (double)scene->scene_config.width / (double)scene->scene_config.height;
-		camera->vertical = camera->horizontal / camera->aspect;
-	}
+	camera->forward = ft_normalize_vec3(ft_rotate_vec3(ft_sub_vec3(target, origin), camera->rotation));
+	camera->right = ft_normalize_vec3(ft_cross_vec3(camera->forward, ft_make_vec3(0, 1, -EPSILON)));
+	camera->up = ft_normalize_vec3(ft_cross_vec3(camera->right, camera->forward));
+	camera->horizontal = tan((camera->fov * M_PI / 180.0) / 2);
+	camera->aspect = camera->aspect * (double)scene->scene_config.width / (double)scene->scene_config.height;
+	camera->vertical = camera->horizontal / camera->aspect;
 }
 
 t_ray get_camera_ray(t_scene *scene, t_camera *camera, double screen_x, double screen_y)
@@ -21,6 +18,7 @@ t_ray get_camera_ray(t_scene *scene, t_camera *camera, double screen_x, double s
 	t_vec3 r;
 	t_vec3 u;
 	t_vec2 target;
+
 	if (camera->type == PERSPECTIVE)
 	{
 		target.x = 2.0 * screen_x / (scene->scene_config.width - 1) - 1.0;
