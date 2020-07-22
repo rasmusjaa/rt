@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mesh.c                                             :+:      :+:    :+:   */
+/*   mesh_create.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/07/03 14:56:36 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/09 13:46:35 by wkorande         ###   ########.fr       */
+/*   Created: 2020/07/22 18:24:04 by wkorande          #+#    #+#             */
+/*   Updated: 2020/07/22 18:33:54 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mesh.h"
 #include "ft_printf.h"
 
-t_mesh *mesh_create(void)
+t_mesh	*mesh_create(void)
 {
 	t_mesh *m;
 
@@ -96,55 +96,5 @@ void	mesh_create_trifaces(t_mesh *m, size_t num_trifaces)
 	{
 		ft_printf("mesh_create: failed to allocate memory for faces!\n");
 		exit(EXIT_FAILURE);
-	}
-}
-
-void	mesh_destroy(t_mesh *m)
-{
-	m->num_vertices = 0;
-	m->num_trifaces = 0;
-	m->num_normals = 0;
-	m->num_uvs = 0;
-	free(m->vertices);
-	free(m->trifaces);
-	free(m->normals);
-	free(m->uvs);
-	free(m);
-}
-
-void	mesh_set_vert(t_mesh *m, size_t i, t_vec3 v)
-{
-	if (!m || !m->vertices || i > m->num_vertices - 1)
-	{
-		ft_printf("mesh_set_vert: failed to set vertex!\n");
-		exit(EXIT_FAILURE);
-	}
-	else
-		m->vertices[i] = v;
-}
-
-void	mesh_calc_bounds(t_mesh *m)
-{
-	size_t i;
-
-	m->bounds.min = ft_make_vec3(MAX_BOUNDS, MAX_BOUNDS, MAX_BOUNDS);
-	m->bounds.max = ft_make_vec3(MIN_BOUNDS, MIN_BOUNDS, MIN_BOUNDS);
-	i = 0;
-	while (i < m->num_vertices)
-	{
-		if (m->vertices[i].x < m->bounds.min.x)
-			m->bounds.min.x = m->vertices[i].x;
-		if (m->vertices[i].y < m->bounds.min.y)
-			m->bounds.min.y = m->vertices[i].y;
-		if (m->vertices[i].z < m->bounds.min.z)
-			m->bounds.min.z = m->vertices[i].z;
-
-		if (m->vertices[i].x > m->bounds.max.x)
-			m->bounds.max.x = m->vertices[i].x;
-		if (m->vertices[i].y > m->bounds.max.y)
-			m->bounds.max.y = m->vertices[i].y;
-		if (m->vertices[i].z > m->bounds.max.z)
-			m->bounds.max.z = m->vertices[i].z;
-		i++;
 	}
 }

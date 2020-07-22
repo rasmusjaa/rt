@@ -6,7 +6,7 @@
 #    By: wkorande <willehard@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/01 15:48:04 by rjaakonm          #+#    #+#              #
-#    Updated: 2020/07/22 18:18:48 by wkorande         ###   ########.fr        #
+#    Updated: 2020/07/22 18:32:34 by wkorande         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,10 @@ SRC = 	core/event_hooks/keyboard.c\
 		debug/debug.c\
 		debug/draw_line.c\
 		main.c\
-		mesh/mesh.c\
+		mesh/mesh_calc_bounds.c\
+		mesh/mesh_create.c\
+		mesh/mesh_destroy.c\
+		mesh/mesh_set_vert.c\
 		octree/bounds.c\
 		octree/octree.c\
 		render/light.c\
