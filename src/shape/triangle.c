@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:38:15 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/14 19:05:57 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/21 19:13:29 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ int intersects_triangle(t_ray *ray, t_triface *triface, t_raycast_hit *hit)
 	double	d;
 
 	d = ft_dot_vec3(triface->normal, ray->direction);
-	if (d > EPSILON)
+	if (ft_abs_d(d) < EPSILON)
 		return (FALSE);
 	hit->t = ft_dot_vec3(ft_sub_vec3(triface->v[0], ray->origin), triface->normal) / d;
-	if (hit->t < 0)
+	if (hit->t < MIN_CLIP || hit->t > MAX_CLIP)
 		return (FALSE);
 	hit->point = ft_add_vec3(ray->origin, ft_mul_vec3(ray->direction, hit->t));
 

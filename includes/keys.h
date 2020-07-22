@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   keys.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/17 20:37:20 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/30 15:50:43 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/22 14:12:26 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@
 #  define KEY_I			34
 #  define KEY_C			8
 #  define KEY_S			1
+#  define KEY_X			7
 
 # else
 
@@ -82,6 +83,7 @@
 #  define KEY_I			105
 #  define KEY_C			99
 #  define KEY_S			115
+#  define KEY_X			7 // change for linux
 
 # endif
 

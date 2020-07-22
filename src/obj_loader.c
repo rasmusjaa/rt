@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   obj_loader.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/03 15:05:05 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/09 17:42:01 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/20 18:16:02 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ static void parse_face(t_mesh *m, size_t i, char *line)
 	triface_calc_bounds(&m->trifaces[i]);
 }
 
-t_mesh	*obj_load(const char *filename)
+t_mesh	*obj_load(const char *filename, t_shape shape)
 {
 	t_mesh *m;
 	int fd;
@@ -141,7 +141,7 @@ t_mesh	*obj_load(const char *filename)
 	{
 		if (ft_strncmp(line, "v ", 2) == 0)
 		{
-			m->vertices[vi] = ft_parse_vec3(line + 1);
+			m->vertices[vi] = ft_rotate_vec3(ft_mul_vec3(ft_add_vec3(ft_parse_vec3(line + 1), shape.position), shape.scale), shape.rotation);
 			vi++;
 		}
 		else if (ft_strncmp(line, "vt", 2) == 0)
@@ -151,7 +151,7 @@ t_mesh	*obj_load(const char *filename)
 		}
 		else if (ft_strncmp(line, "vn", 2) == 0)
 		{
-			m->normals[ni] = ft_parse_vec3(line + 2);
+			m->normals[ni] = ft_rotate_vec3(ft_parse_vec3(line + 2), shape.rotation);
 			ni++;
 		}
 		else if (ft_strncmp(line, "f ", 2) == 0)

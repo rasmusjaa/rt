@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/17 19:38:40 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/22 14:11:17 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,12 +79,13 @@ void	check_scene_fields(t_scene *scene, char *line, int n)
 	scene->scene_config.shadows = round(ft_clamp_d0(values[0], 0, 1));
 	scene->scene_config.shading = round(ft_clamp_d0(values[1], 0, 1));
 	scene->scene_config.specular = round(ft_clamp_d0(values[2], 0, 1));
-	scene->scene_config.refraction = round(ft_clamp_d0(values[3], 0, 1));
-	scene->scene_config.reflection = round(ft_clamp_d0(values[4], 0, 1));
-	scene->scene_config.bounces = round(ft_clamp_d(values[5], MIN_BOUNCES, MAX_BOUNCES));
-	scene->scene_config.width = round(ft_clamp_d(values[6], MIN_WIDTH, MAX_WIDTH));
-	scene->scene_config.height = round(ft_clamp_d(values[7], MIN_HEIGHT, MAX_HEIGHT));
-	scene->scene_config.ambient = ft_clamp_rgba(ft_make_rgba(values[8], values[9], values[10], values[11]));
+	scene->scene_config.opacity = round(ft_clamp_d0(values[3], 0, 1));
+	scene->scene_config.refraction = round(ft_clamp_d0(values[4], 0, 1));
+	scene->scene_config.reflection = round(ft_clamp_d0(values[5], 0, 1));
+	scene->scene_config.bounces = round(ft_clamp_d(values[6], MIN_BOUNCES, MAX_BOUNCES));
+	scene->scene_config.width = round(ft_clamp_d(values[7], MIN_WIDTH, MAX_WIDTH));
+	scene->scene_config.height = round(ft_clamp_d(values[8], MIN_HEIGHT, MAX_HEIGHT));
+	scene->scene_config.ambient = ft_clamp_rgba(ft_make_rgba(values[10], values[10], values[11], values[12]));
 }
 
 void	check_camera_fields(t_scene *scene, char *line, int n)
@@ -94,7 +95,7 @@ void	check_camera_fields(t_scene *scene, char *line, int n)
 	get_fields(line, values, N_CAMERA_VALUES);
 	scene->cameras[n].position = ft_clamp_vec3(ft_make_vec3(values[0], values[1], values[2]), MIN_COORD, MAX_COORD);
 	scene->cameras[n].target = ft_clamp_vec3(ft_make_vec3(values[3], values[4], values[5]), MIN_COORD, MAX_COORD);
-	scene->cameras[n].rotation = ft_clamp_vec3(ft_make_vec3(values[6], values[7], values[8]), 0, 360);
+	scene->cameras[n].rotation = ft_clamp_vec3(ft_make_vec3(-values[6], -values[7], -values[8]), 0, 360);
 	scene->cameras[n].fov = ft_clamp_d(values[9], MIN_FOV, MAX_FOV);
 	scene->cameras[n].type = round(ft_clamp_d0(values[10], 0, CAMERA_TYPES - 1));
 	scene->cameras[n].aspect = ft_clamp_d(values[11], MIN_ASPECT, MAX_ASPECT);
@@ -136,34 +137,39 @@ void	check_shape_fields(t_scene *scene, char *line, int n)
 	double		values[N_SHAPE_VALUES];
 	char		file[256];
 	char		*file_pointer;
+	t_shape		*shape;
 
+	shape = &scene->shapes[n];
 	get_fields(line, values, N_SHAPE_VALUES);
-	scene->shapes[n].type = get_shape_type(line);
-	scene->shapes[n].name = get_shape_name(scene->shapes[n].type); // eiks taa kannata yhdistaa ylempaan ku looppaa saman asian? tai alemmas kun on kaikki tyypit iffil
-	scene->shapes[n].position = ft_clamp_vec3(ft_make_vec3(values[0], values[1], values[2]), MIN_COORD, MAX_COORD);
-	scene->shapes[n].target = ft_clamp_vec3(ft_make_vec3(values[3], values[4], values[5]), MIN_COORD, MAX_COORD);
-	scene->shapes[n].rotation = ft_clamp_vec3(ft_make_vec3(values[6], values[7], values[8]), 0, 360);
-	scene->shapes[n].scale = ft_clamp_vec3(ft_make_vec3(values[9], values[10], values[11]), MIN_SCALE, MAX_SCALE);
-	scene->shapes[n].color = ft_clamp_rgba(ft_make_rgba(values[12], values[13], values[14], values[15]));
-	scene->shapes[n].radius = ft_clamp_d(values[16], MIN_RADIUS, MAX_RADIUS);
-	scene->shapes[n].angle = ft_clamp_d(values[17], MIN_ANGLE, MAX_ANGLE);
-	scene->shapes[n].opacity = ft_clamp_d(values[18], 0, 1);
-	scene->shapes[n].reflection = ft_clamp_d(values[19], 0, 1);
-	scene->shapes[n].refraction = ft_clamp_d(values[20], 0, 1);
-	scene->shapes[n].shine = ft_clamp_d(values[21], 0, 1);
-	if (scene->shapes[n].type == MODEL)
+	shape->type = get_shape_type(line);
+	shape->name = get_shape_name(shape->type); // eiks taa kannata yhdistaa ylempaan ku looppaa saman asian? tai alemmas kun on kaikki tyypit iffil
+	shape->position = ft_clamp_vec3(ft_make_vec3(values[0], values[1], values[2]), MIN_COORD, MAX_COORD);
+	shape->target = ft_clamp_vec3(ft_make_vec3(values[3], values[4], values[5]), MIN_COORD, MAX_COORD);
+	shape->rotation = ft_clamp_vec3(ft_make_vec3(-values[6], -values[7], -values[8]), 0, 360);
+	shape->scale = ft_clamp_d(values[9], MIN_SCALE, MAX_SCALE);
+	shape->color = ft_clamp_rgba(ft_make_rgba(values[10], values[11], values[12], values[13]));
+	shape->radius = shape->scale * ft_clamp_d(values[14], MIN_RADIUS, MAX_RADIUS);
+	shape->angle = ft_clamp_d(values[15], MIN_ANGLE, MAX_ANGLE);
+	shape->opacity = ft_clamp_d(values[16], 0, 1);
+	shape->reflection = ft_clamp_d(values[17], 0, 1);
+	shape->refraction = ft_clamp_d(values[18], 1, 5);
+	shape->shine = ft_clamp_d(values[19], 0, 1);
+	if (shape->type == MODEL)
 	{
 		file_pointer = get_shape_file(line, N_SHAPE_VALUES);
 		if (file_pointer == NULL)
 			exit_message("no model on model line");
 		ft_strcpy(file, file_pointer);
-		scene->shapes[n].mesh = obj_load(file);
-		scene->shapes[n].octree = octree_create_node(scene->shapes[n].mesh->bounds, scene->shapes[n].mesh->num_trifaces, scene->shapes[n].mesh->trifaces);
+		shape->mesh = obj_load(file, *shape);
+		shape->octree = octree_create_node(shape->mesh->bounds, shape->mesh->num_trifaces, shape->mesh->trifaces);
 		ft_printf("loaded model from file %s\n", file);
 	}
-	if (scene->shapes[n].type == PLANE)
-		scene->shapes[n].normal = calc_plane_normal(scene->shapes[n].position, scene->shapes[n].target);
-
+	else
+	{
+		if (shape->position.x == shape->target.x && shape->position.y == shape->target.y && shape->position.z == shape->target.z)
+			shape->target.y = shape->position.y + 1;
+		shape->target = ft_normalize_vec3(ft_rotate_vec3(ft_sub_vec3(shape->target, shape->position), shape->rotation));
+	}
 }
 
 void	check_light_fields(t_scene *scene, char *line, int n)
@@ -237,6 +243,7 @@ int		init_scene(char *file, t_scene *scene)
 	size_t	i;
 
 	scene->help_ray = 0;
+	scene->scene_config.colorize = 0;
 	scene->num_all[0] = 0;
 	scene->num_all[1] = 0;
 	scene->num_all[2] = 0;
