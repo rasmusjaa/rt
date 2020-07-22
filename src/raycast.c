@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/21 19:45:01 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/22 14:38:18 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ static t_rgba calc_reflect(t_scene *scene, t_raycast_hit hit, t_vec3 idir, t_vec
 	reflect_ray.origin = hit.point;// ft_add_vec3(hit.point, ft_mul_vec3(normal, EPSILON));
 	reflect_ray.direction = ft_normalize_vec3(ft_reflect_vec3(idir, normal));
 	reflect_ray.is_shadow = FALSE;
+	reflect_ray.last_color = hit.shape->color;
 	color = raycast(&reflect_ray, scene, depth + 1);
 	if (scene->help_ray == 1)
 		print_rgba("reflect color", color);
@@ -156,6 +157,7 @@ static t_rgba calc_refract(t_scene *scene, t_vec3 idir, t_raycast_hit hit, doubl
 	refract_ray.direction = ft_refract_vec3(idir, hit.normal, ior);
 	refract_ray.direction = ft_normalize_vec3(refract_ray.direction);
 	refract_ray.is_shadow = FALSE;
+	refract_ray.last_color = hit.shape->color;
 	color = raycast(&refract_ray, scene, depth + 1);
 	if (scene->help_ray == 1)
 	{
@@ -314,6 +316,39 @@ typedef struct		s_color_info
 	t_rgba			color; // final color
 }					t_color_info;
 
+t_rgba	colorize(size_t colorize, t_rgba color)
+{
+	double	c;
+	t_rgba	copy;
+
+	copy.r = color.r;
+	copy.g = color.g;
+	copy.b = color.b;
+	copy.a = color.a;
+	if (colorize)
+	{
+		c = ft_intensity_rgba(color);
+		if (colorize == 1)
+			color = ft_make_rgba(c, c, c, color.a);
+		else if (colorize == 2)
+			color = ft_sub_rgba(ft_make_rgba(1, 1, 1, 1), color);
+		else if (colorize == 3)
+		{
+			color.r = (copy.r * .393) + (copy.g *.769) + (copy.b * .189);
+			color.g = (copy.r * .349) + (copy.g *.686) + (copy.b * .168);
+			color.b = (copy.r * .272) + (copy.g *.534) + (copy.b * .131);
+		}
+		else if (colorize == 4)
+			color = ft_make_rgba(c, 0, 0, color.a);
+		else if (colorize == 5)
+			color = ft_make_rgba(0, c, 0, color.a);
+		else if (colorize == 6)
+			color = ft_make_rgba(0, 0, c, color.a);
+
+	}
+	return (ft_clamp_rgba(color));
+}
+
 t_rgba raycast(t_ray *ray, t_scene *scene, int depth)
 {
 	t_rgba color;
@@ -321,7 +356,10 @@ t_rgba raycast(t_ray *ray, t_scene *scene, int depth)
 
 	color = scene->scene_config.ambient;
 	if (depth > scene->scene_config.bounces)
-		return (color);
+	{
+
+		return (colorize(scene->scene_config.colorize, ray->last_color));
+	}
 	hit.shape = NULL;
 	if (trace(ray, scene, &hit))
 	{
@@ -330,5 +368,5 @@ t_rgba raycast(t_ray *ray, t_scene *scene, int depth)
 		hit.ray = *ray;
 		color = shade(scene, &hit);
 	}
-	return (ft_clamp_rgba(color));
+	return (colorize(scene->scene_config.colorize, color));
 }

@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/21 18:04:40 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/22 14:37:05 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@
 # define CAMERA_TYPES 2
 # define LIGHT_TYPES 2
 # define SHAPE_TYPES 6
+# define COLORIZES 7
 
 # define SETTINGS_STR "settings"
 # define CAMERA_STR "camera"
@@ -154,6 +155,7 @@ typedef	struct		s_scene_config
 	int				width;
 	int				height;
 	t_rgba			ambient;
+	size_t			colorize;
 }					t_scene_config;
 
 typedef struct		s_camera
@@ -178,6 +180,8 @@ typedef struct		s_ray
 	t_shape			*source_shape;
 	double			shadow;
 	int				is_shadow;
+	t_rgba			last_color;
+	double			last_opacity;
 }					t_ray;
 
 typedef struct		s_light

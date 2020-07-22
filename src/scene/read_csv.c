@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/21 18:14:02 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/22 14:11:17 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,6 +243,7 @@ int		init_scene(char *file, t_scene *scene)
 	size_t	i;
 
 	scene->help_ray = 0;
+	scene->scene_config.colorize = 0;
 	scene->num_all[0] = 0;
 	scene->num_all[1] = 0;
 	scene->num_all[2] = 0;

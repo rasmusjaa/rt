@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   keyboard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/09 15:06:46 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/10 23:15:16 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/22 14:16:40 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,14 @@ int	key_release_hook(int key, t_rt *rt)
 		if (rt->cur_scene > rt->num_scenes - 1)
 			rt->cur_scene = 0;
 		ft_printf("selected scene: %d (%s)\n", rt->cur_scene, rt->scenes[rt->cur_scene]->scene_config.filepath);
+		render_scene(rt, rt->scenes[rt->cur_scene]);
+	}
+	else if (key == KEY_X)
+	{
+		rt->scenes[rt->cur_scene]->scene_config.colorize++;
+		if (rt->scenes[rt->cur_scene]->scene_config.colorize > COLORIZES - 1)
+			rt->scenes[rt->cur_scene]->scene_config.colorize = 0;
+		ft_printf("colorize: %d\n", rt->scenes[rt->cur_scene]->scene_config.colorize);
 		render_scene(rt, rt->scenes[rt->cur_scene]);
 	}
 	else if (key == KEY_ESC)

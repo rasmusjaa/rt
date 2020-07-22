@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/14 16:48:51 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/21 18:47:02 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/22 14:41:40 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ double	calc_shadow(t_light light, t_raycast_hit hit, t_scene *scene)
 		new_hit.light_dist = ft_len_vec3(shadow_ray.direction);
 		new_hit.shape = NULL;
 		shadow_ray.direction = ft_normalize_vec3(shadow_ray.direction);
+		shadow_ray.shadow = 0;
+		shadow_ray.is_shadow = TRUE;
 		if (trace(&shadow_ray, scene, &new_hit))
 			s += (1.0 / num_samples) * shadow_ray.shadow;;
 		i++;

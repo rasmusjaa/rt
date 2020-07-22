@@ -6,7 +6,7 @@
 #    By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/01 15:48:04 by rjaakonm          #+#    #+#              #
-#    Updated: 2020/07/21 14:29:30 by rjaakonm         ###   ########.fr        #
+#    Updated: 2020/07/22 14:27:05 by rjaakonm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -88,6 +88,6 @@ re: fclean all
 
 run:
 	$(CC) $(CFLAGS) $(INCL) $(SRCS) $(LIB) -o $(NAME)
-	./RT resources/scene_shadow.csv
+	./RT resources/scene6.csv
 
 .PHONY: all libftmake clean fclean re run debug
