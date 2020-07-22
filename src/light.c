@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/14 16:48:51 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/22 14:41:40 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/22 17:08:46 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ double	calc_shadow(t_light light, t_raycast_hit hit, t_scene *scene)
 	t_raycast_hit	new_hit;
 //	t_vec3 lr = ft_normalize_vec3(ft_cross_vec3(ft_sub_vec3(hit.point, light.position), ft_make_vec3(0,1,0)));
 
-	if (light.radius < 1)
+	if (light.radius < EPSILON)
 		return (in_shadow(light, hit, scene));
 	s = 0;
 	num_samples = light.leds;
