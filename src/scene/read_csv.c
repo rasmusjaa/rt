@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_csv.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/23 14:55:10 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/23 18:24:52 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,12 +189,6 @@ void	check_light_fields(t_scene *scene, char *line, int n)
 	scene->lights[n].leds = round(ft_clamp_d(values[9], 2, 100));
 }
 
-void exit_message(char *error)
-{
-	ft_putendl_fd(error, 2);
-	exit(1);
-}
-
 t_unique_obj g_unique_objs[N_UNIQUE_OBJS] =
 {
 	{SETTINGS_STR, check_scene_fields, SETTINGS},
@@ -245,6 +239,7 @@ int		init_scene(char *file, t_scene *scene)
 	int		fd;
 	char	*line;
 	size_t	i;
+	int		res;
 
 	scene->help_ray = 0;
 	scene->scene_config.colorize = 0;
@@ -258,7 +253,8 @@ int		init_scene(char *file, t_scene *scene)
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 		exit_message("Error loading file!");
-	while (ft_get_next_line(fd, &line) > 0)
+	res = 1;
+	while ((res = ft_get_next_line(fd, &line)) && res > 0)
 	{
 		i = 0;
 		while (i < N_UNIQUE_OBJS)
@@ -272,6 +268,8 @@ int		init_scene(char *file, t_scene *scene)
 		free(line);
 	}
 	close(fd);
+	if (res == -1)
+		exit_message("File is not readable");
 	scene->num_cameras = scene->num_all[CAMERA];
 	scene->cur_camera = 0;
 	scene->num_shapes = scene->num_all[SHAPE];
@@ -288,7 +286,9 @@ t_scene		*read_scene(char *file)
 	int		fd;
 	char	*line;
 	t_scene *scene;
+	int		res;
 
+	line = NULL;
 	if (!(scene = (t_scene*)malloc(sizeof(t_scene))))
 		exit_message("Failed to malloc scene!");
 	if (!init_scene(file, scene))
@@ -296,11 +296,14 @@ t_scene		*read_scene(char *file)
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 		exit_message("Invalid file");
-	while (ft_get_next_line(fd, &line) > 0)
+	res = 1;
+	while ((res = ft_get_next_line(fd, &line)) && res > 0)
 	{
 		handle_line(scene, line);
 		free(line);
 	}
 	close(fd);
+	if (res == -1)
+		exit_message("File is not readable");
 	return (scene);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   keyboard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/09 15:06:46 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/23 14:54:09 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/23 15:27:52 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,56 +15,60 @@
 #include "ft_printf.h"
 #include "vector.h"
 
-static void		move_camera2(int key, t_camera *camera, t_vec3 right)
+static void		move_camera2(int key, t_camera *cam, t_vec3 right)
 {
 	if (key == KEY_RIGHT)
 	{
-		camera->position = ft_add_vec3(camera->position, right);
-		camera->target = ft_add_vec3(camera->target, right);
+		cam->position = ft_add_vec3(cam->position, right);
+		cam->target = ft_add_vec3(cam->target, right);
 	}
 	else if (key == KEY_NUM_PLUS)
 	{
-		camera->position = ft_add_vec3(camera->position, camera->up);
-		camera->target = ft_add_vec3(camera->target, camera->up);
+		cam->position = ft_add_vec3(cam->position, cam->up);
+		cam->target = ft_add_vec3(cam->target, cam->up);
 	}
 	else if (key == KEY_NUM_MINUS)
 	{
-		camera->position = ft_add_vec3(camera->position, ft_mul_vec3(camera->up, -1));
-		camera->target = ft_add_vec3(camera->target,
-			ft_mul_vec3(camera->up, -1));
+		cam->position = ft_add_vec3(cam->position, ft_mul_vec3(cam->up, -1));
+		cam->target = ft_add_vec3(cam->target,
+			ft_mul_vec3(cam->up, -1));
 	}
 }
 
-static void		move_camera(int key, t_camera *camera, t_vec3 forward,
+static void		move_camera(int key, t_camera *cam, t_vec3 forward,
 					t_vec3 right)
 {
 	if (key == KEY_UP)
 	{
-		camera->position = ft_add_vec3(camera->position, forward);
-		camera->target = ft_add_vec3(camera->target, forward);
+		cam->position = ft_add_vec3(cam->position, forward);
+		cam->target = ft_add_vec3(cam->target, forward);
 	}
 	else if (key == KEY_DOWN)
 	{
-		camera->position = ft_add_vec3(camera->position,
+		cam->position = ft_add_vec3(cam->position,
 			ft_mul_vec3(forward, -1));
-		camera->target = ft_add_vec3(camera->target, ft_mul_vec3(forward, -1));
+		cam->target = ft_add_vec3(cam->target, ft_mul_vec3(forward, -1));
 	}
 	else if (key == KEY_LEFT)
 	{
-		camera->position = ft_add_vec3(camera->position, ft_mul_vec3(right, -1));
-		camera->target = ft_add_vec3(camera->target, ft_mul_vec3(right, -1));
+		cam->position = ft_add_vec3(cam->position, ft_mul_vec3(right, -1));
+		cam->target = ft_add_vec3(cam->target, ft_mul_vec3(right, -1));
 	}
 	else
-		move_camera2(key, camera, right);
+		move_camera2(key, cam, right);
 }
 
 int				key_press_hook(int key, t_rt *rt)
 {
-	t_scene *scene = rt->scenes[rt->cur_scene];
-	t_camera *camera = &(scene->cameras[scene->cur_camera]);
-	t_vec3 forward = ft_normalize_vec3(ft_sub_vec3(
-		camera->target, camera->position));
-	t_vec3 right = ft_normalize_vec3(ft_cross_vec3(forward, camera->up));
+	t_scene		*scene;
+	t_camera	*camera;
+	t_vec3		forward;
+	t_vec3		right;
+
+	scene = rt->scenes[rt->cur_scene];
+	camera = &(scene->cameras[scene->cur_camera]);
+	forward = ft_normalize_vec3(ft_sub_vec3(camera->target, camera->position));
+	right = ft_normalize_vec3(ft_cross_vec3(forward, camera->up));
 	ft_printf("Scene %d, press key %d\n", rt->cur_scene, key);
 	if (key == KEY_UP || key == KEY_DOWN || key == KEY_LEFT ||
 		key == KEY_RIGHT || key == KEY_NUM_PLUS || key == KEY_NUM_MINUS)
@@ -125,6 +129,6 @@ int				key_release_hook(int key, t_rt *rt)
 		render_scene(rt, rt->scenes[rt->cur_scene]);
 	}
 	else
-		return(key_release_hook2(key, rt));
+		return (key_release_hook2(key, rt));
 	return (0);
 }

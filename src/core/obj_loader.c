@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   obj_loader.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/03 15:05:05 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/23 14:50:19 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/23 18:25:21 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,19 @@
 #include <fcntl.h>
 #include "rt.h"
 #include "shape.h"
+#include "ft_printf.h"
 
-/*
-** reads through the file as we need to know the count before reading for real
-*/
-static void read_mesh_info(t_mesh *m, const char *filename)
+static void	read_mesh_info(t_mesh *m, const char *filename)
 {
 	int fd;
 	char *line;
+	int		res;
+
+	res = 1;
 	fd = open(filename, O_RDONLY);
-	if (fd < 0)
-	{
-		ft_putendl("Error loading model file!");
-		exit(1);
-	}
-	while (ft_get_next_line(fd, &line) > 0)
+	if (fd < 0)// || read(fd, &t, 1000) < 0)
+		exit_message("Error loading model file!");
+	while ((res = ft_get_next_line(fd, &line)) && res > 0)
 	{
 		if (ft_strncmp(line, "v ", 2) == 0)
 			m->num_vertices++;
@@ -44,13 +42,15 @@ static void read_mesh_info(t_mesh *m, const char *filename)
 		free(line);
 	}
 	close(fd);
+	if (res == -1)
+		exit_message("File is not readable");
 	mesh_create_verts(m, m->num_vertices);
 	mesh_create_normals(m, m->num_normals);
 	mesh_create_uvs(m, m->num_uvs);
 	mesh_create_trifaces(m, m->num_trifaces);
 }
 
-void	triface_calc_bounds(t_triface *t)
+void		triface_calc_bounds(t_triface *t)
 {
 	size_t i;
 
@@ -76,7 +76,7 @@ void	triface_calc_bounds(t_triface *t)
 	}
 }
 
-static void parse_face(t_mesh *m, size_t i, char *line)
+static void	parse_face(t_mesh *m, size_t i, char *line)
 {
 	size_t j;
 	char **parts;
@@ -110,59 +110,44 @@ static void parse_face(t_mesh *m, size_t i, char *line)
 	m->trifaces[i].e[0] = ft_sub_vec3(m->trifaces[i].v[1], m->trifaces[i].v[0]);
 	m->trifaces[i].e[1] = ft_sub_vec3(m->trifaces[i].v[2], m->trifaces[i].v[1]);
 	m->trifaces[i].e[2] = ft_sub_vec3(m->trifaces[i].v[0], m->trifaces[i].v[2]);
-	m->trifaces[i].normal = /*ft_normalize_vec3(ft_cross_vec3(m->trifaces[i].e[0], ft_sub_vec3(m->trifaces[i].v[2], m->trifaces[i].v[0]))); */m->trifaces[i].n[0]; // this should not be here
+	m->trifaces[i].normal = m->trifaces[i].n[0];
 	triface_calc_bounds(&m->trifaces[i]);
 }
 
-t_mesh	*obj_load(const char *filename, t_shape shape)
+t_mesh		*obj_load(const char *filename, t_shape shape)
 {
-	t_mesh *m;
-	int fd;
-	char *line;
-	size_t vi;
-	size_t ni;
-	size_t uvi;
-	size_t ti;
+	t_mesh	*m;
+	int		fd;
+	char	*line;
+	size_t	i[4];
+	int		res;
 
 	if (!(m = mesh_create()))
 		return (NULL);
 	read_mesh_info(m, filename);
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
-	{
-		ft_putendl("Error loading file!");
-		exit(1);
-	}
-	line = NULL;
-	vi = 0;
-	ni = 0;
-	uvi = 0;
-	ti = 0;
-	while (ft_get_next_line(fd, &line))
+		exit_message("Error loading file!");
+	i[0] = 0;
+	i[1] = 0;
+	i[2] = 0;
+	i[3] = 0;
+	res = 1;
+	while ((res = ft_get_next_line(fd, &line)) && res > 0)
 	{
 		if (ft_strncmp(line, "v ", 2) == 0)
-		{
-			m->vertices[vi] = ft_rotate_vec3(ft_mul_vec3(ft_add_vec3(ft_parse_vec3(line + 1), shape.position), shape.scale), shape.rotation);
-			vi++;
-		}
+			m->vertices[i[0]++] = ft_rotate_vec3(ft_mul_vec3(ft_add_vec3(ft_parse_vec3(line + 1), shape.position), shape.scale), shape.rotation);
 		else if (ft_strncmp(line, "vt", 2) == 0)
-		{
-			m->uvs[uvi] = ft_parse_vec2(line + 1);
-			uvi++;
-		}
+			m->uvs[i[1]++] = ft_parse_vec2(line + 1);
 		else if (ft_strncmp(line, "vn", 2) == 0)
-		{
-			m->normals[ni] = ft_rotate_vec3(ft_parse_vec3(line + 2), shape.rotation);
-			ni++;
-		}
+			m->normals[i[2]++] = ft_rotate_vec3(ft_parse_vec3(line + 2), shape.rotation);
 		else if (ft_strncmp(line, "f ", 2) == 0)
-		{
-			parse_face(m, ti, line);
-			ti++;
-		}
+			parse_face(m, i[3]++, line);
 		free(line);
 	}
 	close(fd);
+	if (res == -1)
+		exit_message("File is not readable");
 	mesh_calc_bounds(m);
 	return (m);
 }

@@ -3,16 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   rt.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/09 13:50:27 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/23 14:55:10 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/23 15:52:00 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
 #include "thread_pool.h"
 #include "shape.h"
+
+void	exit_message(char *error)
+{
+	ft_putendl_fd(error, 2);
+	exit(1);
+}
 
 t_rt	*rt_init(size_t num_scenes)
 {
@@ -24,12 +30,6 @@ t_rt	*rt_init(size_t num_scenes)
 		exit_message("Failed to malloc rt->scenes!");
 	rt->num_scenes = num_scenes;
 	rt->cur_scene = 0;
-	// rt->done_tiles = NULL;
-	// rt->tp_render = NULL;
-	// rt->render_finished = FALSE;
-	// rt->num_render_jobs = 0;
-	// rt->job_data_block = NULL;
-	// pthread_mutex_init(&rt->job_mutex, NULL);
 	rt->render_task.render_started = FALSE;
 	rt->render_task.render_finished = FALSE;
 	rt->render_task.done_tiles = NULL;

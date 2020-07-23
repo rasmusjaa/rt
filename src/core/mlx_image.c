@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_image.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/10 16:00:45 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/23 14:55:10 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/23 15:25:21 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "rt.h"
 #include "libft.h"
 
-static void panic(char *error)
+static void	panic(char *error)
 {
 	ft_putendl(error);
 	exit(EXIT_FAILURE);
@@ -40,7 +40,7 @@ t_mlx_img	*create_mlx_img(t_mlx *mlx, int width, int height)
 	return (img);
 }
 
-void	destroy_mlx_img(t_mlx *mlx, t_mlx_img *mlx_img)
+void		destroy_mlx_img(t_mlx *mlx, t_mlx_img *mlx_img)
 {
 	if (!mlx || !mlx_img)
 	{
