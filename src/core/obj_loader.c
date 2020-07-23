@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/03 15:05:05 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/23 18:25:21 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/23 21:50:27 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,11 @@ static void	read_mesh_info(t_mesh *m, const char *filename)
 {
 	int fd;
 	char *line;
-	int		res;
 
-	res = 1;
 	fd = open(filename, O_RDONLY);
-	if (fd < 0)// || read(fd, &t, 1000) < 0)
+	if (fd < 0 || read(fd, NULL, 0) == -1)
 		exit_message("Error loading model file!");
-	while ((res = ft_get_next_line(fd, &line)) && res > 0)
+	while (ft_get_next_line(fd, &line) > 0)
 	{
 		if (ft_strncmp(line, "v ", 2) == 0)
 			m->num_vertices++;
@@ -42,8 +40,6 @@ static void	read_mesh_info(t_mesh *m, const char *filename)
 		free(line);
 	}
 	close(fd);
-	if (res == -1)
-		exit_message("File is not readable");
 	mesh_create_verts(m, m->num_vertices);
 	mesh_create_normals(m, m->num_normals);
 	mesh_create_uvs(m, m->num_uvs);
@@ -120,20 +116,18 @@ t_mesh		*obj_load(const char *filename, t_shape shape)
 	int		fd;
 	char	*line;
 	size_t	i[4];
-	int		res;
 
 	if (!(m = mesh_create()))
 		return (NULL);
 	read_mesh_info(m, filename);
 	fd = open(filename, O_RDONLY);
-	if (fd < 0)
-		exit_message("Error loading file!");
+	if (fd < 0 || read(fd, NULL, 0) == -1)
+		exit_message("Error loading model file!");
 	i[0] = 0;
 	i[1] = 0;
 	i[2] = 0;
 	i[3] = 0;
-	res = 1;
-	while ((res = ft_get_next_line(fd, &line)) && res > 0)
+	while (ft_get_next_line(fd, &line) > 0)
 	{
 		if (ft_strncmp(line, "v ", 2) == 0)
 			m->vertices[i[0]++] = ft_rotate_vec3(ft_mul_vec3(ft_add_vec3(ft_parse_vec3(line + 1), shape.position), shape.scale), shape.rotation);
@@ -146,8 +140,6 @@ t_mesh		*obj_load(const char *filename, t_shape shape)
 		free(line);
 	}
 	close(fd);
-	if (res == -1)
-		exit_message("File is not readable");
 	mesh_calc_bounds(m);
 	return (m);
 }
