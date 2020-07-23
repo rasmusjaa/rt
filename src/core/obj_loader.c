@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   obj_loader.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/03 15:05:05 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/20 18:16:02 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/23 14:50:19 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include "rt.h"
+#include "shape.h"
 
 /*
 ** reads through the file as we need to know the count before reading for real

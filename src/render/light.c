@@ -3,15 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   light.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/14 16:48:51 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/22 17:08:46 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/23 14:55:10 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
+#include "ft_printf.h"
 #include <math.h>
+#include <stdlib.h>
 
 double		in_shadow(t_light light, t_raycast_hit hit, t_scene *scene)
 {

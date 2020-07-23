@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   cone.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:27:12 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/20 16:28:42 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/23 14:39:32 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shape.h"
+#include "libft.h"
 
 t_vec3	calc_hit_normal_cone(t_shape *cone, t_raycast_hit *hit)
 {

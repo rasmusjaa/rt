@@ -6,10 +6,11 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/10 16:00:45 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/09 13:32:50 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/23 14:55:10 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "rt.h"
 #include "libft.h"
 

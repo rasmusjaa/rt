@@ -11,6 +11,9 @@
 /* ************************************************************************** */
 
 #include "rt.h"
+#include "ft_printf.h"
+#include "events.h"
+#include "mlx.h"
 #include "thread_pool.h"
 #include "debug.h"
 

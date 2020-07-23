@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   rt.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/09 13:50:27 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/14 12:14:44 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/23 14:55:10 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
 #include "thread_pool.h"
+#include "shape.h"
 
 t_rt	*rt_init(size_t num_scenes)
 {

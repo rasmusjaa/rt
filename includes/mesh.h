@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/03 15:00:35 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/09 15:14:15 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/23 14:55:10 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,7 @@
 # include <stdlib.h>
 # include "vector.h"
 # include "color.h"
-
-# define MAX_BOUNDS 10000
-# define MIN_BOUNDS -10000
-
-typedef struct	s_bounds
-{
-	t_vec3		min;
-	t_vec3		max;
-}				t_bounds;
+# include "bounds.h"
 
 typedef struct	s_triface
 {

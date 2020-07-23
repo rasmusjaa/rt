@@ -3,15 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   read_csv.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/22 14:11:17 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/23 14:55:10 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
+#include "ft_get_next_line.h"
+#include "libft.h"
+#include "ft_printf.h"
 #include "shape.h"
+#include "obj_loader.h"
 #include <math.h>
 #include <time.h>
 #include <sys/stat.h>

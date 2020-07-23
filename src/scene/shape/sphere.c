@@ -6,11 +6,12 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:19:26 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/13 18:46:26 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/23 14:34:49 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shape.h"
+#include "libft.h"
 
 t_vec3	calc_hit_normal_sphere(t_shape *sphere, t_raycast_hit *hit)
 {

@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 10:31:02 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/08 13:23:04 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/23 14:55:10 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,40 +14,36 @@
 #include "thread_pool.h"
 #include <pthread.h>
 
-/*
-** tp_worker does most of the work and handles one thread and gets jobs
-*/
-
 static void	*tp_worker(void *arg)
 {
-	t_tp	*thread_pool;
-	t_tp_job *job;
+	t_tp		*tp;
+	t_tp_job	*job;
 
-	thread_pool = (t_tp*)arg;
+	tp = (t_tp*)arg;
 	job = NULL;
 	while (1)
 	{
-		pthread_mutex_lock(&(thread_pool->job_mutex));
-		while (tp_queue_isempty(thread_pool->job_queue) && !thread_pool->stop)
-			pthread_cond_wait(&(thread_pool->job_cond), &(thread_pool->job_mutex));
-		if (thread_pool->stop)
+		pthread_mutex_lock(&(tp->job_mutex));
+		while (tp_queue_isempty(tp->job_queue) && !tp->stop)
+			pthread_cond_wait(&(tp->job_cond), &(tp->job_mutex));
+		if (tp->stop)
 			break ;
-		job = tp_job_get(thread_pool);
-		pthread_mutex_unlock(&(thread_pool->job_mutex));
+		job = tp_job_get(tp);
+		pthread_mutex_unlock(&(tp->job_mutex));
 		if (job)
 		{
 			job->func(job->arg);
 			tp_job_destroy(job);
 		}
 	}
-	thread_pool->thread_count--;
-	pthread_cond_signal(&(thread_pool->working_cond));
-	pthread_mutex_unlock(&(thread_pool->job_mutex));
+	tp->thread_count--;
+	pthread_cond_signal(&(tp->working_cond));
+	pthread_mutex_unlock(&(tp->job_mutex));
 	pthread_detach(pthread_self());
 	return (NULL);
 }
 
-t_tp	*tp_create(size_t num_threads, size_t max_jobs)
+t_tp		*tp_create(size_t num_threads, size_t max_jobs)
 {
 	t_tp		*thread_pool;
 	pthread_t	thread;
@@ -59,7 +55,6 @@ t_tp	*tp_create(size_t num_threads, size_t max_jobs)
 		return (NULL);
 	thread_pool->stop = 0;
 	thread_pool->thread_count = num_threads;
-	// thread_pool->working_count = 0; joko pois tast ja headerist?
 	pthread_mutex_init(&(thread_pool->job_mutex), NULL);
 	pthread_cond_init(&(thread_pool->job_cond), NULL);
 	pthread_cond_init(&(thread_pool->working_cond), NULL);
@@ -68,19 +63,17 @@ t_tp	*tp_create(size_t num_threads, size_t max_jobs)
 	while (i < num_threads)
 	{
 		pthread_create(&thread, NULL, tp_worker, thread_pool);
-		// pthread_detach(thread);
 		i++;
 	}
 	return (thread_pool);
 }
 
-void	tp_destroy(t_tp *thread_pool)
+void		tp_destroy(t_tp *thread_pool)
 {
 	t_tp_job *job;
 
 	if (!thread_pool)
 		return ;
-
 	pthread_mutex_lock(&(thread_pool->job_mutex));
 	while (!tp_queue_isempty(thread_pool->job_queue))
 	{
@@ -90,34 +83,33 @@ void	tp_destroy(t_tp *thread_pool)
 	thread_pool->stop = 1;
 	pthread_cond_broadcast(&(thread_pool->job_cond));
 	pthread_mutex_unlock(&(thread_pool->job_mutex));
-
 	tp_wait(thread_pool);
-
 	pthread_mutex_destroy(&(thread_pool->job_mutex));
 	pthread_cond_destroy(&(thread_pool->job_cond));
 	pthread_cond_destroy(&(thread_pool->working_cond));
-
 	tp_queue_destroy(thread_pool->job_queue);
 	free(thread_pool);
 	thread_pool = NULL;
 }
 
-void	tp_wait(t_tp *thread_pool)
+void		tp_wait(t_tp *thread_pool)
 {
 	if (!thread_pool)
 		return ;
 	pthread_mutex_lock(&(thread_pool->job_mutex));
 	while (1)
 	{
-		if (!thread_pool->stop || (thread_pool->stop && thread_pool->thread_count != 0)) // stop on kai aina 1 nyt kun tata kutsutaan vaan destroyssa? onks thread count ok tas viel
-			pthread_cond_wait(&(thread_pool->working_cond), &(thread_pool->job_mutex));
+		if (!thread_pool->stop ||
+				(thread_pool->stop && thread_pool->thread_count != 0))
+			pthread_cond_wait(&(thread_pool->working_cond),
+				&(thread_pool->job_mutex));
 		else
 			break ;
 	}
 	pthread_mutex_unlock(&(thread_pool->job_mutex));
 }
 
-int		tp_add_job(t_tp *thread_pool, tp_thread_func func, void *arg)
+int			tp_add_job(t_tp *thread_pool, t_tp_thread_func func, void *arg)
 {
 	t_tp_job *job;
 

@@ -3,16 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   shape.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/15 12:46:47 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/14 13:31:02 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/23 14:36:16 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
+#include "raycast.h"
 #include "shape.h"
 #include "mesh.h"
+#include "ft_printf.h"
 
 t_vec3	point_on_ray(t_ray *r, double t)
 {
@@ -43,44 +45,7 @@ int			solve_quadratic(t_quadratic q, double *t1, double *t2)
 	return (0);
 }
 
-/*
-** mesh bounds are calculated on load
-** axis aligned
-*/
-int	intersects_bounds(t_ray *ray, t_bounds *b, int debug)
-{
-	// might have to add that if camera is in bounding box return true
-	double txmin = (b->min.x - ray->origin.x) / ray->direction.x;
-	double txmax = (b->max.x - ray->origin.x) / ray->direction.x;
 
-	// need to swap if we are looking from behind, as is only works if camera pos in front of bounds
-	if (txmin > txmax)
-		ft_swap_d(&txmin, &txmax);
-
-	double tymin = (b->min.y - ray->origin.y) / ray->direction.y;
-	double tymax = (b->max.y - ray->origin.y) / ray->direction.y;
-
-	if (tymin > tymax)
-		ft_swap_d(&tymin, &tymax);
-
-	if ((txmin > tymax) || (tymin > txmax))
-		return (FALSE);
-
-	double tzmin = (b->min.z - ray->origin.z) / ray->direction.z;
-	double tzmax = (b->max.z - ray->origin.z) / ray->direction.z;
-
-	if (tzmin > tzmax)
-		ft_swap_d(&tzmin, &tzmax);
-
-	if ((txmin > tzmax) || (tzmin > txmax))
-		return (FALSE);
-
-	if ((tymin > tzmax)  || (tzmin > tymax))
-		return (FALSE);
-	return (TRUE);
-	if (debug)
-		return (TRUE);
-}
 
 int	intersects_shape(t_ray *ray, t_shape *shape, t_raycast_hit *hit, int debug)
 {

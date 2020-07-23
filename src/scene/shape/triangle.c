@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   triangle.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:38:15 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/21 19:13:29 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/23 14:31:14 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shape.h"
+#include "libft.h"
 
 int intersects_triangle(t_ray *ray, t_triface *triface, t_raycast_hit *hit)
 {

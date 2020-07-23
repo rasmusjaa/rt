@@ -6,12 +6,13 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/12 16:47:49 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/08 11:49:40 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/23 14:55:10 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rt.h"
 #include "thread_pool.h"
+#include "rt.h"
+#include "ft_printf.h"
 
 t_tp_queue	*tp_queue_create(size_t size)
 {
@@ -82,5 +83,5 @@ int			tp_queue_isempty(t_tp_queue *q)
 {
 	if (!q)
 		return (TRUE);
-	return (q->rear == -1); // tan funktion vois mahollisesti karsii kun on vaan yhes if ehdossa samal taval kun full
+	return (q->rear == -1);
 }

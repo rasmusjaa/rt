@@ -1,17 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   keys.h                                             :+:      :+:    :+:   */
+/*   events.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/17 20:37:20 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/22 14:12:26 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/23 14:45:26 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef KEYS_H
-# define KEYS_H
+#ifndef EVENTS_H
+# define EVENTS_H
+
+# include "rt.h"
 
 # ifndef __linux__
 
@@ -86,5 +88,15 @@
 #  define KEY_X			7 // change for linux
 
 # endif
+
+int				mouse_press_hook(int button, int x, int y, t_rt *rt);
+int				mouse_release_hook(int button, int x, int y, t_rt *rt);
+int				mouse_move_hook(int x, int y, t_rt *rt);
+
+int				key_press_hook(int key, t_rt *rt);
+int				key_release_hook(int key, t_rt *rt);
+
+int				close_hook(t_rt *rt);
+int				expose_hook(t_rt *rt);
 
 #endif

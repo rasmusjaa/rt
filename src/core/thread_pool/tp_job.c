@@ -6,13 +6,13 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/05 12:41:59 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/12 17:15:16 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/23 14:55:10 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "thread_pool.h"
 
-t_tp_job	*tp_job_create(tp_thread_func func, void *arg)
+t_tp_job	*tp_job_create(t_tp_thread_func func, void *arg)
 {
 	t_tp_job *job;
 

@@ -6,7 +6,7 @@
 #    By: wkorande <willehard@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/01 15:48:04 by rjaakonm          #+#    #+#              #
-#    Updated: 2020/07/22 18:32:34 by wkorande         ###   ########.fr        #
+#    Updated: 2020/07/23 14:54:36 by wkorande         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,12 +31,12 @@ SRC = 	core/event_hooks/keyboard.c\
 		mesh/mesh_create.c\
 		mesh/mesh_destroy.c\
 		mesh/mesh_set_vert.c\
-		octree/bounds.c\
 		octree/octree.c\
 		render/light.c\
 		render/raycast.c\
 		scene/camera.c\
 		scene/read_csv.c\
+		scene/shape/bounds.c\
 		scene/shape/cone.c\
 		scene/shape/cylinder.c\
 		scene/shape/model.c\
@@ -92,6 +92,6 @@ re: fclean all
 
 run:
 	$(CC) $(CFLAGS) $(INCL) $(SRCS) $(LIB) -o $(NAME)
-	./RT resources/scene6.csv
+	./RT resources/scenes/scene6.csv
 
 .PHONY: all libftmake clean fclean re run debug

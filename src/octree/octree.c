@@ -3,17 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   octree.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/07 18:41:21 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/14 18:55:13 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/23 14:55:10 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "octree.h"
-#include "ft_printf.h"
 #include <stdlib.h>
-#include "libft.h"
+#include "rt.h"
+#include "octree.h"
+#include "vector.h"
+#include "ft_printf.h"
+// #include "libft.h"
 
 void	octree_calc_child_bounds(t_octree *node)
 {
@@ -121,7 +123,7 @@ void	octree_destroy(t_octree *o)
 	if (!o->is_last)
 	{
 		while (i < NUM_CHILDREN)
-			octree_destroy(o->children[i++]);			
+			octree_destroy(o->children[i++]);
 	}
 	free(o->contains_trifaces);
 	o->contains_trifaces = NULL;

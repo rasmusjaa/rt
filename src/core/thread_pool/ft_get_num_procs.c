@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_get_num_procs.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <wkorande@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/06/05 12:44:21 by wkorande          #+#    #+#             */
-/*   Updated: 2020/06/05 12:45:07 by wkorande         ###   ########.fr       */
+/*   Created: 2020/07/23 14:11:35 by rjaakonm          #+#    #+#             */
+/*   Updated: 2020/07/23 14:11:37 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
