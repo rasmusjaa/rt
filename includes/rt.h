@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/24 18:12:25 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/24 19:02:19 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 # include "mlx.h"
 # include "raycast.h"
 # include "materials.h"
-//# include "shape.h"
 
 # ifndef __linux__
 
