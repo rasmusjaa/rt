@@ -6,17 +6,23 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:22:43 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/23 13:52:43 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/24 17:46:57 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SHAPE_H
 # define SHAPE_H
 
+# include "rt.h"
 # include "raycast.h"
 # include "octree.h"
 # include "color.h"
 # include "vector.h"
+
+typedef struct s_ray t_ray;
+typedef struct s_raycast_hit t_raycast_hit;
+typedef struct s_mesh t_mesh;
+typedef struct s_triface t_triface;
 
 typedef struct	s_quadratic
 {
@@ -56,6 +62,7 @@ typedef struct	s_shape
 	double			reflection;
 	double			refraction;
 	double			shine;
+	struct s_material *material;
 	t_mesh			*mesh;
 	t_octree		*octree;
 }				t_shape;

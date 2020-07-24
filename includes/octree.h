@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/07 18:38:03 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/23 13:52:49 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/24 17:51:59 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,9 @@
 # define TOP_RIGHT_FRONT		5
 # define TOP_RIGHT_BACK			6
 # define TOP_LEFT_BACK			7
+
+typedef struct	s_bounds t_bounds;
+typedef struct	s_triface t_triface;
 
 typedef struct	s_octree_content
 {

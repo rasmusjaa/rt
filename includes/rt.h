@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/24 17:04:47 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/24 18:12:25 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,13 @@
 # include <pthread.h>
 # include <math.h>
 # include <sys/time.h>
+# include <stdlib.h>
 # include "color.h"
 # include "vector.h"
 # include "mlx.h"
 # include "raycast.h"
+# include "materials.h"
+//# include "shape.h"
 
 # ifndef __linux__
 
@@ -106,20 +109,20 @@ typedef	struct	s_scene_config
 
 typedef struct	s_scene
 {
-	t_scene_config	scene_config;
-	size_t			num_all[N_OBJ_TYPES];
-	struct s_camera	*cameras;
-	size_t			num_cameras;
-	size_t			cur_camera;
-	struct s_light	*lights;
-	size_t			num_lights;
-	struct s_shape	*shapes;
-	size_t			num_shapes;
-	int				help_ray;
-	t_material		*materials;
-	size_t			num_materials;
-	t_texture		*textures;
-	size_t			num_textures;
+	t_scene_config		scene_config;
+	size_t				num_all[N_OBJ_TYPES];
+	struct s_camera		*cameras;
+	size_t				num_cameras;
+	size_t				cur_camera;
+	struct s_light		*lights;
+	size_t				num_lights;
+	struct s_shape		*shapes;
+	size_t				num_shapes;
+	int					help_ray;
+	struct s_material	*materials;
+	size_t				num_materials;
+	struct s_texture	*textures;
+	size_t				num_textures;
 }					t_scene;
 
 typedef struct	s_mlx_img

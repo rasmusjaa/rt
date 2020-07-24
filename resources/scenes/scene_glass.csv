@@ -4,9 +4,9 @@ CAMERAS;POS_X;POS_Y;POS_Z;TAR_X;TAR_Y;TAR_Z;ROT_X;ROT_Y;ROT_Z;FOV;TYPE;ASPECT;;;
 camera;0;1;1;0;0;-1;;;;60;0;1;;;;;;;;"";
 camera;0;2;1;0;-2;-1;;;;60;0;1;;;;;;;;"";
 SHAPES;POS_X;POS_Y;POS_Z;TAR_X;TAR_Y;TAR_Z;ROT_X;ROT_Y;ROT_Z;SCA_X;COL_R;COL_G;COL_B;COL_A;RADIUS;ANGLE;OPACITY;REFLECTION;REFRACTION;MATTE/SHINE;
-model;0;0;0;0;1;0;0;0;0;1;0;1;1;1;1;45;0.2;0;1.5;0;resources/water.obj
-model;0;0;0;0;1;0;0;0;0;1;0.5;0.5;1;1;1;45;0.2;0;1.33;0;resources/glass.obj
-model;0;0;0;0;1;0;0;0;0;1;0.1;0.1;0.1;1;1;45;1;0;0;0;resources/pen.obj
+model;0;0;0;0;1;0;0;0;0;1;0;1;1;1;1;45;0.2;0;1.5;0;resources/obj/water.obj
+model;0;0;0;0;1;0;0;0;0;1;0.5;0.5;1;1;1;45;0.2;0;1.33;0;resources/obj/glass.obj
+model;0;0;0;0;1;0;0;0;0;1;0.1;0.1;0.1;1;1;45;1;0;0;0;resources/obj/pen.obj
 plane;0;-1;0;0;1;0;0;0;0;1;0.4;0.8;0.5;1;2;45;1;0;;"";
 LIGHTS;POS_X;POS_Y;POS_Z;COL_R;COL_G;COL_B;TYPE;INTENSITY;RADIUS (0-5 for soft shadows);LEDS;;;;;;;;;;"";
 point;3;5;5;1;1;1;1;1500;0;10;;;;;;;;;;"";

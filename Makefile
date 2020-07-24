@@ -6,7 +6,7 @@
 #    By: wkorande <willehard@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/01 15:48:04 by rjaakonm          #+#    #+#              #
-#    Updated: 2020/07/24 17:10:02 by sluhtala         ###   ########.fr        #
+#    Updated: 2020/07/24 18:13:07 by sluhtala         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,7 +36,7 @@ SRC = 	core/event_hooks/keyboard.c\
 		texture/texture.c\
 		texture/bricks.c\
 		texture/checker.c\
-		texture/texture_mapping.c	
+		texture/texture_mapping.c\
 		render/light.c\
 		render/raycast.c\
 		scene/camera.c\

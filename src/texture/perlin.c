@@ -1,15 +1,18 @@
-#include "mlx.h"
-#include <stdlib.h>
-#include <math.h>
-#define W  600
-#define H  400
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   perlin.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sluhtala <sluhtala@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/07/24 17:31:31 by sluhtala          #+#    #+#             */
+/*   Updated: 2020/07/24 17:36:02 by sluhtala         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "rt.h"
 #define GRAD_MAX 100
 
-int escape()
-{
-	exit(0);
-	return (0);
-}
 
 double ft_lerp(double v0, double v1, double t)
 {
