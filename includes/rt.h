@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/23 14:34:15 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/24 22:13:49 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@
 # define MAX_ASPECT 2.0
 # define MIN_BOUNCES 1
 # define MAX_BOUNCES 100
-# define CAMERA_TYPES 2
+# define CAMERA_TYPES 3
 # define LIGHT_TYPES 2
 # define SHAPE_TYPES 6
 # define COLORIZES 7
