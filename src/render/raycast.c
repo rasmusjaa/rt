@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/23 14:55:10 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/24 18:50:27 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -357,6 +357,7 @@ t_rgba raycast(t_ray *ray, t_scene *scene, int depth)
 	t_raycast_hit hit;
 
 	color = scene->scene_config.ambient;
+	ft_printf("SHAPETYPE %d\n", scene->shapes[0].type);
 	if (depth > scene->scene_config.bounces)
 	{
 
