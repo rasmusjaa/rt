@@ -6,95 +6,74 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/07 18:41:21 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/14 18:55:13 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/23 22:58:51 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "octree.h"
-#include "ft_printf.h"
 #include <stdlib.h>
-#include "libft.h"
+#include "rt.h"
+#include "octree.h"
+#include "vector.h"
+#include "ft_printf.h"
 
 void	octree_calc_child_bounds(t_octree *node)
 {
-	t_vec3 dimensions;
-	t_vec3 half;
-	t_vec3 center;
+	t_vec3		dimensions;
+	t_vec3		half;
+	t_vec3		center;
+	t_bounds	nb;
+	t_bounds	*b;
 
 	if (!node)
-	{
-		ft_printf("octree_calc_bounds: node is null!\n");
-		return ;
-	}
-	dimensions = ft_sub_vec3(node->bounds.max, node->bounds.min);
-
-	// if (dimensions == Vector3.Zero)
-	// {
-	// 	FindEnclosingCube();
-	// 	dimensions = m_region.Max - m_region.Min;
-	// }
-
-	//Check to see if the dimensions of the box are greater than the minimum dimensions
-	// if (dimensions.X <= MIN_SIZE && dimensions.Y <= MIN_SIZE && dimensions.Z <= MIN_SIZE)
-	// {
-	// 	return;
-	// }
-
+		exit_message("Octree_calc_bounds: node is null!\n");
+	nb = node->bounds;
+	b = node->child_bounds;
+	dimensions = ft_sub_vec3(nb.max, nb.min);
 	half = ft_mul_vec3(dimensions, 0.5);
-	center = ft_add_vec3(node->bounds.min, half);
-
-	//Create subdivided regions for each octant
-
-	node->child_bounds[BOTTOM_LEFT_FRONT].min = node->bounds.min;
-	node->child_bounds[BOTTOM_LEFT_FRONT].max = center;
-	node->child_bounds[BOTTOM_RIGHT_FRONT].min = ft_make_vec3(center.x, node->bounds.min.y, node->bounds.min.z);
-	node->child_bounds[BOTTOM_RIGHT_FRONT].max = ft_make_vec3(node->bounds.max.x, center.y, center.z);
-	node->child_bounds[BOTTOM_RIGHT_BACK].min = ft_make_vec3(center.x, node->bounds.min.y, center.z);
-	node->child_bounds[BOTTOM_RIGHT_BACK].max = ft_make_vec3(node->bounds.max.x, center.y, node->bounds.max.z);
-	node->child_bounds[BOTTOM_LEFT_BACK].min = ft_make_vec3(node->bounds.min.x, node->bounds.min.y, center.z);
-	node->child_bounds[BOTTOM_LEFT_BACK].max = ft_make_vec3(center.x, center.y, node->bounds.max.z);
-	node->child_bounds[TOP_LEFT_FRONT].min = ft_make_vec3(node->bounds.min.x, center.y, node->bounds.min.z);
-	node->child_bounds[TOP_LEFT_FRONT].max = ft_make_vec3(center.x, node->bounds.max.y, center.z);
-	node->child_bounds[TOP_RIGHT_FRONT].min = ft_make_vec3(center.x, center.y, node->bounds.min.z);
-	node->child_bounds[TOP_RIGHT_FRONT].max = ft_make_vec3(node->bounds.max.x, node->bounds.max.y, center.z);
-	node->child_bounds[TOP_RIGHT_BACK].min = center;
-	node->child_bounds[TOP_RIGHT_BACK].max = node->bounds.max;
-	node->child_bounds[TOP_LEFT_BACK].min = ft_make_vec3(node->bounds.min.x, center.y, center.z);
-	node->child_bounds[TOP_LEFT_BACK].max = ft_make_vec3(center.x, node->bounds.max.y, node->bounds.max.z);
+	center = ft_add_vec3(nb.min, half);
+	b[BOTTOM_LEFT_FRONT].min = nb.min;
+	b[BOTTOM_LEFT_FRONT].max = center;
+	b[BOTTOM_RIGHT_FRONT].min = ft_make_vec3(center.x, nb.min.y, nb.min.z);
+	b[BOTTOM_RIGHT_FRONT].max = ft_make_vec3(nb.max.x, center.y, center.z);
+	b[BOTTOM_RIGHT_BACK].min = ft_make_vec3(center.x, nb.min.y, center.z);
+	b[BOTTOM_RIGHT_BACK].max = ft_make_vec3(nb.max.x, center.y, nb.max.z);
+	b[BOTTOM_LEFT_BACK].min = ft_make_vec3(nb.min.x, nb.min.y, center.z);
+	b[BOTTOM_LEFT_BACK].max = ft_make_vec3(center.x, center.y, nb.max.z);
+	b[TOP_LEFT_FRONT].min = ft_make_vec3(nb.min.x, center.y, nb.min.z);
+	b[TOP_LEFT_FRONT].max = ft_make_vec3(center.x, nb.max.y, center.z);
+	b[TOP_RIGHT_FRONT].min = ft_make_vec3(center.x, center.y, nb.min.z);
+	b[TOP_RIGHT_FRONT].max = ft_make_vec3(nb.max.x, nb.max.y, center.z);
+	b[TOP_RIGHT_BACK].min = center;
+	b[TOP_RIGHT_BACK].max = nb.max;
+	b[TOP_LEFT_BACK].min = ft_make_vec3(nb.min.x, center.y, center.z);
+	b[TOP_LEFT_BACK].max = ft_make_vec3(center.x, nb.max.y, nb.max.z);
 
 }
 
-t_octree	*octree_create_node(t_bounds bounds, size_t num_tris, t_triface *trifaces)
+t_octree	*octree_create_node(t_bounds bounds, size_t num_tris,
+	t_triface *trifaces)
 {
 	t_octree	*node;
 	size_t		i;
 	size_t		j;
 
-	// ft_printf("create_node\n");
 	node = NULL;
 	if (!(node = (t_octree*)malloc(sizeof(t_octree))) ||
-		!(node->contains_trifaces = (t_triface*)malloc(sizeof(t_triface) * num_tris)))
-	{
-		ft_printf("octree_create_node: failed to allocate memory for octree!\n");
-		return (NULL);
-	}
+			!(node->contains_trifaces = (t_triface*)malloc(sizeof(t_triface)
+			* num_tris)))
+		exit_message("Octree_create_node: failed to malloc!\n");
 	node->is_last = FALSE;
 	node->bounds = bounds;
 	node->num_tris = num_tris;
-
 	i = 0;
 	j = 0;
 	while (i < num_tris)
 	{
 		if (inside_bounds(trifaces[i].bounds, bounds))
-		{
-			node->contains_trifaces[j] = trifaces[i];
-			j++;
-		}
+			node->contains_trifaces[j++] = trifaces[i];
 		i++;
 	}
 	node->num_tris = j;
-	// ft_printf("i %d j %d\n", i, j);
 	i = 0;
 	double bound_len = ft_len_vec3(ft_sub_vec3(bounds.max, bounds.min));
 	if (j > 10 && bound_len > 0.1) // bound_len scenen mukaan?
@@ -121,7 +100,7 @@ void	octree_destroy(t_octree *o)
 	if (!o->is_last)
 	{
 		while (i < NUM_CHILDREN)
-			octree_destroy(o->children[i++]);			
+			octree_destroy(o->children[i++]);
 	}
 	free(o->contains_trifaces);
 	o->contains_trifaces = NULL;

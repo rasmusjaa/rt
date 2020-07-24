@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/08 11:39:28 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/11 00:37:15 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/23 14:55:10 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 #include "rt.h"
 #include "ft_printf.h"
 #include "vector.h"
-
+#include "octree.h"
+#include "shape.h"
 
 void	print_vec3(char *s, t_vec3 v)
 {
@@ -32,11 +33,12 @@ void	print_scene_info(t_scene *scene)
 
 	// settings
 	ft_printf("scene settings\n");
-	ft_printf("\tfile: %s shadows: %d shading: %d specular: %d refraction: %d reflection: %d bounces %d\n",
+	ft_printf("\tfile: %s shadows: %d shading: %d specular: %d opacity: %d refraction: %d reflection: %d bounces %d\n",
 		scene->scene_config.filepath,
 		scene->scene_config.shadows,
 		scene->scene_config.shading,
 		scene->scene_config.specular,
+		scene->scene_config.opacity,
 		scene->scene_config.refraction,
 		scene->scene_config.reflection,
 		scene->scene_config.bounces);
@@ -74,7 +76,7 @@ void	print_scene_info(t_scene *scene)
 		print_vec3(" pos:", scene->shapes[i].position);
 		print_vec3(" target:", scene->shapes[i].target);
 		print_vec3(" rot:", scene->shapes[i].rotation);
-		print_vec3(" scale:", scene->shapes[i].scale);
+		ft_printf(" scale: %f\n", scene->shapes[i].scale);
 		print_rgba(" color:", scene->shapes[i].color);
 		ft_printf(" radius %.2f angle: %.2f opacity: %.2f\n", scene->shapes[i].radius, scene->shapes[i].angle, scene->shapes[i].opacity);
 		i++;
