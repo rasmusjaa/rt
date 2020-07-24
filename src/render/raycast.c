@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/23 14:55:10 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/24 22:49:52 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -351,16 +351,38 @@ t_rgba	colorize(size_t colorize, t_rgba color)
 	return (ft_clamp_rgba(color));
 }
 
+t_rgba sample_cubemap(t_vec3 p)
+{
+	t_vec3 c;
+
+	if (ft_abs_d(p.x) > ft_abs_d(p.y))
+	{
+		if (ft_abs_d(p.x) > ft_abs_d(p.z))
+			c = ft_make_vec3(p.z, p.y, p.x);
+		else 
+			c = ft_make_vec3(p.x, p.y, p.z);
+	}
+	else
+	{
+		if (ft_abs_d(p.y) > ft_abs_d(p.z))
+			c = ft_make_vec3(p.x, p.z, p.y);
+		else
+			c = ft_make_vec3(p.x, p.y, p.z);
+	}
+	c.x = (c.x / ft_abs_d(c.z)) + 1.0;
+	c.y = (c.y / ft_abs_d(c.z)) + 1.0;
+	return (ft_make_rgba(c.x, c.y, 1.0, 1.0));
+}
+
 t_rgba raycast(t_ray *ray, t_scene *scene, int depth)
 {
 	t_rgba color;
 	t_raycast_hit hit;
 
-	color = scene->scene_config.ambient;
+	color = sample_cubemap(ray->direction);// scene->scene_config.ambient;
 	if (depth > scene->scene_config.bounces)
 	{
-
-		return (colorize(scene->scene_config.colorize, ray->last_color));
+		return (sample_cubemap(ray->direction)); //(colorize(scene->scene_config.colorize, ray->last_color));
 	}
 	hit.shape = NULL;
 	if (trace(ray, scene, &hit))
