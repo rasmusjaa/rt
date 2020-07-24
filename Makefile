@@ -6,7 +6,7 @@
 #    By: wkorande <willehard@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/01 15:48:04 by rjaakonm          #+#    #+#              #
-#    Updated: 2020/07/24 16:59:21 by sluhtala         ###   ########.fr        #
+#    Updated: 2020/07/24 17:10:02 by sluhtala         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,14 +32,11 @@ SRC = 	core/event_hooks/keyboard.c\
 		mesh/mesh_destroy.c\
 		mesh/mesh_set_vert.c\
 		octree/octree.c\
-<<<<<<< HEAD
-		octree/bounds.c\
 		texture/material.c\
 		texture/texture.c\
 		texture/bricks.c\
 		texture/checker.c\
 		texture/texture_mapping.c	
-=======
 		render/light.c\
 		render/raycast.c\
 		scene/camera.c\
@@ -53,7 +50,6 @@ SRC = 	core/event_hooks/keyboard.c\
 		scene/shape/sphere.c\
 		scene/shape/triangle.c\
 		texture/perlin.c
->>>>>>> master
 
 SRCS = $(addprefix $(SRCDIR)/, $(SRC))
 
