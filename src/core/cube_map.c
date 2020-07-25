@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/25 12:53:20 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/25 14:59:41 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/25 15:17:42 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,18 @@ t_rgba sample_cube_map(t_mlx_img *cube_map, t_vec3 v)
 	int dir = determine_face(v);
 	t_vec3 c;
 
-	if (dir == FRONT || dir == BACK)
+	if (dir == FRONT)
 		c = ft_make_vec3(v.x, v.y, v.z);
-	else if (dir == LEFT || dir == RIGHT)
+	else if (dir == BACK)
+		c = ft_make_vec3(-v.x, v.y, v.z);
+	else if (dir == LEFT)
+		c = ft_make_vec3(-v.z, v.y, v.x);
+	else if (dir == RIGHT)
 		c = ft_make_vec3(v.z, v.y, v.x);
-	else if (dir == TOP || dir == BOTTOM)
+	else if (dir == TOP)
 		c = ft_make_vec3(v.x, v.z, v.y);
+	else if (dir == BOTTOM)
+		c = ft_make_vec3(v.x, -v.z, v.y);
 	
 	c.x = (c.x / ft_abs_d(c.z)) + 1.0;
 	c.y = -(c.y / ft_abs_d(c.z)) + 1.0;
