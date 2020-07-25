@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/25 12:53:20 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/25 15:17:42 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/25 15:38:32 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ static t_cube_map_face determine_face(t_vec3 v)
 				return (BOTTOM);
 			else
 				return (TOP);
-			// c = ft_make_vec3(v.x, v.z, v.y); // top bottom
 		}
 		else
 		{
@@ -52,6 +51,12 @@ static t_cube_map_face determine_face(t_vec3 v)
 	}
 	return (FRONT);
 }
+
+/*
+** Samples a cube map using a directional vector
+** This could be a camera ray direction or reflection vector.
+** Assumes vector is normalized.
+*/
 
 t_rgba sample_cube_map(t_mlx_img *cube_map, t_vec3 v)
 {
@@ -103,7 +108,7 @@ t_rgba sample_cube_map(t_mlx_img *cube_map, t_vec3 v)
 		c.x += 2.0;
 	}
 
-	int color = get_pixel_mlx_img(cube_map, c.x/8.0 * cube_map->width, c.y/6.0 * cube_map->height);
+	int color = get_pixel_mlx_img(cube_map, (c.x / 8.0) * cube_map->width, (c.y / 6.0) * cube_map->height);
 	t_rgba rgba = ft_make_rgba(
 		(double)((color >> (16)) & 0xff) / 255.0,
 		(double)((color >> (8)) & 0xff) / 255.0,

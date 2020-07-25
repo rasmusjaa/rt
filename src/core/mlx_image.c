@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/10 16:00:45 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/25 12:33:15 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/25 19:27:19 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include "rt.h"
 #include "libft.h"
+#include "ft_printf.h"
 
 t_mlx_img	*create_mlx_img_from_data(t_mlx *mlx, void *data, int width, int height)
 {
@@ -89,8 +90,8 @@ t_mlx_img	*load_xpm_to_mlx_img(t_mlx *mlx, char *file)
 	
 	if (!(img_data = mlx_xpm_file_to_image(mlx->mlx_ptr, file, &size.x, &size.y)))
 		exit_message("xpm_loader: failed to load xpm file!");
-	
 	if (!(mlx_img = create_mlx_img_from_data(mlx, img_data, size.x, size.y)))
 		exit_message("xpm_loader: create_mlx_img_from_data failed!");
+	ft_printf("finished loading: %s\n", file);
 	return (mlx_img);
 }

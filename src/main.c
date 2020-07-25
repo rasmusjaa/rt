@@ -228,7 +228,7 @@ int		main(int ac, char **av)
 	}
 	t_scene *scene = rt->scenes[rt->cur_scene];
 	init_mlx(rt, scene->scene_config.width, scene->scene_config.height);
-	scene->cube_map = load_xpm_to_mlx_img(rt->mlx, "resources/cube_map_test.xpm");
+	scene->cube_map = load_xpm_to_mlx_img(rt->mlx, "resources/cube_map_sky.xpm");
 	hooks_and_loop(rt);
 	mlx_loop(rt->mlx->mlx_ptr);
 	return (0);
