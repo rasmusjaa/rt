@@ -24,7 +24,10 @@ int main(int argc, char **argv)
 	win = mlx_new_window(ptr, W, H, "window");
 	image = img_load_ppm(argv[1]);
 	if (!image)
+	{
 		ft_putendl("null image");
+		return(1);
+	}
 	float sx = image->width / (float)W;
 	float sy = image->height / (float)H;
 	for (int j = 0; j < H; j++)

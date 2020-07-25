@@ -1,5 +1,4 @@
 #include <fcntl.h>
-#include <stdio.h>
 #include "image_save_load.h"
 
 static int		image_allocate(t_image_data *image, char *line)
@@ -77,32 +76,30 @@ static int		read_pixels(t_image_data *image, int fd)
 	return (0);
 }
 
-int bin_read_pixels(t_image_data *image, char *filename)
+int bin_read_pixels(t_image_data *image, int fd)
 {
-	int data;
+	int data[3];
 	int gap;
 	int i;
-	FILE *file;
+	int ret;
 
-	file = fopen(filename, "rb");
 	i = 0;
 	gap = 0;
-	fseek(file, 15, SEEK_SET);
-	while ((data = fgetc(file)) != EOF)
+	read(fd, &data, 1);
+	while ((ret = read(fd, data, 1)) > 0) 
 	{
 		gap = gap % 3;
 		if (gap == 0)
-			image->pixels[i].r = data;
+			image->pixels[i].r = data[0];
 		if (gap == 1)
-			image->pixels[i].g = data;
+			image->pixels[i].g = data[0];
 		if (gap == 2)
-			image->pixels[i].b = data;
-		gap++;
+			image->pixels[i].b = data[0];
+		gap += ret;
 		if (gap == 3)
 			i++;
 	}
-	fclose(file);
-	return (0);
+	return (ret);
 }
 
 static int	process_file(t_image_data *image, int fd, char *filename)
@@ -122,7 +119,7 @@ static int	process_file(t_image_data *image, int fd, char *filename)
 		return (-1);
 	while ((ret = ft_get_next_line(fd, &line)) > 0)
 	{
-		if (line[0] != '#')
+		if (line[0] != '#' || line[0] == '\n')
 			break ;
 		free(line);
 	}
@@ -130,14 +127,22 @@ static int	process_file(t_image_data *image, int fd, char *filename)
 		return (-1);
 	image_allocate(image, line);
 	free(line);
-	return (binary == 0 ? read_pixels(image, fd) : bin_read_pixels(image, filename));
+	return (binary == 0 ? read_pixels(image, fd) :
+	bin_read_pixels(image, fd));
 }
 
 t_image_data	*img_load_ppm(char *filename)
 {
 	int fd;
+	char *filext;
 	t_image_data *image;
 
+	filext = ft_strrchr(filename, '.');
+	if (!filext || ft_strcmp(filext, ".ppm"))
+	{
+		ft_putendl("Error not .ppm file");
+		return (NULL);
+	}
 	if ((fd = open(filename, O_RDONLY)) == -1) 
 	{
 		ft_putendl("Error opening file");

@@ -16,6 +16,7 @@
 # include "vector.h"
 # include "color.h"
 # include "raycast.h"
+# include "materials.h"
 # include "rt.h"
 
 typedef enum	e_camera_type
@@ -35,7 +36,9 @@ typedef enum	e_object_type
 	SETTINGS,
 	CAMERA,
 	SHAPE,
-	LIGHT
+	LIGHT,
+	MATERIAL,
+	TEXTURE
 }				t_object_type;
 
 typedef struct	s_camera
@@ -80,9 +83,9 @@ typedef struct	s_unique_obj
 	int				type;
 }				t_unique_obj;
 
-struct s_ray	get_camera_ray(struct s_scene *scene, t_camera *camera,
-					double screen_x, double screen_y);
-void			init_camera(t_vec3 origin, t_vec3 target,
-					t_camera *camera, struct s_scene *scene);
+struct s_ray		get_camera_ray(struct s_scene *scene, t_camera *camera,
+		double screen_x, double screen_y);
+void				init_camera(t_vec3 origin, t_vec3 target,
+		t_camera *camera, struct s_scene *scene);
 
 #endif

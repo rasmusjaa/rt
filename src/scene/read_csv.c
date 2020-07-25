@@ -28,7 +28,7 @@ t_shape_name_type_map g_shape_name_type_map[SHAPE_TYPES] =
 	{CYL_STR, CYLINDER},
 	{CONE_STR, CONE},
 	{DISC_STR, DISC},
-	{MODEL_STR, MODEL}
+	{MODEL_STR, MODEL},
 };
 
 void	get_fields(char *line, double *values, int num_values)
@@ -195,6 +195,53 @@ void	check_light_fields(t_scene *scene, char *line, int n)
 	lights[n].leds = round(ft_clamp_d(values[9], 2, 100));
 }
 
+void	check_material_fields(t_scene *scene, char *line, int n)
+{
+	double		values[N_MATERIAL_VALUES];
+	t_material	*mat;
+
+	mat = scene->materials;
+	get_fields(line, values, N_MATERIAL_VALUES);
+	mat[n].id = (int)values[0];
+	mat[n].texture_id = (int)values[1];
+	mat[n].diffuse = ft_make_rgba(values[2], values[3], values[4], values[5]); 
+	mat[n].specular = values[6];
+	mat[n].shininess = values[7];
+	mat[n].refra_index = values[8];
+	mat[n].reflection = values[9];
+	mat[n].transparency = values[10];
+	mat[n].texture = NULL;
+}
+
+void	check_texture_fields(t_scene *scene, char *line, int n)
+{
+	double		values[N_TEXTURE_VALUES];
+	t_texture	*tx;
+	char		*temp;
+	int			i;
+
+	tx = scene->textures;
+	get_fields(line, values, N_TEXTURE_VALUES);
+	tx[n].id = (int)values[0];
+	tx[n].procedural_type = (int)values[0];
+	tx[n].color1 = ft_make_rgba(values[2], values[3], values[4], values[5]); 
+	tx[n].color2 = ft_make_rgba(values[6], values[7], values[8], values[9]); 
+	tx[n].color3 = ft_make_rgba(values[10], values[11], values[12], values[13]);
+	tx[n].file = NULL;
+	if ((temp = get_shape_file(line, N_TEXTURE_VALUES)))
+	{
+		if (temp[0] != '0' && temp[0] != ';')
+		{
+			i = 0;
+			while (temp[i] && temp[i] != ';')
+			{
+				i++;
+			}
+			tx[n].file = ft_strsub(temp, 0, i);
+		}
+	}
+}
+
 t_unique_obj g_unique_objs[N_UNIQUE_OBJS] =
 {
 	{SETTINGS_STR, check_scene_fields, SETTINGS},
@@ -205,7 +252,9 @@ t_unique_obj g_unique_objs[N_UNIQUE_OBJS] =
 	{CONE_STR, check_shape_fields, SHAPE},
 	{DISC_STR, check_shape_fields, SHAPE},
 	{MODEL_STR, check_shape_fields, SHAPE},
-	{POINT_LIGHT_STR, check_light_fields, LIGHT}
+	{POINT_LIGHT_STR, check_light_fields, LIGHT},
+	{MATERIAL_STR, check_material_fields, MATERIAL},
+	{TEXTURE_STR, check_texture_fields, TEXTURE}
 };
 
 int			handle_line(t_scene *scene, char *line)
@@ -252,6 +301,8 @@ int		init_scene(char *file, t_scene *scene)
 	scene->num_all[1] = 0;
 	scene->num_all[2] = 0;
 	scene->num_all[3] = 0;
+	scene->num_all[4] = 0;
+	scene->num_all[5] = 0;
 	scene->scene_config.filepath = file;
 	scene->scene_config.last_modified = last_modified(file);
 
@@ -274,6 +325,8 @@ int		init_scene(char *file, t_scene *scene)
 	scene->cur_camera = 0;
 	scene->num_shapes = scene->num_all[SHAPE];
 	scene->num_lights = scene->num_all[LIGHT];
+	allocate_materials(scene,scene->num_all[MATERIAL]);
+	allocate_textures(scene, scene->num_all[TEXTURE]);
 	if (!(scene->cameras = (t_camera*)malloc(sizeof(t_camera) * scene->num_cameras)) ||
 	!(scene->shapes = (t_shape*)malloc(sizeof(t_shape) * scene->num_shapes)) ||
 	!(scene->lights = (t_light*)malloc(sizeof(t_light) * scene->num_lights)))

@@ -33,12 +33,15 @@
 
 # define N_THREADS 10
 # define EPSILON 0.0001
-# define N_OBJ_TYPES 4
-# define N_UNIQUE_OBJS 9
+# define N_OBJ_TYPES 6
+# define N_UNIQUE_OBJS 11
 # define N_SCENE_VALUES 13
 # define N_CAMERA_VALUES 12
 # define N_SHAPE_VALUES 20
 # define N_LIGHT_VALUES 10
+# define N_MATERIAL_VALUES 11
+# define N_TEXTURE_VALUES 14
+
 
 # define MIN_WIDTH 800
 # define MIN_HEIGHT 800
@@ -79,6 +82,8 @@
 # define MODEL_STR "model"
 # define MOEBIUS_STR "moebius"
 # define SHAPE_ERROR_STR "shape_error"
+# define MATERIAL_STR "material"
+# define TEXTURE_STR "texture"
 
 # define TRUE 1
 # define FALSE 0

@@ -14,14 +14,15 @@
 # define MATERIALS_H
 
 # include "rt.h"
-# define BRICKS 1
-# define PERLIN 2
-# define CHECKER 3
+# define CHECKER 1
+# define BRICKS 2
+# define PERLIN 3
 
 typedef struct		s_texture
 {
 	size_t		id;
 	char		*file;
+	int			procedural_type;
 	t_rgba		(*texture_function)(double, double);
 	t_rgba		color1;
 	t_rgba		color2;
@@ -34,6 +35,7 @@ typedef struct		s_material
 	t_rgba			diffuse;
 	double			shininess;
 	double			specular;
+	int				texture_id;
 	t_texture		*texture;
 	double			refra_index;
 	double			reflection;	
