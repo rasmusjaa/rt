@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/24 22:13:49 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/25 11:51:49 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,6 +192,7 @@ time_t			last_modified(char *file);
 t_scene			*read_scene(char *file);
 
 t_mlx_img		*create_mlx_img(t_mlx *mlx, int width, int height);
+t_mlx_img		*create_mlx_img_from_data(t_mlx *mlx, void *data, int width, int height);
 void			destroy_mlx_img(t_mlx *mlx, t_mlx_img *mlx_img);
 void			put_pixel_mlx_img(t_mlx_img *img, int x, int y, int c);
 
