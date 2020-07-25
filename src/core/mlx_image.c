@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/10 16:00:45 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/25 11:54:16 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/25 11:57:19 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,14 @@ void		put_pixel_mlx_img(t_mlx_img *img, int x, int y, int c)
 	if (x < 0 || x >= img->width || y < 0 || y >= img->height)
 		return ;
 	*(int*)(img->d_addr + (((y * img->width) + x) * img->bpp)) = c;
+}
+
+int			get_pixel_mlx_img(t_mlx_img *img, int x, int y)
+{
+	int c;
+
+	if (x < 0 || x >= img->width || y < 0 || y >= img->height)
+		return (-1);
+	c = *(int*)(img->d_addr + (((y * img->width) + x) * img->bpp));
+	return (c);
 }
