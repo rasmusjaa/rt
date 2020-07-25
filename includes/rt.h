@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/25 12:01:30 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/25 12:06:29 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ struct s_shape;
 struct s_light;
 struct s_tp;
 struct s_queue;
+struct s_mlx_img;
 
 typedef	struct	s_scene_config
 {
@@ -134,7 +135,7 @@ typedef struct	s_tile_job_data
 	struct s_rt		*rt;
 	t_mlx			*mlx;
 	t_scene			*scene;
-	t_mlx_img		*mlx_img;
+	struct s_mlx_img	*mlx_img;
 	t_vec2i			screen_coord;
 	t_vec2i			tile_size;
 	int				tile_index;

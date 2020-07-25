@@ -16,6 +16,7 @@
 #include "mlx.h"
 #include "thread_pool.h"
 #include "debug.h"
+#include "mlx_image.h"
 
 void	render_tile_job(void *data)
 {

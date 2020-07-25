@@ -6,7 +6,7 @@
 #    By: wkorande <willehard@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/01 15:48:04 by rjaakonm          #+#    #+#              #
-#    Updated: 2020/07/23 14:54:36 by wkorande         ###   ########.fr        #
+#    Updated: 2020/07/25 12:05:04 by wkorande         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ SRC = 	core/event_hooks/keyboard.c\
 		core/thread_pool/tp.c\
 		core/thread_pool/tp_job.c\
 		core/thread_pool/tp_queue.c\
+		core/xpm_loader.c\
 		debug/debug.c\
 		debug/draw_line.c\
 		main.c\
