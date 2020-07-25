@@ -6,12 +6,13 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/10 16:00:45 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/25 11:57:19 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/25 12:03:06 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "rt.h"
+#include "mlx_image.h"
 #include "libft.h"
 
 t_mlx_img	*create_mlx_img_from_data(t_mlx *mlx, void *data, int width, int height)
