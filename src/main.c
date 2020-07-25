@@ -15,8 +15,8 @@
 #include "events.h"
 #include "mlx.h"
 #include "thread_pool.h"
-#include "debug.h"
 #include "mlx_image.h"
+#include "debug.h"
 
 void	render_tile_job(void *data)
 {
@@ -208,7 +208,6 @@ static void	init_mlx(t_rt *rt, int win_width, int win_height)
 		exit_message("Failed to malloc mlx!");
 	rt->mlx->mlx_ptr = mlx_init();
 	rt->mlx->win_ptr = mlx_new_window(rt->mlx->mlx_ptr, win_width + 300, win_height, "RT");
-	// rt->mlx_img = create_mlx_image(rt->mlx, win_width, win_height);
 	mlx_string_put(rt->mlx->mlx_ptr, rt->mlx->win_ptr, (win_width / 2) - 110, win_height / 2, 0xFFFFFF, "PRESS SPACE TO RENDER");
 }
 
@@ -229,6 +228,7 @@ int		main(int ac, char **av)
 	}
 	t_scene *scene = rt->scenes[rt->cur_scene];
 	init_mlx(rt, scene->scene_config.width, scene->scene_config.height);
+	scene->cube_map = load_xpm_to_mlx_img(rt->mlx, "resources/cube_map_test.xpm");
 	hooks_and_loop(rt);
 	mlx_loop(rt->mlx->mlx_ptr);
 	return (0);

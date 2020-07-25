@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/25 12:06:29 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/25 12:19:03 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,17 +117,18 @@ typedef struct	s_scene
 	struct s_shape	*shapes;
 	size_t			num_shapes;
 	int				help_ray;
+	struct s_mlx_img	*cube_map;
 }				t_scene;
 
 typedef struct	s_mlx
 {
 	void			*mlx_ptr;
 	void			*win_ptr;
-	void			*img_ptr;
-	char			*data_addr;
-	int				bpp;
-	int				size_line;
-	int				endian;
+	// void			*img_ptr;
+	// char			*data_addr;
+	// int				bpp;
+	// int				size_line;
+	// int				endian;
 }				t_mlx;
 
 typedef struct	s_tile_job_data

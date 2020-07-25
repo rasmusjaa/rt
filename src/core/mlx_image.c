@@ -6,13 +6,13 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/10 16:00:45 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/25 12:03:06 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/25 12:33:15 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "mlx_image.h"
 #include <stdlib.h>
 #include "rt.h"
-#include "mlx_image.h"
 #include "libft.h"
 
 t_mlx_img	*create_mlx_img_from_data(t_mlx *mlx, void *data, int width, int height)
@@ -79,4 +79,18 @@ int			get_pixel_mlx_img(t_mlx_img *img, int x, int y)
 		return (-1);
 	c = *(int*)(img->d_addr + (((y * img->width) + x) * img->bpp));
 	return (c);
+}
+
+t_mlx_img	*load_xpm_to_mlx_img(t_mlx *mlx, char *file)
+{
+	t_mlx_img	*mlx_img;
+	t_vec2i 	size;
+	void		*img_data;
+	
+	if (!(img_data = mlx_xpm_file_to_image(mlx->mlx_ptr, file, &size.x, &size.y)))
+		exit_message("xpm_loader: failed to load xpm file!");
+	
+	if (!(mlx_img = create_mlx_img_from_data(mlx, img_data, size.x, size.y)))
+		exit_message("xpm_loader: create_mlx_img_from_data failed!");
+	return (mlx_img);
 }
