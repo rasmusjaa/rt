@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/25 12:53:20 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/25 13:41:50 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/25 14:59:41 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,13 @@ static t_cube_map_face determine_face(t_vec3 v)
 			else
 				return (RIGHT);
 		}
-		else 
-			return (FRONT);
+		else
+		{
+			if (v.z < 0)
+				return (FRONT);
+			else
+				return (BACK);
+		}
 	}
 	else
 	{
@@ -38,7 +43,12 @@ static t_cube_map_face determine_face(t_vec3 v)
 			// c = ft_make_vec3(v.x, v.z, v.y); // top bottom
 		}
 		else
-			return (BACK);
+		{
+			if (v.z < 0)
+				return (FRONT);
+			else
+				return (BACK);
+		}
 	}
 	return (FRONT);
 }
@@ -65,12 +75,11 @@ t_rgba sample_cube_map(t_mlx_img *cube_map, t_vec3 v)
 	}
 	else if (dir == BACK)
 	{
-		c.x += 4.0;
+		c.x += 6.0;
 		c.y += 2.0;
 	}
 	else if (dir == LEFT)
 	{
-		// c.x += 2.0;
 		c.y += 2.0;
 	}
 	else if (dir == RIGHT)
@@ -86,7 +95,6 @@ t_rgba sample_cube_map(t_mlx_img *cube_map, t_vec3 v)
 	else if (dir == TOP)
 	{
 		c.x += 2.0;
-		c.y += 0.0;
 	}
 
 	int color = get_pixel_mlx_img(cube_map, c.x/8.0 * cube_map->width, c.y/6.0 * cube_map->height);

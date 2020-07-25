@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/09 15:06:46 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/23 14:54:09 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/25 14:50:52 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,18 @@ static void		move_camera(int key, t_camera *camera, t_vec3 forward,
 		move_camera2(key, camera, right);
 }
 
+static void rotate_camera(int key, t_camera *c)
+{
+	if (key == KEY_NUM_4)
+		c->rotation.y += 10.0;
+	else if (key == KEY_NUM_6)
+		c->rotation.y -= 10.0;
+	else if (key == KEY_NUM_8)
+		c->rotation.x -= 10.0;
+	else if (key == KEY_NUM_2)
+		c->rotation.x += 10.0;
+}
+
 int				key_press_hook(int key, t_rt *rt)
 {
 	t_scene *scene = rt->scenes[rt->cur_scene];
@@ -67,7 +79,9 @@ int				key_press_hook(int key, t_rt *rt)
 	t_vec3 right = ft_normalize_vec3(ft_cross_vec3(forward, camera->up));
 	ft_printf("Scene %d, press key %d\n", rt->cur_scene, key);
 	if (key == KEY_UP || key == KEY_DOWN || key == KEY_LEFT ||
-		key == KEY_RIGHT || key == KEY_NUM_PLUS || key == KEY_NUM_MINUS)
+		key == KEY_RIGHT || key == KEY_NUM_PLUS || key == KEY_NUM_MINUS ||
+		key == KEY_NUM_4 || key == KEY_NUM_6 ||
+		key == KEY_NUM_8 || key == KEY_NUM_2)
 	{
 		if (rt->render_task.render_started && !rt->render_task.render_finished)
 		{
@@ -75,6 +89,7 @@ int				key_press_hook(int key, t_rt *rt)
 			return (0);
 		}
 		move_camera(key, camera, forward, right);
+		rotate_camera(key, camera);
 		render_scene(rt, scene);
 	}
 	return (0);
