@@ -39,7 +39,7 @@ typedef struct		s_material
 	t_texture		*texture;
 	double			refra_index;
 	double			reflection;	
-	double			transparency;
+	double			opacity;
 	double			uv_scale_x;
 	double			uv_scale_y;
 }					t_material;
@@ -51,6 +51,10 @@ t_material new_material(size_t id, t_rgba diffuse, t_texture *texture);
 
 void	allocate_textures(t_scene *scene, size_t amount);
 void	allocate_materials(t_scene *scene, size_t amount);
+
+
+t_material *get_material_by_id(t_scene *scene, size_t id);
+t_texture *get_texture_by_id(t_scene *scene, size_t id);
 
 t_vec2		cylinder_uv(t_vec3 point, double max, double min);
 t_vec2		sphere_uv(t_vec3 point);

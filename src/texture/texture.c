@@ -57,3 +57,10 @@ t_texture *get_texture_by_id(t_scene *scene, size_t id)
 	}
 	return (NULL);
 }
+
+t_rgba	texture_manager()
+{
+	t_rgba r;
+	r= ft_make_rgba(1,1,1,1);
+	return (r);
+}

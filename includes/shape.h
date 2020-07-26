@@ -58,11 +58,13 @@ typedef struct	s_shape
 	t_rgba			color;
 	double			radius;
 	double			angle;
+	
+	int				material_id;
+	t_material		*material;
 	double			opacity;
 	double			reflection;
 	double			refraction;
 	double			shine;
-	struct s_material *material;
 	t_mesh			*mesh;
 	t_octree		*octree;
 }				t_shape;

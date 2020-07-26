@@ -51,6 +51,7 @@ t_material new_material(size_t id, t_rgba diffuse, t_texture *texture)
 	mat.shininess = 200;
 	mat.specular = 1;
 	mat.texture = texture;
+	mat.opacity = 1;
 	return (mat);
 }
 

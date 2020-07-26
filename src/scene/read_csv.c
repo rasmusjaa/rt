@@ -158,7 +158,8 @@ void	check_shape_fields(t_scene *scene, char *line, int n)
 	s->color = ft_clamp_rgba(ft_make_rgba(values[10], values[11], values[12], values[13]));
 	s->radius = s->scale * ft_clamp_d(values[14], MIN_RADIUS, MAX_RADIUS);
 	s->angle = ft_clamp_d(values[15], MIN_ANGLE, MAX_ANGLE);
-	s->opacity = ft_clamp_d(values[16], 0, 1);
+	s->material_id = (int)values[16];
+	s->opacity = 1.0; // temp value.. try to read opacity from material
 	s->reflection = ft_clamp_d(values[17], 0, 1);
 	s->refraction = ft_clamp_d(values[18], 1, 5);
 	s->shine = ft_clamp_d(values[19], 0, 1);
@@ -209,7 +210,7 @@ void	check_material_fields(t_scene *scene, char *line, int n)
 	mat[n].shininess = values[7];
 	mat[n].refra_index = values[8];
 	mat[n].reflection = values[9];
-	mat[n].transparency = values[10];
+	mat[n].opacity = values[10];
 	mat[n].texture = NULL;
 }
 
@@ -334,6 +335,33 @@ int		init_scene(char *file, t_scene *scene)
 	return (1);
 }
 
+static void	link_shapes_materials_textures(t_scene *scene)
+{
+	int			i;
+	t_material	*mater;
+	t_shape		*shape;
+
+	i = 0;
+	while (i < (int)scene->num_materials)
+	{
+		mater = scene->materials + i;
+		mater->texture = get_texture_by_id(scene, mater->texture_id);
+		i++;
+	}
+	i = 0;
+	while (i < (int)scene->num_shapes)
+	{
+		shape = scene->shapes + i;
+		shape->material = get_material_by_id(scene, shape->material_id);
+		if (shape->material == NULL)
+		{
+			shape->material = (t_material*)malloc(sizeof(t_material));
+			shape->material[0] = new_material(1000, shape->color, NULL);
+		}
+		i++;
+	}
+}
+
 t_scene		*read_scene(char *file)
 {
 	int		fd;
@@ -354,5 +382,6 @@ t_scene		*read_scene(char *file)
 		free(line);
 	}
 	close(fd);
+	link_shapes_materials_textures(scene);
 	return (scene);
 }

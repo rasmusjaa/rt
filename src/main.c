@@ -227,24 +227,6 @@ int		main(int ac, char **av)
 		i++;
 	}
 	t_scene *scene = rt->scenes[rt->cur_scene];
-	//test to assign material and texture
-	material_temp_function(&scene[0]);
-	/*
-	if (scene->num_shapes > 0)
-	{
-		int mat = 1;
-		for(int i = 0; i < (int)scene->num_shapes; i++)
-		{
-			if (scene->shapes[i].type == PLANE && mat >= 0)
-			{
-				scene->shapes[i].material = scene->materials + mat;
-				mat--;
-			}
-			else 
-				scene->shapes[i].material = NULL;
-		}
-	}
-*/
 	init_mlx(rt, scene->scene_config.width, scene->scene_config.height);
 	hooks_and_loop(rt);
 	mlx_loop(rt->mlx->mlx_ptr);
