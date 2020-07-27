@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 14:59:56 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/27 15:52:34 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/27 16:56:32 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,7 +194,7 @@ void	reload_scene(t_rt *rt)
 	height = scene->scene_config.height;
 	ft_printf("old width %d height %d\n", width, height);
 	destroy_scene(scene);
-	rt->scenes[rt->cur_scene] = read_scene(file);
+	rt->scenes[rt->cur_scene] = read_scene(rt, file);
 	rt->scenes[rt->cur_scene]->scene_config.width = width;
 	rt->scenes[rt->cur_scene]->scene_config.height = height;
 	ft_printf("old width %d height %d\n", rt->scenes[rt->cur_scene]->scene_config.width, rt->scenes[rt->cur_scene]->scene_config.height);
@@ -220,14 +220,15 @@ int		main(int ac, char **av)
 	i = 0;
 	if (ac == 1)
 		exit_message("Usage:");
+	init_mlx(rt, 600, 600);
 	while (i < ac - 1)
 	{
-		rt->scenes[i] = read_scene(av[i + 1]);
+		rt->scenes[i] = read_scene(rt, av[i + 1]);
 		print_scene_info(rt->scenes[i]);
 		i++;
 	}
 	t_scene *scene = rt->scenes[rt->cur_scene];
-	init_mlx(rt, scene->scene_config.width, scene->scene_config.height);
+	//init_mlx(rt, scene->scene_config.width, scene->scene_config.height);
 	scene->cube_map = load_xpm_to_mlx_img(rt->mlx, "resources/cube_map.xpm");
 	hooks_and_loop(rt);
 	mlx_loop(rt->mlx->mlx_ptr);

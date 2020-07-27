@@ -6,12 +6,13 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:24:54 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/27 13:47:37 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/27 18:41:31 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shape.h"
 #include "libft.h"
+#include <math.h>
 
 t_vec3	calc_hit_normal_plane(t_shape *plane, t_raycast_hit *hit)
 {
@@ -21,9 +22,15 @@ t_vec3	calc_hit_normal_plane(t_shape *plane, t_raycast_hit *hit)
 
 t_vec2 calc_hit_uv_plane(t_shape *plane, t_raycast_hit *hit)
 {
-	plane = 0;
-	hit = 0;
-	return (ft_make_vec2(0,0));
+	t_vec2 uv;
+	//plane->material->u_scale...
+	//
+	plane = 0;	
+	uv.x = ft_abs_d(hit->point.x) / 10;
+	uv.y = ft_abs_d(hit->point.z) / 10;
+	uv.x = fmod(uv.x, 1);
+	uv.y = fmod(uv.y, 1);
+	return (uv);
 }
 
 int		intersects_plane(t_ray *ray, t_shape *plane, t_raycast_hit *hit)

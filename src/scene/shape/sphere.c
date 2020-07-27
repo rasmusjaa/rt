@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:19:26 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/27 16:13:29 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/27 17:22:45 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_vec2 calc_hit_uv_sphere(t_shape *sphere, t_raycast_hit *hit)
 	
 	n = ft_rotate_vec3(hit->normal, sphere->rotation);
 	u = atan2(n.x, n.z) / (2.0 * M_PI) + 0.5;
-	u *= 2;
+	//u *= 2;
 	v = n.y / 2.0 + 0.5;
 	return (ft_make_vec2(u, v));
 }

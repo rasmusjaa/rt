@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/27 16:42:52 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/27 16:55:11 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,7 +201,7 @@ void			load_scene(t_rt *rt, int scene_nb);
 
 void 			exit_message(char *str);
 time_t			last_modified(char *file);
-t_scene			*read_scene(char *file);
+t_scene			*read_scene(t_rt *rt, char *file);
 
 t_rt			*rt_init(size_t num_scenes);
 void			rt_destroy_exit(t_rt *rt, int status);

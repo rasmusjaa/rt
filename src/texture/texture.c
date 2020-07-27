@@ -6,12 +6,12 @@
 /*   By: sluhtala <sluhtala@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/15 14:41:54 by sluhtala          #+#    #+#             */
-/*   Updated: 2020/07/27 16:39:00 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/27 17:19:40 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "materials.h"
-
+#include "mlx_image.h"
 
 void	allocate_textures(t_scene *scene, size_t amount)
 {
@@ -64,9 +64,21 @@ t_texture *get_texture_by_id(t_scene *scene, size_t id)
 
 t_rgba	sample_texture(t_texture *texture, t_vec2 uv)
 {
+	t_rgba color;
 	if (!texture || (!texture->procedural_type && !texture->img_data))
 		return (ft_make_rgba(1, 1, 1, 1));
+	if (texture && texture->procedural_type == 0 && texture->img_data)
+	{
+		int c = get_pixel_mlx_img(texture->img_data, uv.x * texture->img_data->width, uv.y * texture->img_data->height);
+	   	color = ft_make_rgba(
+					(double)((c >> (16)) & 0xff) / 255.0,
+						(double)((c >> (8)) & 0xff) / 255.0,
+							(double)((c >> (0)) & 0xff) / 255.0,
+								1.0);	
+		return (color);
+	}
 	if (texture->procedural_type == CHECKER)
 		return (checker_texture(texture, uv.x, uv.y));
+
 	return (ft_make_rgba(1, 1, 1, 1));
 }

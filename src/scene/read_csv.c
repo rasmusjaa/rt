@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/27 16:39:57 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/27 17:21:26 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "ft_printf.h"
 #include "shape.h"
 #include "obj_loader.h"
+#include "mlx_image.h"
 #include <math.h>
 #include <time.h>
 #include <sys/stat.h>
@@ -224,7 +225,7 @@ void	check_texture_fields(t_scene *scene, char *line, int n)
 	tx = scene->textures;
 	get_fields(line, values, N_TEXTURE_VALUES);
 	tx[n].id = (int)values[0];
-	tx[n].procedural_type = (int)values[0];
+	tx[n].procedural_type = (int)values[1];
 	tx[n].color1 = ft_make_rgba(values[2], values[3], values[4], values[5]); 
 	tx[n].color2 = ft_make_rgba(values[6], values[7], values[8], values[9]); 
 	tx[n].color3 = ft_make_rgba(values[10], values[11], values[12], values[13]);
@@ -335,7 +336,7 @@ int		init_scene(char *file, t_scene *scene)
 	return (1);
 }
 
-static void	link_shapes_materials_textures(t_scene *scene)
+static void	link_shapes_materials_textures(t_rt *rt, t_scene *scene)
 {
 	int			i;
 	t_material	*mater;
@@ -346,6 +347,10 @@ static void	link_shapes_materials_textures(t_scene *scene)
 	{
 		mater = scene->materials + i;
 		mater->texture = get_texture_by_id(scene, mater->texture_id);
+		if (mater->texture)
+		{
+			mater->texture->img_data = load_xpm_to_mlx_img(rt->mlx, mater->texture->file);
+		}
 		i++;
 	}
 	i = 0;
@@ -362,7 +367,7 @@ static void	link_shapes_materials_textures(t_scene *scene)
 	}
 }
 
-t_scene		*read_scene(char *file)
+t_scene		*read_scene(t_rt *rt, char *file)
 {
 	int		fd;
 	char	*line;
@@ -382,6 +387,6 @@ t_scene		*read_scene(char *file)
 		free(line);
 	}
 	close(fd);
-	link_shapes_materials_textures(scene);
+	link_shapes_materials_textures(rt, scene);
 	return (scene);
 }
