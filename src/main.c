@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 14:59:56 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/27 16:56:32 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/27 19:19:26 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,9 +227,9 @@ int		main(int ac, char **av)
 		print_scene_info(rt->scenes[i]);
 		i++;
 	}
-	t_scene *scene = rt->scenes[rt->cur_scene];
+	// t_scene *scene = rt->scenes[rt->cur_scene];
 	//init_mlx(rt, scene->scene_config.width, scene->scene_config.height);
-	scene->cube_map = load_xpm_to_mlx_img(rt->mlx, "resources/cube_map.xpm");
+
 	hooks_and_loop(rt);
 	mlx_loop(rt->mlx->mlx_ptr);
 	return (0);
