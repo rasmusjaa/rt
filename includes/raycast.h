@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 13:24:35 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/24 17:46:24 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/27 14:06:14 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 struct s_shape;
 struct s_scene;
 struct s_light;
+struct s_triface;
 
 typedef struct		s_ray
 {
@@ -47,6 +48,8 @@ typedef struct		s_raycast_hit
 	int				depth;
 	t_vec3			idir;
 	t_ray			ray;
+	struct s_triface *triface;
+	t_vec2			uv;
 }					t_raycast_hit;
 
 t_rgba				raycast(t_ray *ray, struct s_scene *scene, int depth);

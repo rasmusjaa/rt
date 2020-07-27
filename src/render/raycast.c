@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/27 13:32:28 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/27 14:05:48 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -366,6 +366,7 @@ t_rgba raycast(t_ray *ray, t_scene *scene, int depth)
 	{
 		hit.depth = depth;
 		hit.normal = calc_hit_normal(&hit);
+		hit.uv = calc_hit_uv(&hit);
 		hit.ray = *ray;
 		color = shade(scene, &hit);
 	}

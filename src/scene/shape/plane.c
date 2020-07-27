@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:24:54 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/23 14:55:10 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/27 13:47:37 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,13 @@ t_vec3	calc_hit_normal_plane(t_shape *plane, t_raycast_hit *hit)
 {
 	return (plane->target);
 	hit = 0;
+}
+
+t_vec2 calc_hit_uv_plane(t_shape *plane, t_raycast_hit *hit)
+{
+	plane = 0;
+	hit = 0;
+	return (ft_make_vec2(0,0));
 }
 
 int		intersects_plane(t_ray *ray, t_shape *plane, t_raycast_hit *hit)
