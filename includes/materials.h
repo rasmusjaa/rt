@@ -6,7 +6,7 @@
 /*   By: sluhtala <sluhtala@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/15 14:09:34 by sluhtala          #+#    #+#             */
-/*   Updated: 2020/07/27 13:46:17 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/27 16:20:39 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,15 @@
 # define BRICKS 2
 # define PERLIN 3
 
+typedef struct s_mlx_img	t_mlx_img;
+
 typedef struct		s_texture
 {
 	size_t		id;
 	char		*file;
+	t_mlx_img	*img_data;
 	int			procedural_type;
-	t_rgba		(*texture_function)(double, double);
+	//t_rgba		(*texture_function)(t_texture*, double, double);
 	t_rgba		color1;
 	t_rgba		color2;
 	t_rgba		color3;
@@ -59,10 +62,10 @@ t_texture *get_texture_by_id(t_scene *scene, size_t id);
 t_vec2		cylinder_uv(t_vec3 point, double max, double min);
 t_vec2		sphere_uv(t_vec3 point);
 t_vec2		plane_uv(t_vec3 point);
+t_rgba		sample_texture(t_texture *texture, t_vec2 uv);
 
 t_rgba		brick_texture(double u, double v);
 double		perlin_noise(double x, double y, unsigned char ***g);
-t_rgba		checker_texture(double x, double y);
+t_rgba checker_texture(t_texture *texture, double v, double u);
 
-void	material_temp_function(t_scene *scene);
 #endif

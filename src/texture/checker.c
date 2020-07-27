@@ -6,7 +6,7 @@
 /*   By: sluhtala <sluhtala@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/15 15:01:24 by sluhtala          #+#    #+#             */
-/*   Updated: 2020/07/15 17:58:30 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/27 16:19:00 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ static double dmodulo(double d, double m)
 	return (mod);
 }
 
-t_rgba checker_texture(double v, double u)
+t_rgba checker_texture(t_texture *texture, double v, double u)
 {
 	float size = 0.1;
-	t_rgba col1 = ft_make_rgba(1, 1, 1, 1);
-	t_rgba col2 = ft_make_rgba(0, 0, 0, 1);
+	t_rgba col1 = texture->color1;
+	t_rgba col2 = texture->color2;
 
 	if (dmodulo(u, size * 2) < size)
 	{

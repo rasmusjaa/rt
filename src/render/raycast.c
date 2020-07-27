@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/27 14:11:05 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/27 15:48:22 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -268,7 +268,8 @@ static t_rgba	color_from_shape(t_rgba color, t_scene *scene, t_raycast_hit *hit)
 	double		fresnel;
 	int			rec_calced;
 
-	color = ft_mul_rgba_rgba(color, hit->shape->material->diffuse); //shape->color to material->diffuse /ilman tata mustavalkoseks
+//	color = ft_mul_rgba_rgba(color, hit->shape->material->diffuse); //shape->color to material->diffuse /ilman tata mustavalkoseks
+	color = ft_mul_rgba_rgba(color, ft_mul_rgba_rgba(hit->shape->material->diffuse, sample_texture(hit->shape->material->texture, hit->uv)));
 	rec_calced = FALSE;
 	if (scene->scene_config.opacity && hit->shape->material->opacity < 1 - EPSILON) //material->opacity 
 	{

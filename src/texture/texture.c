@@ -6,7 +6,7 @@
 /*   By: sluhtala <sluhtala@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/15 14:41:54 by sluhtala          #+#    #+#             */
-/*   Updated: 2020/07/15 18:01:53 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/27 16:39:00 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,15 @@ t_texture	new_texture(size_t id, size_t procedural, char *file, t_rgba col1, t_r
 	t_texture tex;
 
 	tex.id = id;
+	tex.img_data = NULL;
 	tex.color1 = col1;
 	tex.color2 = col2;
 	tex.color3 = col3;
 	tex.file = file;
 	if (tex.file)	
 		return (tex);
+	procedural = 1;
+	/*
 	if (procedural == BRICKS)
 		tex.texture_function = brick_texture;
 	else if (procedural == CHECKER)
@@ -41,6 +44,7 @@ t_texture	new_texture(size_t id, size_t procedural, char *file, t_rgba col1, t_r
 	{
 		tex.texture_function = NULL;
 	}
+	*/
 	return (tex);
 }
 
@@ -58,9 +62,11 @@ t_texture *get_texture_by_id(t_scene *scene, size_t id)
 	return (NULL);
 }
 
-t_rgba	texture_manager()
+t_rgba	sample_texture(t_texture *texture, t_vec2 uv)
 {
-	t_rgba r;
-	r= ft_make_rgba(1,1,1,1);
-	return (r);
+	if (!texture || (!texture->procedural_type && !texture->img_data))
+		return (ft_make_rgba(1, 1, 1, 1));
+	if (texture->procedural_type == CHECKER)
+		return (checker_texture(texture, uv.x, uv.y));
+	return (ft_make_rgba(1, 1, 1, 1));
 }

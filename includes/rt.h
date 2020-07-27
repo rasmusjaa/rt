@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/27 14:10:40 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/27 15:57:53 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ struct s_light;
 struct s_tp;
 struct s_queue;
 struct s_mesh;
+struct s_texture;
 
 typedef	struct	s_scene_config
 {
@@ -182,9 +183,8 @@ typedef struct	s_render_task
 
 typedef struct	s_asset_library
 {
-	t_mlx_img	*textures;
-	t_mlx_img	*cube_maps;
-	struct s_mesh *meshes;
+	struct s_texture	*textures;
+	struct s_mesh		*meshes;
 }				t_asset_library;
 
 typedef struct	s_rt
