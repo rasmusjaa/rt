@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/24 19:03:38 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/27 13:32:28 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 
 int trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit)
 {
-	t_raycast_hit cur_hit;
+	_raycast_hit cur_hit;
 	double	min_dist;
 	size_t	i;
 	int		hit_found;
