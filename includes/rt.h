@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/27 15:57:53 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/27 16:42:52 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@
 # define MAX_ASPECT 2.0
 # define MIN_BOUNCES 1
 # define MAX_BOUNCES 100
-# define CAMERA_TYPES 2
+# define CAMERA_TYPES 3
 # define LIGHT_TYPES 2
 # define SHAPE_TYPES 6
 # define COLORIZES 7
@@ -93,6 +93,7 @@ struct s_shape;
 struct s_light;
 struct s_tp;
 struct s_queue;
+struct s_mlx_img;
 struct s_mesh;
 struct s_texture;
 
@@ -129,28 +130,18 @@ typedef struct	s_scene
 	size_t				num_materials;
 	struct s_texture	*textures;
 	size_t				num_textures;
+	struct s_mlx_img	*cube_map;
 }					t_scene;
-
-typedef struct	s_mlx_img
-{
-	void			*img;
-	char			*d_addr;
-	int				bpp;
-	int				size_line;
-	int				endian;
-	int				width;
-	int				height;
-}				t_mlx_img;
 
 typedef struct	s_mlx
 {
 	void			*mlx_ptr;
 	void			*win_ptr;
-	void			*img_ptr;
-	char			*data_addr;
-	int				bpp;
-	int				size_line;
-	int				endian;
+	// void			*img_ptr;
+	// char			*data_addr;
+	// int				bpp;
+	// int				size_line;
+	// int				endian;
 }				t_mlx;
 
 typedef struct	s_tile_job_data
@@ -158,7 +149,7 @@ typedef struct	s_tile_job_data
 	struct s_rt		*rt;
 	t_mlx			*mlx;
 	t_scene			*scene;
-	t_mlx_img		*mlx_img;
+	struct s_mlx_img	*mlx_img;
 	t_vec2i			screen_coord;
 	t_vec2i			tile_size;
 	int				tile_index;
@@ -211,10 +202,6 @@ void			load_scene(t_rt *rt, int scene_nb);
 void 			exit_message(char *str);
 time_t			last_modified(char *file);
 t_scene			*read_scene(char *file);
-
-t_mlx_img		*create_mlx_img(t_mlx *mlx, int width, int height);
-void			destroy_mlx_img(t_mlx *mlx, t_mlx_img *mlx_img);
-void			put_pixel_mlx_img(t_mlx_img *img, int x, int y, int c);
 
 t_rt			*rt_init(size_t num_scenes);
 void			rt_destroy_exit(t_rt *rt, int status);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   camera.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 23:03:26 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/23 23:05:07 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/27 15:52:03 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,14 @@ t_ray get_camera_ray(t_scene *scene, t_camera *cam, double screen_x,
 		ray.origin = cam->position;
 		ray.origin = ft_add_vec3(ray.origin, r);
 		ray.origin = ft_add_vec3(ray.origin, u);
+	}
+	else if (cam->type == FISHEYE)
+	{
+		double x = 180.0 - ((screen_x / scene->scene_config.width) * 360.0);
+		double y = 180.0 - ((screen_y / scene->scene_config.height) * 360.0);
+		t_vec3 v = ft_rotate_vec3(cam->forward, ft_make_vec3(y, x, 0.0));
+		ray.origin = cam->position;
+		ray.direction = ft_normalize_vec3(v);
 	}
 	ray.source_shape = NULL;
 	ray.is_shadow = FALSE;

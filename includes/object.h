@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 13:05:58 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/23 14:38:53 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/24 22:12:13 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@
 typedef enum	e_camera_type
 {
 	PERSPECTIVE,
-	ORTHOGRAPHIC
+	ORTHOGRAPHIC,
+	FISHEYE
 }				t_camera_type;
 
 typedef enum	e_light_type

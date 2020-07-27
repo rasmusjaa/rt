@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/27 15:48:22 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/27 16:43:36 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "libft.h"
 #include <math.h>
 #include "debug.h"
+#include "mlx_image.h"
 
 int trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit)
 {
@@ -271,7 +272,7 @@ static t_rgba	color_from_shape(t_rgba color, t_scene *scene, t_raycast_hit *hit)
 //	color = ft_mul_rgba_rgba(color, hit->shape->material->diffuse); //shape->color to material->diffuse /ilman tata mustavalkoseks
 	color = ft_mul_rgba_rgba(color, ft_mul_rgba_rgba(hit->shape->material->diffuse, sample_texture(hit->shape->material->texture, hit->uv)));
 	rec_calced = FALSE;
-	if (scene->scene_config.opacity && hit->shape->material->opacity < 1 - EPSILON) //material->opacity 
+	if (scene->scene_config.opacity && hit->shape->material->opacity < 1 - EPSILON) //material->opacity
 	{
 		refraction = scene->scene_config.refraction ? hit->shape->material->refra_index : 1; //material->refra_index
 		rac = calc_refract(scene, hit->ray.direction, *hit, refraction, hit->depth);
@@ -357,10 +358,10 @@ t_rgba raycast(t_ray *ray, t_scene *scene, int depth)
 	t_rgba color;
 	t_raycast_hit hit;
 
-	color = scene->scene_config.ambient;
+	color = sample_cube_map(scene->cube_map, ray->direction);// scene->scene_config.ambient;
 	if (depth > scene->scene_config.bounces)
 	{
-		return (colorize(scene->scene_config.colorize, ray->last_color));
+		return (sample_cube_map(scene->cube_map, ray->direction)); //(colorize(scene->scene_config.colorize, ray->last_color));
 	}
 	hit.shape = NULL;
 	if (trace(ray, scene, &hit))
