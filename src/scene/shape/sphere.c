@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:19:26 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/23 14:34:49 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/27 13:38:04 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,13 @@
 t_vec3	calc_hit_normal_sphere(t_shape *sphere, t_raycast_hit *hit)
 {
 	return (ft_normalize_vec3(ft_sub_vec3(hit->point, sphere->position)));
+}
+
+t_vec2 calc_hit_uv_sphere(t_shape *sphere, t_raycast_hit *hit)
+{
+	sphere = 0;
+	hit = 0;
+	return (ft_make_vec2(0,0));
 }
 
 int		intersects_sphere(t_ray *ray, t_shape *sphere, t_raycast_hit *hit)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   model.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:31:38 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/20 18:14:57 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/27 13:45:02 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,13 @@ t_vec3 calc_smooth_normal(t_triface *tf, t_vec3 p)
 
 	n = ft_add_vec3(ft_mul_vec3(tf->n[0], p0), ft_add_vec3(ft_mul_vec3(tf->n[1], p1), ft_mul_vec3(tf->n[2], p2)));
 	return (ft_normalize_vec3(n));
+}
+
+t_vec2	calc_hit_uv_model(t_triface *triface, t_raycast_hit *hit)
+{
+	triface = 0;
+	hit = 0;
+	return (ft_make_vec2(0,0));
 }
 
 int intersects_octree_model(t_ray *ray, t_shape *model, t_octree *node, t_raycast_hit *hit, int debug)
