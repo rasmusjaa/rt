@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/27 17:21:26 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/27 18:56:38 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,6 +212,8 @@ void	check_material_fields(t_scene *scene, char *line, int n)
 	mat[n].refra_index = values[8];
 	mat[n].reflection = values[9];
 	mat[n].opacity = values[10];
+	mat[n].u_scale = values[11];
+	mat[n].v_scale = values[12];
 	mat[n].texture = NULL;
 }
 

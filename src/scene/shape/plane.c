@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:24:54 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/27 18:41:31 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/27 19:48:18 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,13 @@ t_vec3	calc_hit_normal_plane(t_shape *plane, t_raycast_hit *hit)
 
 t_vec2 calc_hit_uv_plane(t_shape *plane, t_raycast_hit *hit)
 {
-	t_vec2 uv;
-	//plane->material->u_scale...
-	//
-	plane = 0;	
-	uv.x = ft_abs_d(hit->point.x) / 10;
-	uv.y = ft_abs_d(hit->point.z) / 10;
-	uv.x = fmod(uv.x, 1);
-	uv.y = fmod(uv.y, 1);
+	t_vec2		uv;
+	//t_vec3	p;
+	//p = ft_rotate_vec3(hit.point, ft_invert_vec3(plane->rotation));
+	uv.x = ft_abs_d(hit->point.x) / plane->material->u_scale;
+	uv.y = ft_abs_d(hit->point.z) / plane->material->v_scale;
+	uv.x = uv.x - floor(uv.x);
+	uv.y = uv.y - floor(uv.y);
 	return (uv);
 }
 

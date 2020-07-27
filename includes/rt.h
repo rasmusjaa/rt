@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/27 16:55:11 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/27 18:56:40 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@
 # define N_CAMERA_VALUES 12
 # define N_SHAPE_VALUES 20
 # define N_LIGHT_VALUES 10
-# define N_MATERIAL_VALUES 11
+# define N_MATERIAL_VALUES 13
 # define N_TEXTURE_VALUES 14
 
 
