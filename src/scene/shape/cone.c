@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:27:12 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/23 14:39:32 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/27 13:42:50 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,13 @@ t_vec3	calc_hit_normal_cone(t_shape *cone, t_raycast_hit *hit)
 	n = ft_sub_vec3(cp, ft_mul_vec3(v,
 		(ft_len_vec3(cp) / cos(cone->radius))));
 	return (ft_normalize_vec3(n));
+}
+
+t_vec2 calc_hit_uv_cone(t_shape *cone, t_raycast_hit *hit)
+{
+	cone = 0;
+	hit = 0;
+	return (ft_make_vec2(0,0));
 }
 
 int	intersects_cone(t_ray *ray, t_shape *cone, t_raycast_hit *hit)

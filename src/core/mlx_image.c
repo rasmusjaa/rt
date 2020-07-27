@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/10 16:00:45 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/25 19:27:19 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/27 15:43:16 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 t_mlx_img	*create_mlx_img_from_data(t_mlx *mlx, void *data, int width, int height)
 {
 	t_mlx_img *img;
-	
+
 	if (!mlx)
 		exit_message("create_mlx_img_from_data: mlx is null!");
 	if (!(img = (t_mlx_img*)malloc(sizeof(t_mlx_img))))
@@ -53,7 +53,7 @@ t_mlx_img	*create_mlx_img(t_mlx *mlx, int width, int height)
 	return (img);
 }
 
-void	destroy_mlx_img(t_mlx *mlx, t_mlx_img *mlx_img)
+void		destroy_mlx_img(t_mlx *mlx, t_mlx_img *mlx_img)
 {
 	if (!mlx || !mlx_img)
 	{
@@ -87,7 +87,7 @@ t_mlx_img	*load_xpm_to_mlx_img(t_mlx *mlx, char *file)
 	t_mlx_img	*mlx_img;
 	t_vec2i 	size;
 	void		*img_data;
-	
+
 	if (!(img_data = mlx_xpm_file_to_image(mlx->mlx_ptr, file, &size.x, &size.y)))
 		exit_message("xpm_loader: failed to load xpm file!");
 	if (!(mlx_img = create_mlx_img_from_data(mlx, img_data, size.x, size.y)))

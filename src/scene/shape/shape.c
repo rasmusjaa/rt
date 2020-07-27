@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/15 12:46:47 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/23 14:36:16 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/27 13:46:37 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,5 +84,29 @@ t_vec3 calc_hit_normal(t_raycast_hit *hit)
 	{
 		ft_printf("calc_hit_normal -- unknown shape type\n");
 		return (ft_make_vec3(0, 0, 0));
+	}
+}
+
+t_vec2 calc_hit_uv(t_raycast_hit *hit)
+{
+	if (!hit->shape)
+	{
+		ft_printf("calc_hit_uv -- hit.shape is null!\n");
+		return (ft_make_vec2(0, 0));
+	}
+	if (hit->shape->type == SPHERE)
+		return (calc_hit_uv_sphere(hit->shape, hit));
+	else if (hit->shape->type == PLANE)
+		return (calc_hit_uv_plane(hit->shape, hit));
+	else if (hit->shape->type == CONE)
+		return (calc_hit_uv_cone(hit->shape, hit));
+	else if (hit->shape->type == CYLINDER)
+		return (calc_hit_uv_cylinder(hit->shape, hit));
+	else if (hit->shape->type == MODEL)
+		return (calc_hit_uv_triangle(hit->triface, hit));
+	else
+	{
+		ft_printf("calc_hit_uv -- unknown shape type\n");
+		return (ft_make_vec2(0, 0));
 	}
 }

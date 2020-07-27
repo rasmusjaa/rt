@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/25 12:19:03 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/27 15:51:19 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,12 @@
 # include <pthread.h>
 # include <math.h>
 # include <sys/time.h>
+# include <stdlib.h>
 # include "color.h"
 # include "vector.h"
 # include "mlx.h"
 # include "raycast.h"
+# include "materials.h"
 
 # ifndef __linux__
 
@@ -31,12 +33,15 @@
 
 # define N_THREADS 10
 # define EPSILON 0.0001
-# define N_OBJ_TYPES 4
-# define N_UNIQUE_OBJS 9
+# define N_OBJ_TYPES 6
+# define N_UNIQUE_OBJS 11
 # define N_SCENE_VALUES 13
 # define N_CAMERA_VALUES 12
 # define N_SHAPE_VALUES 20
 # define N_LIGHT_VALUES 10
+# define N_MATERIAL_VALUES 11
+# define N_TEXTURE_VALUES 14
+
 
 # define MIN_WIDTH 800
 # define MIN_HEIGHT 800
@@ -77,6 +82,8 @@
 # define MODEL_STR "model"
 # define MOEBIUS_STR "moebius"
 # define SHAPE_ERROR_STR "shape_error"
+# define MATERIAL_STR "material"
+# define TEXTURE_STR "texture"
 
 # define TRUE 1
 # define FALSE 0
@@ -87,6 +94,7 @@ struct s_light;
 struct s_tp;
 struct s_queue;
 struct s_mlx_img;
+struct s_mesh;
 
 typedef	struct	s_scene_config
 {
@@ -107,18 +115,22 @@ typedef	struct	s_scene_config
 
 typedef struct	s_scene
 {
-	t_scene_config	scene_config;
-	size_t			num_all[N_OBJ_TYPES];
-	struct s_camera	*cameras;
-	size_t			num_cameras;
-	size_t			cur_camera;
-	struct s_light	*lights;
-	size_t			num_lights;
-	struct s_shape	*shapes;
-	size_t			num_shapes;
-	int				help_ray;
+	t_scene_config		scene_config;
+	size_t				num_all[N_OBJ_TYPES];
+	struct s_camera		*cameras;
+	size_t				num_cameras;
+	size_t				cur_camera;
+	struct s_light		*lights;
+	size_t				num_lights;
+	struct s_shape		*shapes;
+	size_t				num_shapes;
+	int					help_ray;
+	struct s_material	*materials;
+	size_t				num_materials;
+	struct s_texture	*textures;
+	size_t				num_textures;
 	struct s_mlx_img	*cube_map;
-}				t_scene;
+}					t_scene;
 
 typedef struct	s_mlx
 {
@@ -159,6 +171,13 @@ typedef struct	s_render_task
 	size_t			render_started;
 }				t_render_task;
 
+typedef struct	s_asset_library
+{
+	struct s_mlx_img	*textures;
+	struct s_mlx_img	*cube_maps;
+	struct s_mesh *meshes;
+}				t_asset_library;
+
 typedef struct	s_rt
 {
 	t_mlx 			*mlx;
@@ -166,6 +185,7 @@ typedef struct	s_rt
 	size_t			num_scenes;
 	size_t 			cur_scene;
 	t_render_task	render_task;
+	t_asset_library	assets;
 }				t_rt;
 
 typedef struct	s_thread
@@ -173,6 +193,7 @@ typedef struct	s_thread
 	t_rt 			*rt;
 	int				thread;
 }				t_thread;
+
 
 void 			hooks_and_loop(t_rt *rt);
 void			reload_scene(t_rt *rt);

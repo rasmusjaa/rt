@@ -6,17 +6,23 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:22:43 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/23 13:52:43 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/27 14:06:03 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SHAPE_H
 # define SHAPE_H
 
+# include "rt.h"
 # include "raycast.h"
 # include "octree.h"
 # include "color.h"
 # include "vector.h"
+
+typedef struct s_ray t_ray;
+typedef struct s_raycast_hit t_raycast_hit;
+typedef struct s_mesh t_mesh;
+typedef struct s_triface t_triface;
 
 typedef struct	s_quadratic
 {
@@ -52,6 +58,9 @@ typedef struct	s_shape
 	t_rgba			color;
 	double			radius;
 	double			angle;
+	
+	int				material_id;
+	t_material		*material;
 	double			opacity;
 	double			reflection;
 	double			refraction;
@@ -83,6 +92,14 @@ t_vec3			calc_hit_normal_sphere(t_shape *sphere, t_raycast_hit *hit);
 t_vec3			calc_hit_normal_plane(t_shape *plane, t_raycast_hit *hit);
 t_vec3			calc_hit_normal_cone(t_shape *cone, t_raycast_hit *hit);
 t_vec3			calc_hit_normal_cylinder(t_shape *c, t_raycast_hit *hit);
+
+t_vec2			calc_hit_uv(t_raycast_hit *hit);
+t_vec2			calc_hit_uv_sphere(t_shape *sphere, t_raycast_hit *hit);
+t_vec2			calc_hit_uv_plane(t_shape *plane, t_raycast_hit *hit);
+t_vec2			calc_hit_uv_cone(t_shape *cone, t_raycast_hit *hit);
+t_vec2			calc_hit_uv_cylinder(t_shape *c, t_raycast_hit *hit);
+t_vec2			calc_hit_uv_triangle(t_triface *triface, t_raycast_hit *hit);
+// t_vec2			calc_hit_uv_model(t_triface *triface, t_raycast_hit *hit);
 
 t_vec3			point_on_ray(t_ray *r, double t);
 int				solve_quadratic(t_quadratic q, double *t1, double *t2);

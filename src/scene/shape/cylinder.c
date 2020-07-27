@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cylinder.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:29:03 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/20 18:18:00 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/27 13:38:34 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,13 @@ t_vec3	calc_hit_normal_cylinder(t_shape *c, t_raycast_hit *hit)
 	d = ft_dot_vec3(dir, c_to_hit);
 	v = ft_add_vec3(c->position, ft_mul_vec3(dir, d));
 	return (ft_normalize_vec3(ft_sub_vec3(hit->point, v)));
+}
+
+t_vec2 calc_hit_uv_cylinder(t_shape *cylinder, t_raycast_hit *hit)
+{
+	cylinder = 0;
+	hit = 0;
+	return (ft_make_vec2(0,0));
 }
 
 int	intersects_cylinder(t_ray *ray, t_shape *cyl, t_raycast_hit *hit)

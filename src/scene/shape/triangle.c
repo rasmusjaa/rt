@@ -6,12 +6,19 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:38:15 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/23 14:31:14 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/27 13:47:14 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shape.h"
 #include "libft.h"
+
+t_vec2 calc_hit_uv_triangle(t_triface *triface, t_raycast_hit *hit)
+{
+	triface = 0;
+	hit = 0;
+	return (ft_make_vec2(0,0));
+}
 
 int intersects_triangle(t_ray *ray, t_triface *triface, t_raycast_hit *hit)
 {
@@ -38,6 +45,7 @@ int intersects_triangle(t_ray *ray, t_triface *triface, t_raycast_hit *hit)
 	{
 		hit->distance = hit->t;
 		hit->normal = triface->normal;
+		hit->triface = triface;
 		return (TRUE);
 	}
 	return (FALSE);
