@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/27 13:33:56 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/27 14:00:24 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,6 +179,13 @@ typedef struct	s_render_task
 	size_t			render_started;
 }				t_render_task;
 
+typedef struct	s_asset_library
+{
+	t_mlx_img	*textures;
+	t_mlx_img	*cube_maps;
+	t_mesh		*meshes;
+}				t_asset_library;
+
 typedef struct	s_rt
 {
 	t_mlx 			*mlx;
@@ -186,6 +193,7 @@ typedef struct	s_rt
 	size_t			num_scenes;
 	size_t 			cur_scene;
 	t_render_task	render_task;
+	t_asset_library	assets;
 }				t_rt;
 
 typedef struct	s_thread
@@ -193,6 +201,7 @@ typedef struct	s_thread
 	t_rt 			*rt;
 	int				thread;
 }				t_thread;
+
 
 void 			hooks_and_loop(t_rt *rt);
 void			reload_scene(t_rt *rt);
