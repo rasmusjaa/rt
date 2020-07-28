@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/28 13:05:16 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/28 17:58:31 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -365,11 +365,19 @@ t_rgba raycast(t_ray *ray, t_scene *scene, int depth)
 		return (sample_cube_map(scene->cube_map, ray->direction)); //(colorize(scene->scene_config.colorize, ray->last_color));
 	}
 	hit.shape = NULL;
+
 	if (trace(ray, scene, &hit))
 	{
 		hit.depth = depth;
 		hit.normal = calc_hit_normal(&hit);
 		hit.uv = calc_hit_uv(&hit);
+		// if (hit.shape->material->texture)
+		// {
+			t_texture *tex = get_texture_by_id(scene, 2);
+			t_rgba rgb = sample_texture(tex, hit.uv);
+			double d = hit.shape->refraction;
+			hit.normal = ft_rotate_vec3(hit.normal, ft_make_vec3(d * (0.5 - rgb.r), d * (0.5 - rgb.g), d * (0.5 - rgb.b)));
+		// }
 		hit.ray = *ray;
 		color = shade(scene, &hit);
 	}

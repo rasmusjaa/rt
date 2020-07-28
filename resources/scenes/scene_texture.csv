@@ -5,12 +5,14 @@ camera;0;50;0;0;0;0;;;;60;0;1;;;;;;;;;
 camera;0;5;10;0;5;0;0;0;0;60;0;1;;;;;;;;;
 TEXTURES;ID;PROC_TYPE;COL1_R;COL1_G;COL1_B;COL1_A;COL2_R;COL2_G;COL2_B;COL2_A;COL3_R;COL3_G;COL3_B;COL3_A;FILE;;;;;;
 texture;1;0;1;1;1;1;1;0;0;1;1;1;1;1;resources/grass.xpm;;;;;;
+texture;2;0;1;1;1;1;1;0;0;1;1;1;1;1;resources/leather.xpm;;;;;;
 MATERIALS;ID;TEX_ID;COL_R;COL_G;COl_B;COL_A;SPECULAR;SHINE;REF_INDEX;GLOSSY;OPACITY;U_SCALE;V_SCALE;;;;;;;;
-material;1;1;1;1;1;1;1;0;1.33;0;1;100;100;;;;;;;;
+material;1;1;1;1;1;1;1;0;1.33;0;1;20;20;;;;;;;;
+material;2;2;1;1;1;1;1;0;1.33;0;1;100;100;"";"";"";"";"";"";"";""
 SHAPES;POS_X;POS_Y;POS_Z;TAR_X;TAR_Y;TAR_Z;ROT_X;ROT_Y;ROT_Z;SCALE;COL_R;COL_G;COL_B;COL_A;RADIUS;ANGLE;MATERIAL_ID;REFLECTION;REFRACTION;MATTE/SHINE (0-1);
-sphere;0;6;0;0;0;0;0;0;0;1;1;1;1;1;1;45;1;0;1.33;0;
-sphere;1;6;0;0;0;0;0;0;0;1;0;0;1;1;1.5;45;1;1;1.33;0;
-plane;-4;0;0;0;0;0;0;0;-90;1;0.4;0.8;0.5;1;2;45;42;0;0;1;
+sphere;0;6;0;0;0;0;0;0;0;1;1;1;1;1;1;45;1;0;0;0;
+sphere;1;6;0;0;0;0;0;0;0;1;0;0;1;1;1.5;45;1;1;30;0;
+plane;-4;0;0;0;0;0;0;0;-90;1;0.4;0.8;0.5;1;2;45;1;0;50;1;
 model;-2;4;0;0;1;0;0;0;0;1;1;0;0;1;2;45;1;0;0;1;resources/obj/cat2.obj
 LIGHTS;POS_X;POS_Y;POS_Z;COL_R;COL_G;COL_B;TYPE;INTENSITY;RADIUS (0-5 for soft shadows);LEDS;;;;;;;;;;;
-point;20;6;10;1;1;1;0;1000;0;1;;;;;;;;;;;
+point;20;6;10;1;1;1;0;300;0;1;;;;;;;;;;;

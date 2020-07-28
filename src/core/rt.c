@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/09 13:50:27 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/28 15:51:29 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/28 17:31:54 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,9 @@ void	destroy_scene(t_rt *rt, t_scene *scene)
 		i++;
 	}
 	i = 0;
-	while (i < scene->num_materials)
+	while (i < scene->num_textures)
 	{
-		destroy_mlx_img(rt->mlx, scene->materials[i].texture->img_data);
+		destroy_mlx_img(rt->mlx, scene->textures[i].img_data);
 		i++;
 	}
 	destroy_mlx_img(rt->mlx, scene->cube_map);

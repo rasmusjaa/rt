@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/28 13:05:46 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/28 17:28:57 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,8 @@ typedef	struct	s_scene_config
 	size_t			colorize;
 }				t_scene_config;
 
+struct s_rt;
+
 typedef struct	s_scene
 {
 	t_scene_config		scene_config;
@@ -131,6 +133,7 @@ typedef struct	s_scene
 	struct s_texture	*textures;
 	size_t				num_textures;
 	struct s_mlx_img	*cube_map;
+	struct s_rt			*rt;
 }					t_scene;
 
 typedef struct	s_mlx

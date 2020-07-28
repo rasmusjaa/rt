@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/28 15:49:51 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/28 17:51:59 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,7 @@ void	check_shape_fields(t_scene *scene, char *line, int n)
 	s->material_id = (int)values[16];
 	s->opacity = 1.0; // temp value.. try to read opacity from material
 	s->reflection = ft_clamp_d(values[17], 0, 1);
-	s->refraction = ft_clamp_d(values[18], 1, 5);
+	s->refraction = ft_clamp_d(values[18], 1, 90);
 	s->shine = ft_clamp_d(values[19], 0, 1);
 	if (s->type == MODEL)
 	{
@@ -233,16 +233,15 @@ void	check_texture_fields(t_scene *scene, char *line, int n)
 	tx[n].color2 = ft_make_rgba(values[6], values[7], values[8], values[9]);
 	tx[n].color3 = ft_make_rgba(values[10], values[11], values[12], values[13]);
 	ft_bzero(tx[n].file, 256);
-	if ((temp = get_shape_file(line, N_TEXTURE_VALUES)))
+	if (!tx[n].procedural_type && (temp = get_shape_file(line, N_TEXTURE_VALUES)))
 	{
 		if (temp[0] != '0' && temp[0] != ';')
 		{
 			i = 0;
 			while (temp[i] && temp[i] != ';')
-			{
 				i++;
-			}
 			ft_strncpy(tx[n].file, temp, i);
+			tx[n].img_data = load_xpm_to_mlx_img(scene->rt->mlx, tx[n].file);
 		}
 	}
 }
@@ -352,18 +351,19 @@ int		init_scene(char *file, t_scene *scene)
 	return (1);
 }
 
-static void	link_shapes_materials_textures(t_rt *rt, t_scene *scene)
+static void	link_shapes_materials_textures(t_scene *scene)
 {
 	size_t		i;
 	// t_material	*mater;
 	// t_shape		*shape;
 
+
 	i = 0;
 	while (i < scene->num_materials)
 	{
 		scene->materials[i].texture = get_texture_by_id(scene, scene->materials[i].texture_id);
-		if (scene->materials[i].texture)
-			scene->materials[i].texture->img_data = load_xpm_to_mlx_img(rt->mlx, scene->materials[i].texture->file);
+		// if (scene->materials[i].texture)
+		// 	scene->materials[i].texture->img_data = load_xpm_to_mlx_img(rt->mlx, scene->materials[i].texture->file);
 		i++;
 	}
 	i = 0;
@@ -390,6 +390,7 @@ t_scene		*read_scene(t_rt *rt, char *file)
 		exit_message("Failed to malloc scene!");
 	if (!init_scene(file, scene))
 		exit_message("Failed to init scene!");
+	scene->rt = rt;
 	fd = open(file, O_RDONLY);
 	if (fd < 0 || read(fd, NULL, 0) == -1)
 		exit_message("Invalid file");
@@ -399,7 +400,7 @@ t_scene		*read_scene(t_rt *rt, char *file)
 		free(line);
 	}
 	close(fd);
-	link_shapes_materials_textures(rt, scene);
+	link_shapes_materials_textures(scene);
 	scene->cube_map = load_xpm_to_mlx_img(rt->mlx, "resources/cube_map.xpm");
 	return (scene);
 }
