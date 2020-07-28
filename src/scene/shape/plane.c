@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   plane.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:24:54 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/28 19:05:18 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/28 21:33:54 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,10 @@ int		intersects_plane(t_ray *ray, t_shape *plane, t_raycast_hit *hit)
 	double	d;
 	t_vec3	temp;
 
-	temp = plane->material->explode > EPSILON ? temp = ft_add_vec3(plane->position, ft_mul_vec3(plane->target, plane->material->explode * ft_inv_lerp_d((double)rand(), 0, RAND_MAX)))  : plane->target;
+	if (plane->material->explode > EPSILON)
+		temp = ft_add_vec3(plane->position, ft_mul_vec3(plane->target, plane->material->explode * ft_inv_lerp_d((double)rand(), 0, RAND_MAX)));
+	else
+		temp = plane->target;
 
 	d = ft_dot_vec3(ray->direction, plane->target);
 	if (ft_abs_d(d) < EPSILON)
