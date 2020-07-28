@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/28 17:51:59 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/28 19:03:11 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,6 +233,7 @@ void	check_texture_fields(t_scene *scene, char *line, int n)
 	tx[n].color2 = ft_make_rgba(values[6], values[7], values[8], values[9]);
 	tx[n].color3 = ft_make_rgba(values[10], values[11], values[12], values[13]);
 	ft_bzero(tx[n].file, 256);
+	tx[n].img_data = NULL;
 	if (!tx[n].procedural_type && (temp = get_shape_file(line, N_TEXTURE_VALUES)))
 	{
 		if (temp[0] != '0' && temp[0] != ';')

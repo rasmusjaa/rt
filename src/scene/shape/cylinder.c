@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:29:03 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/27 13:38:34 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/28 18:32:45 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,19 @@ t_vec3	calc_hit_normal_cylinder(t_shape *c, t_raycast_hit *hit)
 
 t_vec2 calc_hit_uv_cylinder(t_shape *cylinder, t_raycast_hit *hit)
 {
+	double min, max;
+    min = 0;
+	max = 2;
+
+    
+	t_vec2 uv;
+    t_vec3 normal;
+    
 	cylinder = 0;
-	hit = 0;
-	return (ft_make_vec2(0,0));
+    normal = hit->normal; 
+ 	uv.x = atan2(normal.x, normal.y) / (M_PI * 2.0) + 0.5;
+    uv.y = (normal.y - min) / (max - min);
+	return (uv);
 }
 
 int	intersects_cylinder(t_ray *ray, t_shape *cyl, t_raycast_hit *hit)
