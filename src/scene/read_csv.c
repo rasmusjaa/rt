@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_csv.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/24 19:18:01 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/28 12:16:14 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "ft_printf.h"
 #include "shape.h"
 #include "obj_loader.h"
+#include "mlx_image.h"
 #include <math.h>
 #include <time.h>
 #include <sys/stat.h>
@@ -205,7 +206,7 @@ void	check_material_fields(t_scene *scene, char *line, int n)
 	get_fields(line, values, N_MATERIAL_VALUES);
 	mat[n].id = (int)values[0];
 	mat[n].texture_id = (int)values[1];
-	mat[n].diffuse = ft_make_rgba(values[2], values[3], values[4], values[5]); 
+	mat[n].diffuse = ft_make_rgba(values[2], values[3], values[4], values[5]);
 	mat[n].specular = values[6];
 	mat[n].shininess = values[7];
 	mat[n].refra_index = values[8];
@@ -225,8 +226,8 @@ void	check_texture_fields(t_scene *scene, char *line, int n)
 	get_fields(line, values, N_TEXTURE_VALUES);
 	tx[n].id = (int)values[0];
 	tx[n].procedural_type = (int)values[0];
-	tx[n].color1 = ft_make_rgba(values[2], values[3], values[4], values[5]); 
-	tx[n].color2 = ft_make_rgba(values[6], values[7], values[8], values[9]); 
+	tx[n].color1 = ft_make_rgba(values[2], values[3], values[4], values[5]);
+	tx[n].color2 = ft_make_rgba(values[6], values[7], values[8], values[9]);
 	tx[n].color3 = ft_make_rgba(values[10], values[11], values[12], values[13]);
 	tx[n].file = NULL;
 	if ((temp = get_shape_file(line, N_TEXTURE_VALUES)))
@@ -362,7 +363,7 @@ static void	link_shapes_materials_textures(t_scene *scene)
 	}
 }
 
-t_scene		*read_scene(char *file)
+t_scene		*read_scene(t_rt *rt, char *file)
 {
 	int		fd;
 	char	*line;
@@ -383,5 +384,6 @@ t_scene		*read_scene(char *file)
 	}
 	close(fd);
 	link_shapes_materials_textures(scene);
+	scene->cube_map = load_xpm_to_mlx_img(rt->mlx, "resources/cube_map.xpm");
 	return (scene);
 }

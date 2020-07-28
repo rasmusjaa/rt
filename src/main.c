@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 14:59:56 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/27 15:52:34 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/28 12:26:54 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,8 +193,8 @@ void	reload_scene(t_rt *rt)
 	width = scene->scene_config.width;
 	height = scene->scene_config.height;
 	ft_printf("old width %d height %d\n", width, height);
-	destroy_scene(scene);
-	rt->scenes[rt->cur_scene] = read_scene(file);
+	destroy_scene(rt, scene);
+	rt->scenes[rt->cur_scene] = read_scene(rt, file);
 	rt->scenes[rt->cur_scene]->scene_config.width = width;
 	rt->scenes[rt->cur_scene]->scene_config.height = height;
 	ft_printf("old width %d height %d\n", rt->scenes[rt->cur_scene]->scene_config.width, rt->scenes[rt->cur_scene]->scene_config.height);
@@ -202,13 +202,13 @@ void	reload_scene(t_rt *rt)
 	render_scene(rt, rt->scenes[rt->cur_scene]);
 }
 
-static void	init_mlx(t_rt *rt, int win_width, int win_height)
+static void	init_mlx(t_rt *rt)
 {
 	if (!(rt->mlx = (t_mlx *)malloc(sizeof(t_mlx))))
 		exit_message("Failed to malloc mlx!");
 	rt->mlx->mlx_ptr = mlx_init();
-	rt->mlx->win_ptr = mlx_new_window(rt->mlx->mlx_ptr, win_width + 300, win_height, "RT");
-	mlx_string_put(rt->mlx->mlx_ptr, rt->mlx->win_ptr, (win_width / 2) - 110, win_height / 2, 0xFFFFFF, "PRESS SPACE TO RENDER");
+	// rt->mlx->win_ptr = mlx_new_window(rt->mlx->mlx_ptr, win_width + 300, win_height, "RT");
+	// mlx_string_put(rt->mlx->mlx_ptr, rt->mlx->win_ptr, (win_width / 2) - 110, win_height / 2, 0xFFFFFF, "PRESS SPACE TO RENDER");
 }
 
 int		main(int ac, char **av)
@@ -220,15 +220,15 @@ int		main(int ac, char **av)
 	i = 0;
 	if (ac == 1)
 		exit_message("Usage:");
+	init_mlx(rt);
 	while (i < ac - 1)
 	{
-		rt->scenes[i] = read_scene(av[i + 1]);
+		rt->scenes[i] = read_scene(rt, av[i + 1]);
 		print_scene_info(rt->scenes[i]);
 		i++;
 	}
 	t_scene *scene = rt->scenes[rt->cur_scene];
-	init_mlx(rt, scene->scene_config.width, scene->scene_config.height);
-	scene->cube_map = load_xpm_to_mlx_img(rt->mlx, "resources/cube_map.xpm");
+	rt->mlx->win_ptr = mlx_new_window(rt->mlx->mlx_ptr, scene->scene_config.width + 300, scene->scene_config.width, "RT");
 	hooks_and_loop(rt);
 	mlx_loop(rt->mlx->mlx_ptr);
 	return (0);

@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   rt.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/09 13:50:27 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/24 18:53:06 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/28 12:26:19 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
 #include "thread_pool.h"
 #include "shape.h"
+#include "mlx_image.h"
 
 void	exit_message(char *error)
 {
@@ -36,7 +37,7 @@ t_rt	*rt_init(size_t num_scenes)
 	return (rt);
 }
 
-void	destroy_scene(t_scene *scene)
+void	destroy_scene(t_rt *rt, t_scene *scene)
 {
 	size_t i;
 
@@ -50,6 +51,7 @@ void	destroy_scene(t_scene *scene)
 		}
 		i++;
 	}
+	destroy_mlx_img(rt->mlx, scene->cube_map);
 	free(scene->cameras);
 	free(scene->lights);
 	free(scene->shapes);
@@ -63,7 +65,7 @@ void	rt_destroy_exit(t_rt *rt, int status)
 	i = 0;
 	while (i < rt->num_scenes)
 	{
-		destroy_scene(rt->scenes[i]);
+		destroy_scene(rt, rt->scenes[i]);
 		i++;
 	}
 	free(rt->scenes);
