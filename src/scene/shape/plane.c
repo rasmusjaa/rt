@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   plane.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:24:54 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/27 19:48:18 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/28 18:53:39 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,15 @@ t_vec2 calc_hit_uv_plane(t_shape *plane, t_raycast_hit *hit)
 
 int		intersects_plane(t_ray *ray, t_shape *plane, t_raycast_hit *hit)
 {
-	double d;
+	double	d;
+	t_vec3	temp;
+
+	temp = plane->material->explode > EPSILON ? temp = ft_add_vec3(plane->position, ft_mul_vec3(plane->target, plane->material->explode * ft_inv_lerp_d((double)rand(), 0, RAND_MAX)))  : plane->target;
 
 	d = ft_dot_vec3(ray->direction, plane->target);
 	if (ft_abs_d(d) < EPSILON)
 		return (FALSE);
-	hit->t = ft_dot_vec3(ft_sub_vec3(plane->position, ray->origin), plane->target) / d;
+	hit->t = ft_dot_vec3(ft_sub_vec3(temp, ray->origin), plane->target) / d;
 	if (hit->t > MIN_CLIP && hit->t < MAX_CLIP)
 	{
 		hit->distance = hit->t;

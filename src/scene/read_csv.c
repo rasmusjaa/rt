@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_csv.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/28 17:51:59 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/28 18:49:56 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,17 +154,18 @@ void	check_shape_fields(t_scene *scene, char *line, int n)
 	s->type = get_shape_type(line);
 	s->name = get_shape_name(s->type);
 	s->position = ft_clamp_vec3(ft_make_vec3(values[0], values[1], values[2]), MIN_COORD, MAX_COORD);
-	s->target = ft_clamp_vec3(ft_make_vec3(values[3], values[4], values[5]), MIN_COORD, MAX_COORD);
-	s->rotation = ft_clamp_vec3(ft_make_vec3(-values[6], -values[7], -values[8]), 0, 360);
-	s->scale = ft_clamp_d(values[9], MIN_SCALE, MAX_SCALE);
-	s->color = ft_clamp_rgba(ft_make_rgba(values[10], values[11], values[12], values[13]));
-	s->radius = s->scale * ft_clamp_d(values[14], MIN_RADIUS, MAX_RADIUS);
-	s->angle = ft_clamp_d(values[15], MIN_ANGLE, MAX_ANGLE);
-	s->material_id = (int)values[16];
+	s->target = ft_add_vec3(s->position, ft_make_vec3(0, 1, 0));
+//	s->target = ft_clamp_vec3(ft_make_vec3(values[3], values[4], values[5]), MIN_COORD, MAX_COORD);
+	s->rotation = ft_clamp_vec3(ft_make_vec3(-values[3], -values[4], -values[5]), 0, 360);
+	s->scale = ft_clamp_d(values[6], MIN_SCALE, MAX_SCALE);
+	s->color = ft_clamp_rgba(ft_make_rgba(values[7], values[8], values[9], values[10]));
+	s->radius = s->scale * ft_clamp_d(values[11], MIN_RADIUS, MAX_RADIUS);
+	s->angle = ft_clamp_d(values[12], MIN_ANGLE, MAX_ANGLE);
+	s->material_id = (int)values[13];
 	s->opacity = 1.0; // temp value.. try to read opacity from material
-	s->reflection = ft_clamp_d(values[17], 0, 1);
-	s->refraction = ft_clamp_d(values[18], 1, 90);
-	s->shine = ft_clamp_d(values[19], 0, 1);
+	s->reflection = ft_clamp_d(values[14], 0, 1);
+	s->refraction = ft_clamp_d(values[15], 1, 90);
+	s->shine = ft_clamp_d(values[16], 0, 1);
 	if (s->type == MODEL)
 	{
 		file_pointer = get_shape_file(line, N_SHAPE_VALUES);
@@ -215,6 +216,7 @@ void	check_material_fields(t_scene *scene, char *line, int n)
 	mat[n].opacity = values[10];
 	mat[n].u_scale = values[11];
 	mat[n].v_scale = values[12];
+	mat[n].explode = ft_clamp_d(values[13], 0, 5);
 	mat[n].texture = NULL;
 }
 
