@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   texture.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/15 14:41:54 by sluhtala          #+#    #+#             */
-/*   Updated: 2020/07/28 14:58:53 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/28 15:25:14 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "texture.h"
 #include "material.h"
 #include "mlx_image.h"
+#include "libft.h"
 
 
 // void	allocate_textures(t_scene *scene, size_t amount)
@@ -31,10 +32,8 @@ t_texture	new_texture(size_t id, size_t procedural, char *file, t_rgba col1, t_r
 	tex.color1 = col1;
 	tex.color2 = col2;
 	tex.color3 = col3;
-	tex.file = file;
-	if (tex.file)	
-		return (tex);
-	procedural = 1;
+	ft_strcpy(tex.file, file);
+	procedural = 0;
 	/*
 	if (procedural == BRICKS)
 		tex.texture_function = brick_texture;
@@ -76,7 +75,7 @@ t_rgba	sample_texture(t_texture *texture, t_vec2 uv)
 					(double)((c >> (16)) & 0xff) / 255.0,
 						(double)((c >> (8)) & 0xff) / 255.0,
 							(double)((c >> (0)) & 0xff) / 255.0,
-								1.0);	
+								1.0);
 		return (color);
 	}
 	if (texture->procedural_type == CHECKER)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   texture.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/28 14:02:51 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/28 14:56:54 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/28 15:17:23 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ struct s_mlx_img;
 typedef struct			s_texture
 {
 	size_t				id;
-	char				*file;
+	char				file[256];
 	struct s_mlx_img	*img_data;
 	int					procedural_type;
 	t_rgba				color1;

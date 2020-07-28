@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_csv.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/28 14:56:36 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/28 15:49:51 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,7 +223,7 @@ void	check_texture_fields(t_scene *scene, char *line, int n)
 	double		values[N_TEXTURE_VALUES];
 	t_texture	*tx;
 	char		*temp;
-	int			i;
+	size_t		i;
 
 	tx = scene->textures;
 	get_fields(line, values, N_TEXTURE_VALUES);
@@ -232,7 +232,7 @@ void	check_texture_fields(t_scene *scene, char *line, int n)
 	tx[n].color1 = ft_make_rgba(values[2], values[3], values[4], values[5]);
 	tx[n].color2 = ft_make_rgba(values[6], values[7], values[8], values[9]);
 	tx[n].color3 = ft_make_rgba(values[10], values[11], values[12], values[13]);
-	tx[n].file = NULL;
+	ft_bzero(tx[n].file, 256);
 	if ((temp = get_shape_file(line, N_TEXTURE_VALUES)))
 	{
 		if (temp[0] != '0' && temp[0] != ';')
@@ -242,7 +242,7 @@ void	check_texture_fields(t_scene *scene, char *line, int n)
 			{
 				i++;
 			}
-			tx[n].file = ft_strsub(temp, 0, i);
+			ft_strncpy(tx[n].file, temp, i);
 		}
 	}
 }
@@ -373,7 +373,7 @@ static void	link_shapes_materials_textures(t_rt *rt, t_scene *scene)
 		if (scene->shapes[i].material == NULL)
 		{
 			scene->shapes[i].material = (t_material*)malloc(sizeof(t_material));
-			*(scene->shapes[i].material) = new_material(1000, scene->shapes[i].color, NULL);
+			*(scene->shapes[i].material) = new_material(DEFAULT_MATERIAL_ID, scene->shapes[i].color, NULL);
 		}
 		i++;
 	}

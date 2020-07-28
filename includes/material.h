@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   materials.h                                        :+:      :+:    :+:   */
+/*   material.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/15 14:09:34 by sluhtala          #+#    #+#             */
-/*   Updated: 2020/07/28 14:06:08 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/28 15:51:07 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # include "rt.h"
 # include "color.h"
+
+# define DEFAULT_MATERIAL_ID SIZE_MAX
 
 struct s_texture;
 
@@ -27,7 +29,7 @@ typedef struct		s_material
 	int					texture_id;
 	struct s_texture	*texture;
 	double				refra_index;
-	double				reflection;	
+	double				reflection;
 	double				opacity;
 	double				u_scale;
 	double				v_scale;

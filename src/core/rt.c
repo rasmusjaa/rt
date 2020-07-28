@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/09 13:50:27 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/28 14:56:07 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/28 15:51:29 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,24 @@
 #include "shape.h"
 #include "mlx_image.h"
 #include "texture.h"
+#include "ft_printf.h"
 #include <stdarg.h>
 
-void free_null(void *param_type, ...)
+void free_null(size_t count, ...)
 {
 	va_list pl;
+	size_t	i;
+	void	*param_type;
 
-	va_start(pl, param_type); 
-	param_type = va_arg(pl, void *);
-	while (param_type)
+	i = 0;
+	va_start(pl, count);
+	while (i < count)
 	{
+		param_type = va_arg(pl, void *);
+		ft_printf("free\n");
 		free(param_type);
 		param_type = NULL;
-		param_type = va_arg(pl, void *);
+		i++;
 	}
 	va_end(pl);
 }
@@ -66,8 +71,8 @@ void	destroy_scene(t_rt *rt, t_scene *scene)
 			mesh_destroy(scene->shapes[i].mesh);
 			octree_destroy(scene->shapes[i].octree);
 		}
-		free(scene->shapes[i].material);
-		scene->shapes[i].material = NULL;
+		if (scene->shapes[i].material->id == DEFAULT_MATERIAL_ID)
+			free_null(1, scene->shapes[i].material);
 		i++;
 	}
 	i = 0;
@@ -77,12 +82,7 @@ void	destroy_scene(t_rt *rt, t_scene *scene)
 		i++;
 	}
 	destroy_mlx_img(rt->mlx, scene->cube_map);
-	free(scene->cameras);
-	free(scene->lights);
-	free(scene->shapes);
-	free(scene->textures);
-	free(scene->materials);
-//	free_null(scene->cameras, scene->lights, scene->shapes);
+	free_null(5, scene->cameras, scene->lights, scene->shapes, scene->textures, scene->materials);
 	free(scene);
 }
 
@@ -100,6 +100,5 @@ void	rt_destroy_exit(t_rt *rt, int status)
 	// call render task cleanup
 	free(rt->mlx);
 	free(rt);
-	while(1);
 	exit(status);
 }
