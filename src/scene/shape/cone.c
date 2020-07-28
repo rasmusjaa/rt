@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cone.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:27:12 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/28 21:33:04 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/28 18:53:18 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,7 @@ int	intersects_cone(t_ray *ray, t_shape *cone, t_raycast_hit *hit)
 	double		theta_sqr;
 	t_vec3	temp;
 
-	if (cone->material->explode > EPSILON)
-		temp = ft_add_vec3(cone->position, ft_mul_vec3(cone->target, cone->material->explode * ft_inv_lerp_d((double)rand(), 0, RAND_MAX)));
-	else
-		temp = cone->target;
+	temp = cone->material->explode > EPSILON ? temp = ft_add_vec3(cone->position, ft_mul_vec3(cone->target, cone->material->explode * ft_inv_lerp_d((double)rand(), 0, RAND_MAX)))  : cone->target;
 
 
 	theta_sqr = ft_deg_to_rad(cone->angle) * ft_deg_to_rad(cone->angle);

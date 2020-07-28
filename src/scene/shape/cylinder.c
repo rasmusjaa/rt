@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cylinder.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:29:03 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/28 21:34:04 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/28 19:05:06 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,7 @@ int	intersects_cylinder(t_ray *ray, t_shape *cyl, t_raycast_hit *hit)
 	t_vec3		dxv;	// cross product of ray direction and cylinder direction
 	double		temp;
 
-	if ( cyl->material->explode > EPSILON)
-		temp = cyl->radius + cyl->material->explode * ft_inv_lerp_d((double)rand(), 0, RAND_MAX);
-	else
-		temp = cyl->radius;
+	temp = cyl->material->explode > EPSILON ? temp = cyl->radius + cyl->material->explode * ft_inv_lerp_d((double)rand(), 0, RAND_MAX) : cyl->radius;
 	v = cyl->target;
 	ocxv = ft_cross_vec3(ft_sub_vec3(ray->origin, cyl->position), v);
 	dxv = ft_cross_vec3(ray->direction, v);
