@@ -6,7 +6,7 @@
 #    By: wkorande <willehard@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/01 15:48:04 by rjaakonm          #+#    #+#              #
-#    Updated: 2020/07/27 16:43:06 by sluhtala         ###   ########.fr        #
+#    Updated: 2020/07/28 14:58:08 by sluhtala         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,7 +48,6 @@ SRC = 	core/event_hooks/keyboard.c\
 		scene/shape/shape.c\
 		scene/shape/sphere.c\
 		scene/shape/triangle.c\
-		texture/perlin.c\
 		main.c\
 		core/cube_map.c
 

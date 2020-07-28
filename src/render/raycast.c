@@ -17,6 +17,7 @@
 #include "libft.h"
 #include <math.h>
 #include "debug.h"
+#include "texture.h"
 #include "mlx_image.h"
 
 int trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit)

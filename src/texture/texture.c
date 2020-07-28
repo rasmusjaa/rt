@@ -3,22 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   texture.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluhtala <sluhtala@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/15 14:41:54 by sluhtala          #+#    #+#             */
-/*   Updated: 2020/07/27 17:19:40 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/28 14:58:53 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "materials.h"
+#include "texture.h"
+#include "material.h"
 #include "mlx_image.h"
 
-void	allocate_textures(t_scene *scene, size_t amount)
-{
-	if (!(scene->textures = (t_texture*)malloc(sizeof(t_texture) * amount)))
-		exit_message("Error allocating textures");
-	scene->num_textures = amount;
-}
+
+// void	allocate_textures(t_scene *scene, size_t amount)
+// {
+// 	if (!(scene->textures = (t_texture*)malloc(sizeof(t_texture) * amount)))
+// 		exit_message("Error allocating textures");
+// 	scene->num_textures = amount;
+// }
 
 t_texture	new_texture(size_t id, size_t procedural, char *file, t_rgba col1, t_rgba col2, t_rgba col3)
 {

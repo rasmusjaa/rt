@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_csv.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/28 13:04:57 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/28 14:56:36 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@
 #include <math.h>
 #include <time.h>
 #include <sys/stat.h>
-
+#include "texture.h"
+#include "material.h"
 
 t_shape_name_type_map g_shape_name_type_map[SHAPE_TYPES] =
 {
@@ -204,8 +205,8 @@ void	check_material_fields(t_scene *scene, char *line, int n)
 
 	mat = scene->materials;
 	get_fields(line, values, N_MATERIAL_VALUES);
-	mat[n].id = (int)values[0];
-	mat[n].texture_id = (int)values[1];
+	mat[n].id = round(values[0]);
+	mat[n].texture_id = round(values[1]);
 	mat[n].diffuse = ft_make_rgba(values[2], values[3], values[4], values[5]);
 	mat[n].specular = values[6];
 	mat[n].shininess = values[7];
@@ -226,8 +227,8 @@ void	check_texture_fields(t_scene *scene, char *line, int n)
 
 	tx = scene->textures;
 	get_fields(line, values, N_TEXTURE_VALUES);
-	tx[n].id = (int)values[0];
-	tx[n].procedural_type = (int)values[1];
+	tx[n].id = round(values[0]);
+	tx[n].procedural_type = round(values[1]);
 	tx[n].color1 = ft_make_rgba(values[2], values[3], values[4], values[5]);
 	tx[n].color2 = ft_make_rgba(values[6], values[7], values[8], values[9]);
 	tx[n].color3 = ft_make_rgba(values[10], values[11], values[12], values[13]);
@@ -299,14 +300,21 @@ int		init_scene(char *file, t_scene *scene)
 	char	*line;
 	size_t	i;
 
+	// SETTINGS,
+	// CAMERA,
+	// SHAPE,
+	// LIGHT,
+	// MATERIAL,
+	// TEXTURE
+
 	scene->help_ray = 0;
 	scene->scene_config.colorize = 0;
-	scene->num_all[0] = 0;
-	scene->num_all[1] = 0;
-	scene->num_all[2] = 0;
-	scene->num_all[3] = 0;
-	scene->num_all[4] = 0;
-	scene->num_all[5] = 0;
+	scene->num_all[SETTINGS] = 0;
+	scene->num_all[CAMERA] = 0;
+	scene->num_all[SHAPE] = 0;
+	scene->num_all[LIGHT] = 0;
+	scene->num_all[MATERIAL] = 0;
+	scene->num_all[TEXTURE] = 0;
 	scene->scene_config.filepath = file;
 	scene->scene_config.last_modified = last_modified(file);
 
@@ -325,46 +333,47 @@ int		init_scene(char *file, t_scene *scene)
 		free(line);
 	}
 	close(fd);
-	scene->num_cameras = scene->num_all[CAMERA];
 	scene->cur_camera = 0;
+	scene->num_cameras = scene->num_all[CAMERA];
 	scene->num_shapes = scene->num_all[SHAPE];
 	scene->num_lights = scene->num_all[LIGHT];
-	allocate_materials(scene,scene->num_all[MATERIAL]);
-	allocate_textures(scene, scene->num_all[TEXTURE]);
+	scene->num_materials = scene->num_all[MATERIAL];
+	scene->num_textures = scene->num_all[TEXTURE];
+	//allocate_materials(scene,scene->num_all[MATERIAL]);
+	//allocate_textures(scene, scene->num_all[TEXTURE]);
 	if (!(scene->cameras = (t_camera*)malloc(sizeof(t_camera) * scene->num_cameras)) ||
-	!(scene->shapes = (t_shape*)malloc(sizeof(t_shape) * scene->num_shapes)) ||
-	!(scene->lights = (t_light*)malloc(sizeof(t_light) * scene->num_lights)))
-		return (0);
+		!(scene->shapes = (t_shape*)malloc(sizeof(t_shape) * scene->num_shapes)) ||
+		!(scene->lights = (t_light*)malloc(sizeof(t_light) * scene->num_lights)) ||
+		!(scene->textures = (t_texture*)malloc(sizeof(t_texture) * scene->num_textures)) ||
+		!(scene->materials = (t_material*)malloc(sizeof(t_material) * scene->num_materials))
+	)
+		exit_message("Error allocating scene contents");
 	scene->cube_map = NULL;
 	return (1);
 }
 
 static void	link_shapes_materials_textures(t_rt *rt, t_scene *scene)
 {
-	int			i;
-	t_material	*mater;
-	t_shape		*shape;
+	size_t		i;
+	// t_material	*mater;
+	// t_shape		*shape;
 
 	i = 0;
-	while (i < (int)scene->num_materials)
+	while (i < scene->num_materials)
 	{
-		mater = scene->materials + i;
-		mater->texture = get_texture_by_id(scene, mater->texture_id);
-		if (mater->texture)
-		{
-			mater->texture->img_data = load_xpm_to_mlx_img(rt->mlx, mater->texture->file);
-		}
+		scene->materials[i].texture = get_texture_by_id(scene, scene->materials[i].texture_id);
+		if (scene->materials[i].texture)
+			scene->materials[i].texture->img_data = load_xpm_to_mlx_img(rt->mlx, scene->materials[i].texture->file);
 		i++;
 	}
 	i = 0;
-	while (i < (int)scene->num_shapes)
+	while (i < scene->num_shapes)
 	{
-		shape = scene->shapes + i;
-		shape->material = get_material_by_id(scene, shape->material_id);
-		if (shape->material == NULL)
+		scene->shapes[i].material = get_material_by_id(scene, scene->shapes[i].material_id);
+		if (scene->shapes[i].material == NULL)
 		{
-			shape->material = (t_material*)malloc(sizeof(t_material));
-			shape->material[0] = new_material(1000, shape->color, NULL);
+			scene->shapes[i].material = (t_material*)malloc(sizeof(t_material));
+			*(scene->shapes[i].material) = new_material(1000, scene->shapes[i].color, NULL);
 		}
 		i++;
 	}

@@ -22,7 +22,7 @@
 # include "vector.h"
 # include "mlx.h"
 # include "raycast.h"
-# include "materials.h"
+# include "material.h"
 
 # ifndef __linux__
 

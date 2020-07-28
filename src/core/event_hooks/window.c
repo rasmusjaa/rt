@@ -17,7 +17,7 @@
 int		close_hook(t_rt *rt)
 {
 	ft_printf("Scene %d close\n", rt->cur_scene);
-	exit(0);
+	rt_destroy_exit(rt, EXIT_SUCCESS);
 	return (0);
 }
 

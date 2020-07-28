@@ -128,7 +128,7 @@ static int	process_file(t_image_data *image, int fd, char *filename)
 	image_allocate(image, line);
 	free(line);
 	return (binary == 0 ? read_pixels(image, fd) :
-	bin_read_pixels(image, fd));
+		bin_read_pixels(image, fd));
 }
 
 t_image_data	*img_load_ppm(char *filename)
@@ -143,7 +143,7 @@ t_image_data	*img_load_ppm(char *filename)
 		ft_putendl("Error not .ppm file");
 		return (NULL);
 	}
-	if ((fd = open(filename, O_RDONLY)) == -1) 
+	if ((fd = open(filename, O_RDONLY)) == -1 || read(fd, NULL, 0) == -1) 
 	{
 		ft_putendl("Error opening file");
 		return (NULL);
