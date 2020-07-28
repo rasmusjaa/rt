@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:31:38 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/27 13:45:02 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/27 18:45:51 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ int intersects_octree_model(t_ray *ray, t_shape *model, t_octree *node, t_raycas
 				if (cur_hit.distance < hit->distance)
 				{
 					cur_hit.shape = model;
+					cur_hit.triface = &node->contains_trifaces[i];
 					*hit = cur_hit;
 					hit_found = TRUE;
 				}

@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 14:59:56 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/27 16:56:32 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/28 12:53:06 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,7 @@ void	reload_scene(t_rt *rt)
 	width = scene->scene_config.width;
 	height = scene->scene_config.height;
 	ft_printf("old width %d height %d\n", width, height);
-	destroy_scene(scene);
+	destroy_scene(rt, scene);
 	rt->scenes[rt->cur_scene] = read_scene(rt, file);
 	rt->scenes[rt->cur_scene]->scene_config.width = width;
 	rt->scenes[rt->cur_scene]->scene_config.height = height;
@@ -202,13 +202,13 @@ void	reload_scene(t_rt *rt)
 	render_scene(rt, rt->scenes[rt->cur_scene]);
 }
 
-static void	init_mlx(t_rt *rt, int win_width, int win_height)
+static void	init_mlx(t_rt *rt)
 {
 	if (!(rt->mlx = (t_mlx *)malloc(sizeof(t_mlx))))
 		exit_message("Failed to malloc mlx!");
 	rt->mlx->mlx_ptr = mlx_init();
-	rt->mlx->win_ptr = mlx_new_window(rt->mlx->mlx_ptr, win_width + 300, win_height, "RT");
-	mlx_string_put(rt->mlx->mlx_ptr, rt->mlx->win_ptr, (win_width / 2) - 110, win_height / 2, 0xFFFFFF, "PRESS SPACE TO RENDER");
+	// rt->mlx->win_ptr = mlx_new_window(rt->mlx->mlx_ptr, win_width + 300, win_height, "RT");
+	// mlx_string_put(rt->mlx->mlx_ptr, rt->mlx->win_ptr, (win_width / 2) - 110, win_height / 2, 0xFFFFFF, "PRESS SPACE TO RENDER");
 }
 
 int		main(int ac, char **av)
@@ -220,7 +220,7 @@ int		main(int ac, char **av)
 	i = 0;
 	if (ac == 1)
 		exit_message("Usage:");
-	init_mlx(rt, 600, 600);
+	init_mlx(rt);
 	while (i < ac - 1)
 	{
 		rt->scenes[i] = read_scene(rt, av[i + 1]);
@@ -228,8 +228,7 @@ int		main(int ac, char **av)
 		i++;
 	}
 	t_scene *scene = rt->scenes[rt->cur_scene];
-	//init_mlx(rt, scene->scene_config.width, scene->scene_config.height);
-	scene->cube_map = load_xpm_to_mlx_img(rt->mlx, "resources/cube_map.xpm");
+	rt->mlx->win_ptr = mlx_new_window(rt->mlx->mlx_ptr, scene->scene_config.width + 300, scene->scene_config.width, "RT");
 	hooks_and_loop(rt);
 	mlx_loop(rt->mlx->mlx_ptr);
 	return (0);

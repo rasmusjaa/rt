@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:38:15 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/27 13:47:14 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/27 20:08:16 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,18 @@
 
 t_vec2 calc_hit_uv_triangle(t_triface *triface, t_raycast_hit *hit)
 {
-	triface = 0;
-	hit = 0;
-	return (ft_make_vec2(0,0));
+	t_vec2 uv;
+	double u;
+	double v;
+	double w;
+
+	u = ft_len_vec3(ft_cross_vec3(ft_sub_vec3(hit->point, triface->v[0]), ft_sub_vec3(triface->v[2], triface->v[0]))) * 0.5;
+	v = ft_len_vec3(ft_cross_vec3(ft_sub_vec3(hit->point, triface->v[1]), ft_sub_vec3(triface->v[2], triface->v[1]))) * 0.5;
+	w = 1.0 - u - v;
+	uv = ft_add_vec2(ft_mul_vec2(triface->uv[0], u), ft_add_vec2(ft_mul_vec2(triface->uv[1], v), ft_mul_vec2(triface->uv[2], w)));
+	uv.x -= floor(uv.x);
+	uv.y -= floor(uv.y);
+	return (uv);
 }
 
 int intersects_triangle(t_ray *ray, t_triface *triface, t_raycast_hit *hit)
