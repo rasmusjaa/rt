@@ -81,7 +81,6 @@ void	destroy_scene(t_rt *rt, t_scene *scene)
 		destroy_mlx_img(rt->mlx, scene->textures[i].img_data);
 		i++;
 	}
-	destroy_mlx_img(rt->mlx, scene->cube_map);
 	free_null(5, scene->cameras, scene->lights, scene->shapes, scene->textures, scene->materials);
 	free(scene);
 }

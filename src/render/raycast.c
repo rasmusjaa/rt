@@ -271,7 +271,7 @@ static t_rgba	color_from_shape(t_rgba color, t_scene *scene, t_raycast_hit *hit)
 	int			rec_calced;
 
 //	color = ft_mul_rgba_rgba(color, hit->shape->material->diffuse); //shape->color to material->diffuse /ilman tata mustavalkoseks
-	color = ft_mul_rgba_rgba(color, ft_mul_rgba_rgba(hit->shape->material->diffuse, sample_texture(hit->shape->material->texture, hit->uv)));
+	color = ft_mul_rgba_rgba(color, ft_add_rgba(hit->shape->material->diffuse, sample_texture(hit->shape->material->texture, hit->uv)));
 	rec_calced = FALSE;
 	if (scene->scene_config.opacity && hit->shape->material->opacity < 1 - EPSILON) //material->opacity
 	{
@@ -304,10 +304,10 @@ static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
 	if (!hit->shape)
 		return (ambient);
 	color = color_from_lights(scene, hit);
+	color = ft_add_rgba(color, scene->scene_config.ambient);
 	color = color_from_shape(color, scene, hit);
 	if (scene->scene_config.specular && hit->shape->material->shininess > EPSILON) //material->shininess
 		color = ft_add_rgba(color, calc_specular(scene, *hit, scene->cameras[scene->cur_camera]));
-	color = ft_add_rgba(color, ambient);
 	return (ft_clamp_rgba(color));
 }
 
@@ -330,6 +330,7 @@ t_rgba	colorize(size_t colorize, t_rgba color)
 	copy.g = color.g;
 	copy.b = color.b;
 	copy.a = color.a;
+
 	if (colorize)
 	{
 		c = ft_intensity_rgba(color);
@@ -359,11 +360,12 @@ t_rgba raycast(t_ray *ray, t_scene *scene, int depth)
 	t_rgba color;
 	t_raycast_hit hit;
 
-	color = sample_cube_map(scene->cube_map, ray->direction);// scene->scene_config.ambient;
+	if (scene->cube_map)
+		color = sample_cube_map(scene->cube_map->img_data, ray->direction);
+	else
+		color = scene->scene_config.ambient;
 	if (depth > scene->scene_config.bounces)
-	{
-		return (sample_cube_map(scene->cube_map, ray->direction)); //(colorize(scene->scene_config.colorize, ray->last_color));
-	}
+		return (colorize(scene->scene_config.colorize, ray->last_color));
 	hit.shape = NULL;
 
 	if (trace(ray, scene, &hit))

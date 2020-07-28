@@ -35,11 +35,11 @@
 # define EPSILON 0.0001
 # define N_OBJ_TYPES 6
 # define N_UNIQUE_OBJS 11
-# define N_SCENE_VALUES 13
+# define N_SCENE_VALUES 14
 # define N_CAMERA_VALUES 12
-# define N_SHAPE_VALUES 17
+# define N_SHAPE_VALUES 14
 # define N_LIGHT_VALUES 10
-# define N_MATERIAL_VALUES 14
+# define N_MATERIAL_VALUES 13
 # define N_TEXTURE_VALUES 14
 
 
@@ -112,6 +112,7 @@ typedef	struct	s_scene_config
 	int				height;
 	t_rgba			ambient;
 	size_t			colorize;
+	size_t			sky_tex_id;
 }				t_scene_config;
 
 struct s_rt;
@@ -132,7 +133,7 @@ typedef struct	s_scene
 	size_t				num_materials;
 	struct s_texture	*textures;
 	size_t				num_textures;
-	struct s_mlx_img	*cube_map;
+	struct s_texture	*cube_map;
 	struct s_rt			*rt;
 }					t_scene;
 

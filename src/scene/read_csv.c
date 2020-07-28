@@ -94,7 +94,8 @@ void	check_scene_fields(t_scene *scene, char *line, int n)
 	conf->width = round(ft_clamp_d(values[7], MIN_WIDTH, MAX_WIDTH));
 	conf->height = round(ft_clamp_d(values[8], MIN_HEIGHT, MAX_HEIGHT));
 	conf->ambient = ft_clamp_rgba(ft_make_rgba(
-		values[10], values[10], values[11], values[12]));
+		values[9], values[10], values[11], values[12]));
+	conf->sky_tex_id = round(values[13]);
 }
 
 void	check_camera_fields(t_scene *scene, char *line, int n)
@@ -162,10 +163,6 @@ void	check_shape_fields(t_scene *scene, char *line, int n)
 	s->radius = s->scale * ft_clamp_d(values[11], MIN_RADIUS, MAX_RADIUS);
 	s->angle = ft_clamp_d(values[12], MIN_ANGLE, MAX_ANGLE);
 	s->material_id = (int)values[13];
-	s->opacity = 1.0; // temp value.. try to read opacity from material
-	s->reflection = ft_clamp_d(values[14], 0, 1);
-	s->refraction = ft_clamp_d(values[15], 1, 90);
-	s->shine = ft_clamp_d(values[16], 0, 1);
 	if (s->type == MODEL)
 	{
 		file_pointer = get_shape_file(line, N_SHAPE_VALUES);
@@ -208,15 +205,14 @@ void	check_material_fields(t_scene *scene, char *line, int n)
 	get_fields(line, values, N_MATERIAL_VALUES);
 	mat[n].id = round(values[0]);
 	mat[n].texture_id = round(values[1]);
-	mat[n].diffuse = ft_make_rgba(values[2], values[3], values[4], values[5]);
-	mat[n].specular = values[6];
-	mat[n].shininess = values[7];
-	mat[n].refra_index = values[8];
-	mat[n].reflection = values[9];
-	mat[n].opacity = values[10];
-	mat[n].u_scale = values[11];
-	mat[n].v_scale = values[12];
-	mat[n].explode = ft_clamp_d(values[13], 0, 5);
+	mat[n].diffuse = ft_clamp_rgba(ft_make_rgba(values[2], values[3], values[4], values[5]));
+	mat[n].shininess = ft_clamp_d(values[6], 0, 1);
+	mat[n].refra_index = ft_clamp_d(values[7], 1, 6);
+	mat[n].reflection = ft_clamp_d(values[8], 0, 1);
+	mat[n].opacity = ft_clamp_d(values[9], 0, 1);
+	mat[n].u_scale = ft_clamp_d(values[10], 0.01, 100);
+	mat[n].v_scale = ft_clamp_d(values[11], 0.01, 100);
+	mat[n].explode = ft_clamp_d(values[12], 0, 5);
 	mat[n].texture = NULL;
 }
 
@@ -231,9 +227,9 @@ void	check_texture_fields(t_scene *scene, char *line, int n)
 	get_fields(line, values, N_TEXTURE_VALUES);
 	tx[n].id = round(values[0]);
 	tx[n].procedural_type = round(values[1]);
-	tx[n].color1 = ft_make_rgba(values[2], values[3], values[4], values[5]);
-	tx[n].color2 = ft_make_rgba(values[6], values[7], values[8], values[9]);
-	tx[n].color3 = ft_make_rgba(values[10], values[11], values[12], values[13]);
+	tx[n].color1 = ft_clamp_rgba(ft_make_rgba(values[2], values[3], values[4], values[5]));
+	tx[n].color2 = ft_clamp_rgba(ft_make_rgba(values[6], values[7], values[8], values[9]));
+	tx[n].color3 = ft_clamp_rgba(ft_make_rgba(values[10], values[11], values[12], values[13]));
 	ft_bzero(tx[n].file, 256);
 	tx[n].img_data = NULL;
 	if (!tx[n].procedural_type && (temp = get_shape_file(line, N_TEXTURE_VALUES)))
@@ -404,6 +400,7 @@ t_scene		*read_scene(t_rt *rt, char *file)
 	}
 	close(fd);
 	link_shapes_materials_textures(scene);
-	scene->cube_map = load_xpm_to_mlx_img(rt->mlx, "resources/cube_map.xpm");
+	scene->cube_map = get_texture_by_id(scene, scene->scene_config.sky_tex_id);
+//	load_xpm_to_mlx_img(rt->mlx, "resources/cube_map.xpm");
 	return (scene);
 }

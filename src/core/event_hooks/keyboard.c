@@ -118,7 +118,7 @@ int				key_release_hook2(int key, t_rt *rt)
 		render_scene(rt, rt->scenes[rt->cur_scene]);
 	}
 	else if (key == KEY_ESC)
-		close_hook(rt);
+		rt_destroy_exit(rt, EXIT_SUCCESS);
 	return (0);
 }
 
