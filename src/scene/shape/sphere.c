@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sphere.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:19:26 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/28 18:53:48 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/28 21:54:34 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int		intersects_sphere(t_ray *ray, t_shape *sphere, t_raycast_hit *hit)
 	int 		hits;
 	double		temp;
 
-	temp = sphere->material->explode > EPSILON ? temp = sphere->radius + sphere->material->explode * ft_inv_lerp_d((double)rand(), 0, RAND_MAX) : sphere->radius;
+	temp = sphere->material->explode > EPSILON ? sphere->radius + sphere->material->explode * ft_inv_lerp_d((double)rand(), 0, RAND_MAX) : sphere->radius;
 	oc = ft_sub_vec3(ray->origin, sphere->position);
 	q.a = ft_dot_vec3(ray->direction, ray->direction);
 	q.b = 2.0 * ft_dot_vec3(oc, ray->direction);
