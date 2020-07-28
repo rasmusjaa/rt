@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shape.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:22:43 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/27 14:06:03 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/28 18:51:00 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ typedef struct	s_shape
 	t_rgba			color;
 	double			radius;
 	double			angle;
-	
 	int				material_id;
 	t_material		*material;
 	double			opacity;

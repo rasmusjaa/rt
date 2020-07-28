@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rt.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/28 17:28:57 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/28 18:47:30 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@
 # define N_UNIQUE_OBJS 11
 # define N_SCENE_VALUES 13
 # define N_CAMERA_VALUES 12
-# define N_SHAPE_VALUES 20
+# define N_SHAPE_VALUES 17
 # define N_LIGHT_VALUES 10
-# define N_MATERIAL_VALUES 13
+# define N_MATERIAL_VALUES 14
 # define N_TEXTURE_VALUES 14
 
 
