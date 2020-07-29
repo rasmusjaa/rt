@@ -31,7 +31,8 @@ t_texture	new_texture(size_t id, size_t procedural, char *file, t_rgba col1, t_r
 	tex.img_data = NULL;
 	tex.color1 = col1;
 	tex.color2 = col2;
-	tex.color3 = col3;
+	col3.r = 0;
+	tex.settings = ft_make_vec3(1, 0.5, 0);
 	ft_strcpy(tex.file, file);
 	procedural = 0;
 	/*

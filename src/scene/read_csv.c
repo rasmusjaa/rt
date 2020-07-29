@@ -237,7 +237,7 @@ void	check_texture_fields(t_scene *scene, char *line, int n)
 	tx->procedural_type = round(values[1]);
 	tx->color1 = ft_clamp_rgba(ft_make_rgba(values[2], values[3], values[4], values[5]));
 	tx->color2 = ft_clamp_rgba(ft_make_rgba(values[6], values[7], values[8], values[9]));
-	tx->color3 = ft_clamp_rgba(ft_make_rgba(values[10], values[11], values[12], values[13]));
+	tx->settings = ft_clamp_vec3(ft_make_vec3(values[10], values[11], values[12]), 0, 100);
 	ft_bzero(tx->file, 256);
 	tx->img_data = NULL;
 	if (!tx->procedural_type && (file_pointer = get_shape_file(line, N_TEXTURE_VALUES)))

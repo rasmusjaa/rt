@@ -31,7 +31,7 @@ typedef struct			s_texture
 	int					procedural_type;
 	t_rgba				color1;
 	t_rgba				color2;
-	t_rgba				color3;
+	t_vec3				settings;
 }					t_texture;
 
 

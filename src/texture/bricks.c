@@ -15,23 +15,16 @@
 
 t_rgba	brick_texture(t_texture *texture, double u, double v)
 {
-	int rows = 11;
-	double line_w = 0.02;
-	double lines = rows - 1;
-	double rs = ((1.0 - lines * line_w)) / (double)rows;
-	double mod;
+	int rows = (int)texture->settings.x;
+	double mort_scale = texture->settings.y;
+	double section_height = 1 / (double)rows;
+	double brick_height = section_height / (1 + mort_scale);
+	double mort_heigth = brick_height * mort_scale;
 
-	 
-	//v += line_w;
-	mod = fmod(v, rs);
-
-	if (mod < line_w)
+	u = 0;
+	if (fmod(v, section_height) < mort_heigth)
 		return (texture->color2);
-	else
-	{
-		u = 0;
-			return (texture->color1);
-	}
+	return (texture->color1);
 	/*
 	else
 	{
