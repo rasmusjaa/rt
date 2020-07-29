@@ -16,7 +16,7 @@
 # include "vector.h"
 # include "color.h"
 # include "raycast.h"
-# include "materials.h"
+# include "material.h"
 # include "rt.h"
 
 typedef enum	e_camera_type

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   plane.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:24:54 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/27 18:41:31 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/29 13:42:02 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,25 +22,33 @@ t_vec3	calc_hit_normal_plane(t_shape *plane, t_raycast_hit *hit)
 
 t_vec2 calc_hit_uv_plane(t_shape *plane, t_raycast_hit *hit)
 {
-	t_vec2 uv;
-	//plane->material->u_scale...
-	//
-	plane = 0;	
-	uv.x = ft_abs_d(hit->point.x) / 10;
-	uv.y = ft_abs_d(hit->point.z) / 10;
-	uv.x = fmod(uv.x, 1);
-	uv.y = fmod(uv.y, 1);
+	t_vec2		uv;
+	t_vec3	p;
+
+	p = hit->point;
+	
+
+	p = ft_rotate_vec3(hit->point, ft_invert_vec3(plane->rotation));
+	uv.x = (hit->point.x) / plane->material->u_scale;
+	uv.y = (hit->point.z) / plane->material->v_scale;
+	
+	uv.x = uv.x - floor(uv.x);
+	uv.y = uv.y - floor(uv.y);
+
 	return (uv);
 }
 
 int		intersects_plane(t_ray *ray, t_shape *plane, t_raycast_hit *hit)
 {
-	double d;
+	double	d;
+	t_vec3	temp;
+
+	temp = plane->material->explode > EPSILON ? ft_add_vec3(plane->position, ft_mul_vec3(plane->target, plane->material->explode * ft_inv_lerp_d((double)rand(), 0, RAND_MAX)))  : plane->position;
 
 	d = ft_dot_vec3(ray->direction, plane->target);
 	if (ft_abs_d(d) < EPSILON)
 		return (FALSE);
-	hit->t = ft_dot_vec3(ft_sub_vec3(plane->position, ray->origin), plane->target) / d;
+	hit->t = ft_dot_vec3(ft_sub_vec3(temp, ray->origin), plane->target) / d;
 	if (hit->t > MIN_CLIP && hit->t < MAX_CLIP)
 	{
 		hit->distance = hit->t;

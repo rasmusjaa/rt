@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rt.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/09 13:50:27 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/28 12:26:19 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/29 16:05:35 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,27 @@
 #include "thread_pool.h"
 #include "shape.h"
 #include "mlx_image.h"
+#include "texture.h"
+#include "ft_printf.h"
+#include <stdarg.h>
+
+void free_null(size_t count, ...)
+{
+	va_list pl;
+	size_t	i;
+	void	*param_type;
+
+	i = 0;
+	va_start(pl, count);
+	while (i < count)
+	{
+		param_type = va_arg(pl, void *);
+		free(param_type);
+		param_type = NULL;
+		i++;
+	}
+	va_end(pl);
+}
 
 void	exit_message(char *error)
 {
@@ -49,12 +70,17 @@ void	destroy_scene(t_rt *rt, t_scene *scene)
 			mesh_destroy(scene->shapes[i].mesh);
 			octree_destroy(scene->shapes[i].octree);
 		}
+		if (scene->shapes[i].material->id == DEFAULT_MATERIAL_ID)
+			free_null(1, scene->shapes[i].material);
 		i++;
 	}
-	destroy_mlx_img(rt->mlx, scene->cube_map);
-	free(scene->cameras);
-	free(scene->lights);
-	free(scene->shapes);
+	i = 0;
+	while (i < scene->num_textures)
+	{
+		destroy_mlx_img(rt->mlx, scene->textures[i].img_data);
+		i++;
+	}
+	free_null(5, scene->cameras, scene->lights, scene->shapes, scene->textures, scene->materials);
 	free(scene);
 }
 

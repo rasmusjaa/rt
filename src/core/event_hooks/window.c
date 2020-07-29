@@ -18,7 +18,7 @@ int		close_hook(t_rt *rt)
 {
 	ft_printf("Scene %d close\n", rt->cur_scene);
 	exit(0);
-	return (0);
+	return(0);
 }
 
 int		expose_hook(t_rt *rt)

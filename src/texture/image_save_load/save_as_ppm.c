@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   save_asppm.c                                       :+:      :+:    :+:   */
+/*   save_as_ppm.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluhtala <sluhtala@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/09 13:37:27 by sluhtala          #+#    #+#             */
-/*   Updated: 2020/06/09 15:36:32 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/28 13:16:50 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	img_to_ppm(unsigned char *img, char *file_name, int width, int height)
 
 	ft_printf("Saving to image.ppm...\n");
 	file = open(file_name, O_RDWR | O_CREAT, 777);
-	if (file == -1)
+	if (file == -1 || read(file, NULL, 0) == -1)
 	{
 		ft_printf("Error saving image.\n");
 		return ;

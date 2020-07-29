@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/14 16:48:51 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/23 23:02:48 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/29 16:16:31 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ double			in_shadow(t_light light, t_raycast_hit hit, t_scene *scene)
 	shadow_ray.direction = ft_normalize_vec3(shadow_ray.direction);
 	shadow_ray.shadow = 0;
 	shadow_ray.is_shadow = TRUE;
+	shadow_ray.scene = scene;
+	shadow_ray.bump_ray = FALSE;
 	if (scene->help_ray)
 		ft_printf("testing shadow of %f %f %f\n", hit.point.x, hit.point.y,
 			hit.point.z);
@@ -81,6 +83,8 @@ double			calc_shadow(t_light light, t_raycast_hit hit, t_scene *scene)
 		shadow_ray.direction = ft_normalize_vec3(shadow_ray.direction);
 		shadow_ray.shadow = 0;
 		shadow_ray.is_shadow = TRUE;
+		shadow_ray.scene = scene;
+		shadow_ray.bump_ray = FALSE;
 		if (trace(&shadow_ray, scene, &new_hit))
 			s += (1.0 / num_samples) * shadow_ray.shadow;
 		i++;

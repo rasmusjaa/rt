@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/28 12:53:51 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/29 14:02:52 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "libft.h"
 #include <math.h>
 #include "debug.h"
+#include "texture.h"
 #include "mlx_image.h"
 
 int trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit)
@@ -270,7 +271,7 @@ static t_rgba	color_from_shape(t_rgba color, t_scene *scene, t_raycast_hit *hit)
 	int			rec_calced;
 
 //	color = ft_mul_rgba_rgba(color, hit->shape->material->diffuse); //shape->color to material->diffuse /ilman tata mustavalkoseks
-	color = ft_mul_rgba_rgba(color, ft_mul_rgba_rgba(hit->shape->material->diffuse, sample_texture(hit->shape->material->texture, hit->uv)));
+	color = ft_mul_rgba_rgba(color, ft_add_rgba(hit->shape->material->diffuse, sample_texture(hit->shape->material->texture, hit->uv)));
 	rec_calced = FALSE;
 	if (scene->scene_config.opacity && hit->shape->material->opacity < 1 - EPSILON) //material->opacity
 	{
@@ -303,10 +304,10 @@ static t_rgba	shade(t_scene *scene, t_raycast_hit *hit)
 	if (!hit->shape)
 		return (ambient);
 	color = color_from_lights(scene, hit);
+	color = ft_add_rgba(color, scene->scene_config.ambient);
 	color = color_from_shape(color, scene, hit);
 	if (scene->scene_config.specular && hit->shape->material->shininess > EPSILON) //material->shininess
 		color = ft_add_rgba(color, calc_specular(scene, *hit, scene->cameras[scene->cur_camera]));
-	color = ft_add_rgba(color, ambient);
 	return (ft_clamp_rgba(color));
 }
 
@@ -329,6 +330,7 @@ t_rgba	colorize(size_t colorize, t_rgba color)
 	copy.g = color.g;
 	copy.b = color.b;
 	copy.a = color.a;
+
 	if (colorize)
 	{
 		c = ft_intensity_rgba(color);
@@ -358,17 +360,29 @@ t_rgba raycast(t_ray *ray, t_scene *scene, int depth)
 	t_rgba color;
 	t_raycast_hit hit;
 
-	color = sample_cube_map(scene->cube_map, ray->direction);// scene->scene_config.ambient;
+	if (scene->cube_map)
+		color = sample_cube_map(scene->cube_map->img_data, ray->direction);
+	else
+		color = scene->scene_config.ambient;
 	if (depth > scene->scene_config.bounces)
-	{
-		return (sample_cube_map(scene->cube_map, ray->direction)); //(colorize(scene->scene_config.colorize, ray->last_color));
-	}
+		return (colorize(scene->scene_config.colorize, ray->last_color));
 	hit.shape = NULL;
+	ray->scene = scene;
+	ray->bump_ray = 0;
 	if (trace(ray, scene, &hit))
 	{
 		hit.depth = depth;
 		hit.normal = calc_hit_normal(&hit);
 		hit.uv = calc_hit_uv(&hit);
+		if (scene->help_ray)
+			ft_printf("uv: %f %f\n", hit.uv.x, hit.uv.y);
+		// if (hit.shape->material->texture)
+		// {
+		//	t_texture *tex = get_texture_by_id(scene, 2);
+		//	t_rgba rgb = sample_texture(tex, hit.uv);
+		//	double d = hit.shape->refraction;
+		//	hit.normal = ft_rotate_vec3(hit.normal, ft_make_vec3(d * (0.5 - rgb.r), d * (0.5 - rgb.g), d * (0.5 - rgb.b)));
+		// }
 		hit.ray = *ray;
 		color = shade(scene, &hit);
 	}

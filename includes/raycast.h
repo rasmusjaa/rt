@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 13:24:35 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/27 14:06:14 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/29 14:06:48 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,9 @@ typedef struct		s_ray
 	int				is_shadow;
 	t_rgba			last_color;
 	double			last_opacity;
+	struct s_scene	*scene;
+	size_t			bump_ray;
+	t_vec2			uv;
 }					t_ray;
 
 typedef struct		s_raycast_hit
