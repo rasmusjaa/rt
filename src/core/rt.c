@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/09 13:50:27 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/29 12:03:06 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/29 21:44:57 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ t_rt	*rt_init(size_t num_scenes)
 	rt->render_task.render_started = FALSE;
 	rt->render_task.render_finished = FALSE;
 	rt->render_task.done_tiles = NULL;
-	sranddev();
+	srand(4);
 	return (rt);
 }
 

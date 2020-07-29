@@ -5,11 +5,11 @@ camera;0;10;0;0;0;0;0;0;0;60;1;1;;;
 camera;0;0;5;0;0;0;0;0;0;60;0;1;;;
 TEXTURES;ID;PROC_TYPE;COL1_R;COL1_G;COL1_B;COL1_A;COL2_R;COL2_G;COL2_B;COL2_A;COL3_R;COL3_G;COL3_B;COL3_A;FILE
 texture;1;0;1;1;1;1;1;0;0;1;1;1;1;1;resources/cube_map.xpm
-texture;2;0;1;1;1;1;1;0;0;1;1;1;1;1;resources/grass.xpm
+texture;2;1;1;1;1;1;1;0;0;1;1;1;1;1;resources/grass.xpm
 MATERIALS;ID;TEX_ID;COL_R;COL_G;COl_B;COL_A;SHINE;REF_INDEX;REFLECTION;OPACITY;U_SCALE;V_SCALE;EXPLODE;;
-material;1;2;0;0;0;0;0;1.33;1;1;20;20;0;;
+material;1;2;0;0;0;0;0;1.33;0;1;20;20;0;;
 SHAPES;POS_X;POS_Y;POS_Z;ROT_X;ROT_Y;ROT_Z;SCALE;COL_R;COL_G;COL_B;COL_A;RADIUS;ANGLE;MATERIAL_ID;
-sphere;0;0;0;0;0;0;1;1;1;1;1;1;45;1;
+model;0;0;0;0;0;0;1;1;1;1;1;1;45;1;resources/obj/icosphere.obj
 sphere;-3;0;-5;0;0;0;1;1;1;1;1;1;45;1;
 LIGHTS;POS_X;POS_Y;POS_Z;COL_R;COL_G;COL_B;TYPE;INTENSITY;RADIUS (0-5 for soft shadows);LEDS;;;;;
 point;2;5;5;1;1;1;0;400;0;100;;;;;
