@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bounds.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 13:23:19 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/23 14:55:10 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/29 17:56:52 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef struct	s_bounds
 }				t_bounds;
 
 int				inside_bounds(t_bounds object_bounds, t_bounds bounds);
+int				point_inside_bounds(t_vec3 p, t_bounds bounds);
 int				intersects_bounds(t_ray *ray, t_bounds *b, int debug);
 
 #endif
