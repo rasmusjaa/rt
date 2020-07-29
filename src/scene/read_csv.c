@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/28 19:04:26 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/29 16:32:29 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,6 +149,7 @@ void	check_shape_fields(t_scene *scene, char *line, int n)
 	char		file[256];
 	char		*file_pointer;
 	t_shape		*s;
+	int			i;
 
 	s = &scene->shapes[n];
 	get_fields(line, values, N_SHAPE_VALUES);
@@ -163,12 +164,15 @@ void	check_shape_fields(t_scene *scene, char *line, int n)
 	s->radius = s->scale * ft_clamp_d(values[11], MIN_RADIUS, MAX_RADIUS);
 	s->angle = ft_clamp_d(values[12], MIN_ANGLE, MAX_ANGLE);
 	s->material_id = (int)values[13];
-	if (s->type == MODEL)
+	if (s->type == MODEL && (file_pointer = get_shape_file(line, N_SHAPE_VALUES)))
 	{
-		file_pointer = get_shape_file(line, N_SHAPE_VALUES);
 		if (file_pointer == NULL)
 			exit_message("no model on model line");
-		ft_strcpy(file, file_pointer);
+		i = 0;
+		while(file_pointer[0 + i] != '\n' && file_pointer[0 + i] != ';' && file_pointer[0 + i] != 0)
+			i++;
+		ft_strncpy(file, file_pointer, i);
+		file[i] = 0;
 		s->mesh = obj_load(file, *s);
 		s->octree = octree_create_node(s->mesh->bounds, s->mesh->num_trifaces, s->mesh->trifaces);
 		ft_printf("loaded model from file %s\n", file);
@@ -201,47 +205,51 @@ void	check_material_fields(t_scene *scene, char *line, int n)
 	double		values[N_MATERIAL_VALUES];
 	t_material	*mat;
 
-	mat = scene->materials;
+	mat = &scene->materials[n];
 	get_fields(line, values, N_MATERIAL_VALUES);
-	mat[n].id = round(values[0]);
-	mat[n].texture_id = round(values[1]);
-	mat[n].diffuse = ft_clamp_rgba(ft_make_rgba(values[2], values[3], values[4], values[5]));
-	mat[n].shininess = ft_clamp_d(values[6], 0, 1);
-	mat[n].refra_index = ft_clamp_d(values[7], 1, 6);
-	mat[n].reflection = ft_clamp_d(values[8], 0, 1);
-	mat[n].opacity = ft_clamp_d(values[9], 0, 1);
-	mat[n].u_scale = ft_clamp_d(values[10], 0.01, 100);
-	mat[n].v_scale = ft_clamp_d(values[11], 0.01, 100);
-	mat[n].explode = ft_clamp_d(values[12], 0, 5);
-	mat[n].texture = NULL;
+	mat->id = round(values[0]);
+	mat->texture_id = round(values[1]);
+	mat->diffuse = ft_clamp_rgba(ft_make_rgba(values[2], values[3], values[4], values[5]));
+	mat->shininess = ft_clamp_d(values[6], 0, 1);
+	mat->refra_index = ft_clamp_d(values[7], 1, 6);
+	mat->reflection = ft_clamp_d(values[8], 0, 1);
+	mat->opacity = ft_clamp_d(values[9], 0, 1);
+	mat->u_scale = ft_clamp_d(values[10], 0.01, 100);
+	mat->v_scale = ft_clamp_d(values[11], 0.01, 100);
+	mat->explode = ft_clamp_d(values[12], 0, 5);
+	mat->normal_tex_id = round(ft_clamp_d(values[13], 0, 100));
+	mat->normal_mult = ft_clamp_d(values[14], 0, 90);
+	mat->bump_tex_id = round(ft_clamp_d(values[15], 0, 100));
+	mat->bump_mult = ft_clamp_d(values[16], 0, 100);
+	mat->texture = NULL;
 }
 
 void	check_texture_fields(t_scene *scene, char *line, int n)
 {
 	double		values[N_TEXTURE_VALUES];
 	t_texture	*tx;
-	char		*temp;
+	char		*file_pointer;
 	size_t		i;
 
-	tx = scene->textures;
+	tx = &scene->textures[n];
 	get_fields(line, values, N_TEXTURE_VALUES);
-	tx[n].id = round(values[0]);
-	tx[n].procedural_type = round(values[1]);
-	tx[n].color1 = ft_clamp_rgba(ft_make_rgba(values[2], values[3], values[4], values[5]));
-	tx[n].color2 = ft_clamp_rgba(ft_make_rgba(values[6], values[7], values[8], values[9]));
-	tx[n].color3 = ft_clamp_rgba(ft_make_rgba(values[10], values[11], values[12], values[13]));
-	ft_bzero(tx[n].file, 256);
-	tx[n].img_data = NULL;
-	if (!tx[n].procedural_type && (temp = get_shape_file(line, N_TEXTURE_VALUES)))
+	tx->id = round(values[0]);
+	tx->procedural_type = round(values[1]);
+	tx->color1 = ft_clamp_rgba(ft_make_rgba(values[2], values[3], values[4], values[5]));
+	tx->color2 = ft_clamp_rgba(ft_make_rgba(values[6], values[7], values[8], values[9]));
+	tx->color3 = ft_clamp_rgba(ft_make_rgba(values[10], values[11], values[12], values[13]));
+	ft_bzero(tx->file, 256);
+	tx->img_data = NULL;
+	if (!tx->procedural_type && (file_pointer = get_shape_file(line, N_TEXTURE_VALUES)))
 	{
-		if (temp[0] != '0' && temp[0] != ';')
-		{
-			i = 0;
-			while (temp[i] && temp[i] != ';')
-				i++;
-			ft_strncpy(tx[n].file, temp, i);
-			tx[n].img_data = load_xpm_to_mlx_img(scene->rt->mlx, tx[n].file);
-		}
+		if (file_pointer == NULL)
+			exit_message("no texture on texture line");
+		i = 0;
+		while(file_pointer[0 + i] != '\n' && file_pointer[0 + i] != ';' && file_pointer[0 + i] != 0)
+			i++;
+		ft_strncpy(tx->file, file_pointer, i);
+		tx->file[i] = 0;
+		tx->img_data = load_xpm_to_mlx_img(scene->rt->mlx, tx->file);
 	}
 }
 
@@ -298,13 +306,6 @@ int		init_scene(char *file, t_scene *scene)
 	char	*line;
 	size_t	i;
 
-	// SETTINGS,
-	// CAMERA,
-	// SHAPE,
-	// LIGHT,
-	// MATERIAL,
-	// TEXTURE
-
 	scene->help_ray = 0;
 	scene->scene_config.colorize = 0;
 	scene->num_all[SETTINGS] = 0;
@@ -353,15 +354,11 @@ int		init_scene(char *file, t_scene *scene)
 static void	link_shapes_materials_textures(t_scene *scene)
 {
 	size_t		i;
-	// t_material	*mater;
-	// t_shape		*shape;
-
 
 	i = 0;
 	while (i < scene->num_materials)
 	{
 		scene->materials[i].texture = get_texture_by_id(scene, scene->materials[i].texture_id);
-		// if (scene->materials[i].texture)
 		// 	scene->materials[i].texture->img_data = load_xpm_to_mlx_img(rt->mlx, scene->materials[i].texture->file);
 		i++;
 	}
@@ -401,6 +398,7 @@ t_scene		*read_scene(t_rt *rt, char *file)
 	close(fd);
 	link_shapes_materials_textures(scene);
 	scene->cube_map = get_texture_by_id(scene, scene->scene_config.sky_tex_id);
-//	load_xpm_to_mlx_img(rt->mlx, "resources/cube_map.xpm");
+	if (scene->cube_map->procedural_type || !scene->cube_map->img_data)
+		scene->cube_map = NULL;
 	return (scene);
 }

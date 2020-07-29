@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   plane.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:24:54 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/28 21:54:25 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/29 13:42:02 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@ t_vec2 calc_hit_uv_plane(t_shape *plane, t_raycast_hit *hit)
 {
 	t_vec2		uv;
 	t_vec3	p;
-	
+
 	p = hit->point;
 	//p = ft_rotate_vec3(hit.point, ft_invert_vec3(plane->rotation));
 	uv.x = ft_abs_d(hit->point.x) / plane->material->u_scale;
 	uv.y = ft_abs_d(hit->point.z) / plane->material->v_scale;
-	
+
 	uv.x = uv.x - floor(uv.x);
 	uv.y = uv.y - floor(uv.y);
 	if (p.z < 0)
@@ -44,7 +44,7 @@ int		intersects_plane(t_ray *ray, t_shape *plane, t_raycast_hit *hit)
 	double	d;
 	t_vec3	temp;
 
-	temp = plane->material->explode > EPSILON ? ft_add_vec3(plane->position, ft_mul_vec3(plane->target, plane->material->explode * ft_inv_lerp_d((double)rand(), 0, RAND_MAX)))  : plane->target;
+	temp = plane->material->explode > EPSILON ? ft_add_vec3(plane->position, ft_mul_vec3(plane->target, plane->material->explode * ft_inv_lerp_d((double)rand(), 0, RAND_MAX)))  : plane->position;
 
 	d = ft_dot_vec3(ray->direction, plane->target);
 	if (ft_abs_d(d) < EPSILON)

@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/15 14:09:34 by sluhtala          #+#    #+#             */
-/*   Updated: 2020/07/28 18:44:29 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/29 13:49:39 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ typedef struct		s_material
 	t_rgba				diffuse;
 	double				shininess;
 	double				specular;
-	int					texture_id;
+	size_t				texture_id;
 	struct s_texture	*texture;
 	double				refra_index;
 	double				reflection;
@@ -34,22 +34,17 @@ typedef struct		s_material
 	double				u_scale;
 	double				v_scale;
 	double				explode;
+	size_t				normal_tex_id;
+	size_t				bump_tex_id;
+	double				normal_mult;
+	double				bump_mult;
 }					t_material;
 
 typedef struct s_scene t_scene;
 
 t_material			new_material(size_t id, t_rgba diffuse, struct s_texture *texture);
 
-//void				allocate_textures(t_scene *scene, size_t amount);
-//void				allocate_materials(t_scene *scene, size_t amount);
-
-
 t_material			*get_material_by_id(t_scene *scene, size_t id);
 struct s_texture			*get_texture_by_id(t_scene *scene, size_t id);
-
-// t_vec2		cylinder_uv(t_vec3 point, double max, double min);
-// t_vec2		sphere_uv(t_vec3 point);
-// t_vec2		plane_uv(t_vec3 point);
-
 
 #endif
