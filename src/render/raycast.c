@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/28 18:41:39 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/29 14:02:52 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -367,7 +367,8 @@ t_rgba raycast(t_ray *ray, t_scene *scene, int depth)
 	if (depth > scene->scene_config.bounces)
 		return (colorize(scene->scene_config.colorize, ray->last_color));
 	hit.shape = NULL;
-
+	ray->scene = scene;
+	ray->bump_ray = 0;
 	if (trace(ray, scene, &hit))
 	{
 		hit.depth = depth;

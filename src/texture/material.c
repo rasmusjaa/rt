@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/15 14:24:30 by sluhtala          #+#    #+#             */
-/*   Updated: 2020/07/28 14:57:07 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/29 16:40:38 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@
 // 	allocate_materials(scene, 2);
 // 	allocate_textures(scene, 2);
 
-// 	scene->textures[0] = new_texture(1, CHECKER, NULL, col1, col2, col3); 
+// 	scene->textures[0] = new_texture(1, CHECKER, NULL, col1, col2, col3);
 // 	scene->materials[0] = new_material(1, ft_make_rgba(1, 0, 0, 1), scene->textures);
-	
-// 	scene->textures[1] = new_texture(2, BRICKS, NULL, col1, col2, col3); 
+
+// 	scene->textures[1] = new_texture(2, BRICKS, NULL, col1, col2, col3);
 // 	scene->materials[1] = new_material(2, ft_make_rgba(1, 0, 0, 1), scene->textures + 1);
 
 // }
@@ -41,7 +41,7 @@
 // 	i = 0;
 // 	if(!(scene->materials = (t_material*)malloc(sizeof(t_material) * amount)))
 // 		exit_message("Error allocating materials");
-// 	scene->num_materials = amount;	
+// 	scene->num_materials = amount;
 // }
 
 t_material new_material(size_t id, t_rgba diffuse, t_texture *texture)
@@ -54,6 +54,8 @@ t_material new_material(size_t id, t_rgba diffuse, t_texture *texture)
 	mat.specular = 1;
 	mat.texture = texture;
 	mat.opacity = 1;
+	mat.normal_tex_id = 0;
+	mat.bump_tex_id = 0;
 	return (mat);
 }
 
@@ -65,7 +67,7 @@ t_material *get_material_by_id(t_scene *scene, size_t id)
 	while (i < scene->num_materials)
 	{
 		if (scene->materials[i].id == id)
-			return (scene->materials + i);
+			return (&scene->materials[i]);
 		i++;
 	}
 	return (NULL);

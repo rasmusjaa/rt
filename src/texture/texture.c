@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   texture.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/15 14:41:54 by sluhtala          #+#    #+#             */
-/*   Updated: 2020/07/28 15:25:14 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/29 16:34:33 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,13 @@ t_texture *get_texture_by_id(t_scene *scene, size_t id)
 {
 	size_t i;
 
+	if (!scene)
+		return (NULL);
 	i = 0;
 	while (i < scene->num_textures)
 	{
 		if (scene->textures[i].id == id)
-			return (scene->textures + i);
+			return (&scene->textures[i]);
 		i++;
 	}
 	return (NULL);
@@ -67,7 +69,7 @@ t_rgba	sample_texture(t_texture *texture, t_vec2 uv)
 {
 	t_rgba color;
 	if (!texture || (!texture->procedural_type && !texture->img_data))
-		return (ft_make_rgba(1, 1, 1, 1));
+		return (ft_make_rgba(0, 0, 0, 1));
 	if (texture && texture->procedural_type == 0 && texture->img_data)
 	{
 		int c = get_pixel_mlx_img(texture->img_data, uv.x * texture->img_data->width, uv.y * texture->img_data->height);
@@ -82,5 +84,5 @@ t_rgba	sample_texture(t_texture *texture, t_vec2 uv)
 		return (checker_texture(texture, uv.x, uv.y));
 	if (texture->procedural_type == BRICKS)
 		return (brick_texture(texture, uv.x, uv.y));
-	return (ft_make_rgba(1, 1, 1, 1));
+	return (ft_make_rgba(0, 0, 0, 1));
 }
