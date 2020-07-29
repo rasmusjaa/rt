@@ -14,14 +14,13 @@
 
 t_rgba	brick_texture(t_texture *texture, double u, double v)
 {
-	int		rows = (int)texture->settings.x;
-	double	mort_scale = texture->settings.y;
-	double	section_height = 1 / (double)rows;
-	double	brick_height = section_height / (1 + mort_scale);
-	double	mort_height = brick_height * mort_scale;
+	int		rows 			= (int)texture->settings.x;
+	double	mort_scale 		= texture->settings.y;
+	double	section_height 	= 1 / (double)rows;
+	double	brick_height 	= section_height / (1 + mort_scale);
+	double	mort_height 	= brick_height * mort_scale;
 
-	double a = 1 / (brick_height + mort_scale);
-	double brick_width = brick_height * a * 2;
+	double brick_width = brick_height * 3.333333;
 	
 	if (fmod(v, section_height) < mort_height)
 		return (texture->color2);
@@ -33,7 +32,7 @@ t_rgba	brick_texture(t_texture *texture, double u, double v)
 	}
 	else
 	{
-		if (fmod(u + brick_width / 2.0, brick_width + mort_height) < mort_height)
+		if (fmod(u + (mort_height + brick_width) / 2, brick_width + mort_height) < mort_height)
 			return (texture->color2);
 		return (texture->color1);
 	}
