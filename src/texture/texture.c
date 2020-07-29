@@ -80,6 +80,7 @@ t_rgba	sample_texture(t_texture *texture, t_vec2 uv)
 	}
 	if (texture->procedural_type == CHECKER)
 		return (checker_texture(texture, uv.x, uv.y));
-
+	if (texture->procedural_type == BRICKS)
+		return (brick_texture(texture, uv.x, uv.y));
 	return (ft_make_rgba(1, 1, 1, 1));
 }

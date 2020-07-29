@@ -373,6 +373,8 @@ t_rgba raycast(t_ray *ray, t_scene *scene, int depth)
 		hit.depth = depth;
 		hit.normal = calc_hit_normal(&hit);
 		hit.uv = calc_hit_uv(&hit);
+		if (scene->help_ray)
+			ft_printf("uv: %f %f\n", hit.uv.x, hit.uv.y);
 		// if (hit.shape->material->texture)
 		// {
 		//	t_texture *tex = get_texture_by_id(scene, 2);
