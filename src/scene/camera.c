@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 23:03:26 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/29 12:22:17 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/29 23:14:41 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,30 +55,28 @@ t_ray get_camera_ray(t_scene *scene, t_camera *cam, double screen_x,
 	t_vec2 target;
 
 	t_vec3 focal_point;
-	double focal_length;
-	double aperture;
-
-	aperture = 0.08;
-	focal_length = 4;
+	cam->focal_length = 10;
+	cam->aperture = 5.0;
 
 	target.x = 2.0 * screen_x / (scene->scene_config.width - 1) - 1.0;
 	target.y = -2.0 * screen_y / (scene->scene_config.height - 1) + 1.0;
 	if (cam->type == PERSPECTIVE)
 	{
 		ray.origin = cam->position;
-
 		ray.direction = cam->forward;
 		r = ft_mul_vec3(cam->right, target.x * cam->horizontal);
 		u = ft_mul_vec3(cam->up, target.y * cam->vertical);
 		ray.direction = ft_add_vec3(ray.direction, r);
 		ray.direction = ft_add_vec3(ray.direction, u);
 		ray.direction = ft_normalize_vec3(ray.direction);
-
-		focal_point = ft_add_vec3(cam->position, ft_mul_vec3(ray.direction, focal_length));
-		ray.origin.x += random_d() * aperture;
-		ray.origin.y += random_d() * aperture;
-		ray.origin.z += random_d() * aperture;
-		ray.direction = ft_normalize_vec3(ft_sub_vec3(focal_point, ray.origin));
+		if (scene->scene_config.dof)
+		{
+			focal_point = ft_add_vec3(cam->position, ft_mul_vec3(ray.direction, cam->focal_length));
+			ray.origin.x += random_d() * cam->aperture;
+			ray.origin.y += random_d() * cam->aperture;
+			ray.origin.z += random_d() * cam->aperture;
+			ray.direction = ft_normalize_vec3(ft_sub_vec3(focal_point, ray.origin));
+		}
 	}
 	else if (cam->type == ORTHOGRAPHIC)
 	{
@@ -97,8 +95,6 @@ t_ray get_camera_ray(t_scene *scene, t_camera *cam, double screen_x,
 		ray.origin = cam->position;
 		ray.direction = ft_normalize_vec3(v);
 	}
-
-
 	ray.source_shape = NULL;
 	ray.is_shadow = FALSE;
 	return (ray);

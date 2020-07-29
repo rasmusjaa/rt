@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_csv.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/29 16:32:29 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/29 23:16:27 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -400,5 +400,7 @@ t_scene		*read_scene(t_rt *rt, char *file)
 	scene->cube_map = get_texture_by_id(scene, scene->scene_config.sky_tex_id);
 	if (scene->cube_map->procedural_type || !scene->cube_map->img_data)
 		scene->cube_map = NULL;
+	scene->scene_config.dof = FALSE;
+	scene->scene_config.dof_samples = 50;
 	return (scene);
 }
