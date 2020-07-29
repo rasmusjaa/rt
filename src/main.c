@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 14:59:56 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/28 12:53:06 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/29 12:36:18 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ void	render_tile_job(void *data)
 	t_tile_job_data *job_data;
 	t_vec2i cur;
 	t_vec2i tile_coord;
+	t_rgba color;
+	t_rgba newcolor;
 
 	job_data = (t_tile_job_data*)data;
 	tile_coord = ft_make_vec2i(job_data->screen_coord.x / job_data->tile_size.x, job_data->screen_coord.y / job_data->tile_size.y);
@@ -32,8 +34,22 @@ void	render_tile_job(void *data)
 		cur.x = job_data->screen_coord.x;
 		while (cur.x < job_data->screen_coord.x + job_data->tile_size.x)
 		{
-			t_ray camera_ray = get_camera_ray(job_data->scene, job_data->camera, cur.x, cur.y);
-			t_rgba color = raycast(&camera_ray, job_data->scene, 0);
+			size_t i = 0;
+			color = ft_make_rgba(0,0,0,0);
+			newcolor = ft_make_rgba(0,0,0,0);
+			while (i < 200)
+			{
+				t_ray camera_ray = get_camera_ray(job_data->scene, job_data->camera, cur.x, cur.y);
+				newcolor = raycast(&camera_ray, job_data->scene, 0);
+				color.r += newcolor.r;
+				color.g += newcolor.g;
+				color.b += newcolor.b;
+				i++;
+			}
+			color.r /= 200;
+			color.g /= 200;
+			color.b /= 200;
+			color = ft_clamp_rgba(color);
 			put_pixel_mlx_img(job_data->mlx_img, cur.x - job_data->screen_coord.x, cur.y - job_data->screen_coord.y, ft_get_color(color));
 			cur.x++;
 		}

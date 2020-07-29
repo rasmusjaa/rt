@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 23:03:26 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/29 00:23:44 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/29 12:22:17 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_vec2   random_inside_unit_circle(void)
 	t_vec2 p;
 	double r;
 	double theta;
-	
+
 	r = sqrt((double)rand() / RAND_MAX * 2.0);
 	theta = ((double)rand() / RAND_MAX * 2.0) * 2 * M_PI;
 	p.x = r * cos(theta);
@@ -41,7 +41,9 @@ t_vec2   random_inside_unit_circle(void)
 
 double   random_d(void)
 {
-	return ((double)rand() / RAND_MAX * 2.0 - 1.0);
+	double r;
+	r = ((double)rand() / RAND_MAX * 2.0 - 1.0);
+	return (r);
 }
 
 t_ray get_camera_ray(t_scene *scene, t_camera *cam, double screen_x,
@@ -56,7 +58,7 @@ t_ray get_camera_ray(t_scene *scene, t_camera *cam, double screen_x,
 	double focal_length;
 	double aperture;
 
-	aperture = 0.2;
+	aperture = 0.08;
 	focal_length = 4;
 
 	target.x = 2.0 * screen_x / (scene->scene_config.width - 1) - 1.0;
@@ -64,7 +66,7 @@ t_ray get_camera_ray(t_scene *scene, t_camera *cam, double screen_x,
 	if (cam->type == PERSPECTIVE)
 	{
 		ray.origin = cam->position;
-		
+
 		ray.direction = cam->forward;
 		r = ft_mul_vec3(cam->right, target.x * cam->horizontal);
 		u = ft_mul_vec3(cam->up, target.y * cam->vertical);
