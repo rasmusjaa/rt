@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 23:03:26 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/29 23:14:41 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/30 13:58:19 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,6 @@ t_ray get_camera_ray(t_scene *scene, t_camera *cam, double screen_x,
 	t_vec2 target;
 
 	t_vec3 focal_point;
-	cam->focal_length = 10;
-	cam->aperture = 5.0;
 
 	target.x = 2.0 * screen_x / (scene->scene_config.width - 1) - 1.0;
 	target.y = -2.0 * screen_y / (scene->scene_config.height - 1) + 1.0;

@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 14:59:56 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/29 23:10:37 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/30 15:39:54 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ void	init_render_task(t_render_task *task, size_t res)
 	task->render_started = FALSE;
 	task->num_jobs = res * res;
 	task->jobs = task->num_jobs;
+	if (task->thread_pool)
+		tp_destroy(task->thread_pool);
 	task->thread_pool = tp_create(N_THREADS, task->num_jobs);
 	if (!(task->job_data_block = (t_tile_job_data*)(malloc(sizeof(t_tile_job_data) * task->num_jobs))))
 		exit_message("init_render_task: Failed to allocate memory for thread pool jobs!");
@@ -106,13 +108,12 @@ void	render_scene(t_rt *rt, t_scene *scene)
 	t_vec2i	cur;
 	t_vec2i tile_size;
 	int ji;
-	int res;
 
-	res = 10;
-	init_render_task(&rt->render_task, res);
+	ft_printf("render!\n");
+	init_render_task(&rt->render_task, RENDER_TILE_RES);
 	rt->render_task.render_started = TRUE;
-	tile_size = ft_make_vec2i(scene->scene_config.width / res, scene->scene_config.height / res);
-	 camera = &(scene->cameras[scene->cur_camera]);
+	tile_size = ft_make_vec2i(scene->scene_config.width / RENDER_TILE_RES, scene->scene_config.height / RENDER_TILE_RES);
+	camera = &(scene->cameras[scene->cur_camera]);
 	init_camera(camera->position, camera->target, camera, scene);
 	gettimeofday(&rt->render_task.start_time, NULL);
 	ji = 0;
@@ -149,6 +150,8 @@ int update(void *arg)
 	rt = (t_rt*)arg;
 	task = &rt->render_task;
 	job = NULL;
+	if (task->render_started && task->jobs == 0)
+		task->render_finished = TRUE;
 	while (task->render_started && task->done_tiles != NULL && !ft_queue_isempty(task->done_tiles))
 	{
 		pthread_mutex_lock(&task->task_mutex);
@@ -157,11 +160,16 @@ int update(void *arg)
 			mlx_put_image_to_window(rt->mlx->mlx_ptr, rt->mlx->win_ptr, job->mlx_img->img, job->screen_coord.x, job->screen_coord.y);
 		pthread_mutex_unlock(&task->task_mutex);
 	}
-	if (task->render_finished && task->done_tiles != NULL && ft_queue_isempty(task->done_tiles))
+	if (task->render_started && task->render_finished && task->done_tiles != NULL && ft_queue_isempty(task->done_tiles))
 	{
 		gettimeofday(&task->end_time, NULL);
 		ft_printf("render task finished in in: %.4f s\n", (double)(task->end_time.tv_usec - task->start_time.tv_usec) / 1000000 + (double)(task->end_time.tv_sec - task->start_time.tv_sec));
 		cleanup_render_task(rt, task);
+	}
+	if (rt->render_requested)
+	{
+		render_scene(rt, rt->scenes[rt->cur_scene]);
+		rt->render_requested = FALSE;
 	}
 	return (1);
 }

@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   read_csv.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
 /*   Updated: 2020/07/30 16:03:14 by rjaakonm         ###   ########.fr       */
@@ -96,6 +96,8 @@ void	check_scene_fields(t_scene *scene, char *line, int n)
 	conf->ambient = ft_clamp_rgba(ft_make_rgba(
 		values[9], values[10], values[11], values[12]));
 	conf->sky_tex_id = round(values[13]);
+	conf->dof = round(ft_clamp_d0(values[14], 0, 1));
+	conf->dof_samples = round(ft_clamp_d(values[15], 1, 1000));
 }
 
 void	check_camera_fields(t_scene *scene, char *line, int n)
@@ -111,6 +113,8 @@ void	check_camera_fields(t_scene *scene, char *line, int n)
 	cams[n].fov = ft_clamp_d(values[9], MIN_FOV, MAX_FOV);
 	cams[n].type = round(ft_clamp_d0(values[10], 0, CAMERA_TYPES - 1));
 	cams[n].aspect = ft_clamp_d(values[11], MIN_ASPECT, MAX_ASPECT);
+	cams[n].focal_length = ft_clamp_d(values[12], 0, MAX_CLIP);
+	cams[n].aperture = ft_clamp_d(values[13], 0.01, 10.0);
 }
 
 static t_shape_type	get_shape_type(char *line)
@@ -265,9 +269,15 @@ void	check_texture_fields(t_scene *scene, char *line, int n)
 	tx->procedural_type = round(values[1]);
 	tx->color1 = ft_clamp_rgba(ft_make_rgba(values[2], values[3], values[4], values[5]));
 	tx->color2 = ft_clamp_rgba(ft_make_rgba(values[6], values[7], values[8], values[9]));
-	tx->color3 = ft_clamp_rgba(ft_make_rgba(values[10], values[11], values[12], values[13]));
+	tx->settings = ft_clamp_vec3(ft_make_vec3(values[10], values[11], values[12]), 0, 100);
 	ft_bzero(tx->file, 256);
 	tx->img_data = NULL;
+	tx->grad_vectors = NULL;
+	if (tx->procedural_type == PERLIN)
+	{
+			if (perlin_init(scene->rt, tx) == -1)
+				exit_message("error initializing gradient vectors");
+	}
 	if (!tx->procedural_type)
 	{
 		file_pointer = get_shape_file(line, N_TEXTURE_VALUES);
@@ -426,7 +436,6 @@ t_scene		*read_scene(t_rt *rt, char *file)
 	scene->cube_map = get_texture_by_id(scene, scene->scene_config.sky_tex_id);
 	if (scene->cube_map->procedural_type || !scene->cube_map->img_data)
 		scene->cube_map = NULL;
-	scene->scene_config.dof = FALSE;
-	scene->scene_config.dof_samples = 50;
+	// scene->scene_config.dof_samples = 50;
 	return (scene);
 }

@@ -12,37 +12,29 @@
 
 #include "texture.h"
 
-
 t_rgba	brick_texture(t_texture *texture, double u, double v)
 {
-	int rows = 11;
-	double line_w = 0.02;
-	double lines = rows - 1;
-	double rs = ((1.0 - lines * line_w)) / (double)rows;
-	double mod;
+	int		rows 			= (int)texture->settings.x;
+	double	mort_scale 		= texture->settings.y;
+	double	section_height 	= 1 / (double)rows;
+	double	brick_height 	= section_height / (1 + mort_scale);
+	double	mort_height 	= brick_height * mort_scale;
 
-	 
-	//v += line_w;
-	mod = fmod(v, rs);
-
-	if (mod < line_w)
+	//double a = 1 - mort_height * ((double)rows - 1) / (brick_height * (double)rows); 
+	double brick_width = brick_height * 3.333333;
+	
+	if (fmod(v, section_height) < mort_height)
 		return (texture->color2);
-	else
+	if (fmod(v, section_height * 2) < section_height)
 	{
-		u = 0;
-			return (texture->color1);
-	}
-	/*
-	else
-	{
-		if (fmod(v, 2 * (rs + line_w)) < rs+line_w)
-			u += line_w * 10;
-		rs = ((1.0 - lines * 2 * line_w))/(rows/4);
-		u += line_w;
-		mod = fmod(u, rs + line_w);
-		if(mod < line_w)
-			return(texture->color2);
+		if (fmod(u, brick_width + mort_height) < mort_height)
+			return (texture->color2);
 		return (texture->color1);
 	}
-	*/
+	else
+	{
+		if (fmod(u + (mort_height + brick_width) / 2, brick_width + mort_height) < mort_height)
+			return (texture->color2);
+		return (texture->color1);
+	}
 }

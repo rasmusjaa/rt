@@ -10,63 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include "rt.h"
-#include "mlx.h"
+#include "texture.h"
 #include "libft.h"
-#include <stdlib.h>
-#define GRAD_MAX 100
-// #define W 600
-// #define H 600
-
-// int escape()
-// {
-// 	exit(0);
-// 	return (0);
-// }
-
-static void  delete_grad(unsigned char  ***g)
-{
-	int i;
-	int j;
-
-	j = 0;
-	while (j < GRAD_MAX)
-	{
-		i = 0;
-		while (i < GRAD_MAX)
-		{
-			free(g[j][i]);
-			i++;
-		}
-		free(g[j]);
-		j++;
-	}
-	free(g);
-}
-
-static unsigned char  ***create_gradient_vectors()
-{
-	unsigned char	***g;
-	int				i;
-	int				j;
-
-	j = 0;
-	g = malloc(sizeof(char**)*GRAD_MAX);
-	while (j < GRAD_MAX)
-	{
-		g[j] = malloc(sizeof(char*) *GRAD_MAX);
-		i = 0;
-		while(i < GRAD_MAX)
-		{
-			g[j][i] = malloc(sizeof(char) * 2);
-			g[j][i][0] = rand() % 255;
-			g[j][i][1] = rand() % 255;
-			i++;
-		}
-		j++;
-	}
-	return (g);
-}
 
 static double dotgrad(int ix, int iy, double x, double y, unsigned char ***g)
 {
@@ -86,7 +31,7 @@ static double dotgrad(int ix, int iy, double x, double y, unsigned char ***g)
 }
 
 
-double	perlin_noise(double x, double y, unsigned char ***g)
+double	perlin_noise(t_texture *texture, double x, double y)
 {
 
 	int x0 = (int)x;
@@ -97,16 +42,16 @@ double	perlin_noise(double x, double y, unsigned char ***g)
 	double sy = y - (float)y0;
 	double n0, n1, ix0, ix1, value;
 
-	n0 = dotgrad(x0, y0, x, y, g);
-	n1 = dotgrad(x1, y0, x, y, g);
+	n0 = dotgrad(x0, y0, x, y, texture->grad_vectors);
+	n1 = dotgrad(x1, y0, x, y, texture->grad_vectors);
 	ix0 = ft_lerp_d(n0, n1, sx);
-	n0 = dotgrad(x0, y1, x, y, g);
-	n1 = dotgrad(x1, y1, x, y, g);
+	n0 = dotgrad(x0, y1, x, y, texture->grad_vectors);
+	n1 = dotgrad(x1, y1, x, y, texture->grad_vectors);
 	ix1 = ft_lerp_d(n0, n1, sx);
 	value = ft_lerp_d(ix0, ix1, sy);
 	return (value / 2 + 0.5);
 }
-
+/*
 double octave_perlin(double x, double y, int oct, double pers, unsigned char ***g)
 {
 	double total = 0;
@@ -123,7 +68,7 @@ double octave_perlin(double x, double y, int oct, double pers, unsigned char ***
 	}
 	return (total / maxvalue);
 }
-
+*/
 // double ft_map(double v, double s1, double e1, double s2, double e2)
 // {
 // 	double r;
