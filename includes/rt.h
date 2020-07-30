@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/29 22:44:29 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/30 12:12:30 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@
 # define N_UNIQUE_OBJS 11
 # define N_SCENE_VALUES 14
 # define N_CAMERA_VALUES 12
-# define N_SHAPE_VALUES 14
+# define N_SHAPE_VALUES 20
 # define N_LIGHT_VALUES 10
 # define N_MATERIAL_VALUES 17
 # define N_TEXTURE_VALUES 14

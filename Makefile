@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: wkorande <willehard@gmail.com>             +#+  +:+       +#+         #
+#    By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/01 15:48:04 by rjaakonm          #+#    #+#              #
-#    Updated: 2020/07/28 18:32:59 by sluhtala         ###   ########.fr        #
+#    Updated: 2020/07/30 11:30:10 by rjaakonm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -96,6 +96,6 @@ re: fclean all
 
 run:
 	$(CC) $(CFLAGS) $(INCL) $(SRCS) $(LIB) -o $(NAME)
-	./RT resources/scenes/scene6.csv
+	./RT resources/scenes/scene_texture.csv
 
 .PHONY: all libftmake clean fclean re run debug

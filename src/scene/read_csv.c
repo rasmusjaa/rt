@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/29 23:16:27 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/30 12:50:48 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,6 +142,37 @@ static char	*get_shape_name(t_shape_type type)
 	return (SHAPE_ERROR_STR);
 }
 
+t_shape_b	make_shape_bounds(t_vec3 pos, double *values)
+{
+	t_shape_b	b;
+
+	b.has_bounds = FALSE;
+	b.b.min.x = -MAX_CLIP;
+	b.b.max.x = MAX_CLIP;
+	b.b.min.y = -MAX_CLIP;
+	b.b.max.y = MAX_CLIP;
+	b.b.min.z = -MAX_CLIP;
+	b.b.max.z = MAX_CLIP;
+	if (ft_abs_d(values[14] - values[17]) > EPSILON)
+	{
+		b.b.min.x = pos.x + values[14];
+		b.b.max.x = pos.x + values[17];
+		b.has_bounds = TRUE;
+	}
+	if (ft_abs_d(values[15] - values[18]) > EPSILON)
+	{
+		b.b.min.y = pos.y + values[15];
+		b.b.max.y = pos.y + values[18];
+		b.has_bounds = TRUE;
+	}
+	if (ft_abs_d(values[16] - values[19]) > EPSILON)
+	{
+		b.b.min.z = pos.z + values[16];
+		b.b.max.z = pos.z + values[19];
+		b.has_bounds = TRUE;
+	}
+	return (b);
+}
 
 void	check_shape_fields(t_scene *scene, char *line, int n)
 {
@@ -157,13 +188,13 @@ void	check_shape_fields(t_scene *scene, char *line, int n)
 	s->name = get_shape_name(s->type);
 	s->position = ft_clamp_vec3(ft_make_vec3(values[0], values[1], values[2]), MIN_COORD, MAX_COORD);
 	s->target = ft_add_vec3(s->position, ft_make_vec3(0, 1, 0));
-//	s->target = ft_clamp_vec3(ft_make_vec3(values[3], values[4], values[5]), MIN_COORD, MAX_COORD);
 	s->rotation = ft_clamp_vec3(ft_make_vec3(-values[3], -values[4], -values[5]), 0, 360);
 	s->scale = ft_clamp_d(values[6], MIN_SCALE, MAX_SCALE);
 	s->color = ft_clamp_rgba(ft_make_rgba(values[7], values[8], values[9], values[10]));
 	s->radius = s->scale * ft_clamp_d(values[11], MIN_RADIUS, MAX_RADIUS);
 	s->angle = ft_clamp_d(values[12], MIN_ANGLE, MAX_ANGLE);
 	s->material_id = (int)values[13];
+	s->bounds = make_shape_bounds(s->position, values);
 	if (s->type == MODEL && (file_pointer = get_shape_file(line, N_SHAPE_VALUES)))
 	{
 		if (file_pointer == NULL)
@@ -176,12 +207,6 @@ void	check_shape_fields(t_scene *scene, char *line, int n)
 		s->mesh = obj_load(file, *s);
 		s->octree = octree_create_node(s->mesh->bounds, s->mesh->num_trifaces, s->mesh->trifaces);
 		ft_printf("loaded model from file %s\n", file);
-	}
-	else
-	{
-		if (s->position.x == s->target.x && s->position.y == s->target.y && s->position.z == s->target.z)
-			s->target.y = s->position.y + 1;
-		s->target = ft_normalize_vec3(ft_rotate_vec3(ft_sub_vec3(s->target, s->position), s->rotation));
 	}
 }
 
@@ -338,8 +363,6 @@ int		init_scene(char *file, t_scene *scene)
 	scene->num_lights = scene->num_all[LIGHT];
 	scene->num_materials = scene->num_all[MATERIAL];
 	scene->num_textures = scene->num_all[TEXTURE];
-	//allocate_materials(scene,scene->num_all[MATERIAL]);
-	//allocate_textures(scene, scene->num_all[TEXTURE]);
 	if (!(scene->cameras = (t_camera*)malloc(sizeof(t_camera) * scene->num_cameras)) ||
 		!(scene->shapes = (t_shape*)malloc(sizeof(t_shape) * scene->num_shapes)) ||
 		!(scene->lights = (t_light*)malloc(sizeof(t_light) * scene->num_lights)) ||
@@ -359,7 +382,6 @@ static void	link_shapes_materials_textures(t_scene *scene)
 	while (i < scene->num_materials)
 	{
 		scene->materials[i].texture = get_texture_by_id(scene, scene->materials[i].texture_id);
-		// 	scene->materials[i].texture->img_data = load_xpm_to_mlx_img(rt->mlx, scene->materials[i].texture->file);
 		i++;
 	}
 	i = 0;
