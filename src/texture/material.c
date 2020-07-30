@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/15 14:24:30 by sluhtala          #+#    #+#             */
-/*   Updated: 2020/07/29 16:40:38 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/30 18:09:09 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ t_material new_material(size_t id, t_rgba diffuse, t_texture *texture)
 
 	mat.id = id;
 	mat.diffuse = diffuse;
-	mat.shininess = 200;
+	mat.shininess = 1;
 	mat.specular = 1;
 	mat.texture = texture;
 	mat.opacity = 1;
