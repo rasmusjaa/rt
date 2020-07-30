@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shape.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/15 12:46:47 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/30 16:24:26 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/30 18:41:53 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ t_vec2 calc_hit_uv(t_raycast_hit *hit)
 	else if (hit->shape->type == CYLINDER)
 		return (calc_hit_uv_cylinder(hit->shape, hit));
 	else if (hit->shape->type == MODEL)
-		return (calc_hit_uv_triangle(hit->triface, hit));
+		return (calc_hit_uv_triangle(hit->shape, hit));
 	else
 	{
 		ft_printf("calc_hit_uv -- unknown shape type\n");
