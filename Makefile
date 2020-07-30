@@ -35,6 +35,8 @@ SRC = 	core/event_hooks/keyboard.c\
 		texture/texture.c\
 		texture/bricks.c\
 		texture/checker.c\
+		core/perlin_init.c\
+		texture/perlin.c\
 		render/light.c\
 		render/raycast.c\
 		scene/camera.c\

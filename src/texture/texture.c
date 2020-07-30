@@ -69,6 +69,8 @@ t_texture *get_texture_by_id(t_scene *scene, size_t id)
 t_rgba	sample_texture(t_texture *texture, t_vec2 uv)
 {
 	t_rgba color;
+	double perlin;
+
 	if (!texture || (!texture->procedural_type && !texture->img_data))
 		return (ft_make_rgba(0, 0, 0, 1));
 	if (texture && texture->procedural_type == 0 && texture->img_data)
@@ -85,5 +87,11 @@ t_rgba	sample_texture(t_texture *texture, t_vec2 uv)
 		return (checker_texture(texture, uv.x, uv.y));
 	if (texture->procedural_type == BRICKS)
 		return (brick_texture(texture, uv.x, uv.y));
+	if (texture->procedural_type == PERLIN)
+	{
+		perlin = perlin_noise(texture, uv.x * GRAD_MAX, uv.y * GRAD_MAX);
+		color = ft_make_rgba(perlin, perlin, perlin, 1);
+		return (color);
+	}
 	return (ft_make_rgba(0, 0, 0, 1));
 }

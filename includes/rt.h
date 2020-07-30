@@ -190,6 +190,7 @@ typedef struct	s_rt
 	size_t 			cur_scene;
 	t_render_task	render_task;
 	t_asset_library	assets;
+	unsigned char	***grad_vectors;
 }				t_rt;
 
 typedef struct	s_thread
@@ -208,6 +209,8 @@ time_t			last_modified(char *file);
 t_scene			*read_scene(t_rt *rt, char *file);
 
 t_rt			*rt_init(size_t num_scenes);
+int				perlin_init(t_rt *rt, struct s_texture *texture);
+void			delete_gradient_vectors(unsigned char  ***g);
 void			rt_destroy_exit(t_rt *rt, int status);
 void			render_scene(t_rt *rt, t_scene *scene);
 void			destroy_scene(t_rt *rt, t_scene *scene);

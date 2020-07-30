@@ -4,7 +4,7 @@ CAMERAS;POS_X;POS_Y;POS_Z;TAR_X;TAR_Y;TAR_Z;ROT_X;ROT_Y;ROT_Z;FOV;TYPE;ASPECT;;;
 camera;0;50;0;0;0;0;;;;60;0;1;;;;;
 camera;0;5;10;0;5;0;0;0;0;90;0;1;;;;;
 TEXTURES;ID;PROC_TYPE;COL1_R;COL1_G;COL1_B;COL1_A;COL2_R;COL2_G;COL2_B;COL2_A;?;?;?;?;FILE;;
-texture;1;2;0.9;0.25;0.1;1;0.8;0.8;0.8;1;30;0.33;1;1;resources/cube_map.xpm;;
+texture;1;2;0.9;0.25;0.1;1;0.8;0.8;0.8;1;10;0.5;1;1;resources/cube_map.xpm;;
 texture;2;0;1;1;1;1;1;0;0;1;1;1;1;1;resources/couch.xpm;;
 texture;3;0;0;0;0;0;0;0;0;0;0;0;0;0;resources/perlin.xpm;;
 MATERIALS;ID;TEX_ID;COL_R;COL_G;COl_B;COL_A;SHINE;REF_INDEX;REFLECTION;OPACITY;U_SCALE;V_SCALE;EXPLODE;NORMAL_TEXTURE_ID;NORMAL_MULT;BUMP_TEXTURE_ID;BUMP_MULT

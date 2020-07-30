@@ -240,6 +240,12 @@ void	check_texture_fields(t_scene *scene, char *line, int n)
 	tx->settings = ft_clamp_vec3(ft_make_vec3(values[10], values[11], values[12]), 0, 100);
 	ft_bzero(tx->file, 256);
 	tx->img_data = NULL;
+	tx->grad_vectors = NULL;
+	if (tx->procedural_type == PERLIN)
+	{
+			if (perlin_init(scene->rt, tx) == -1)
+				exit_message("error initializing gradient vectors");
+	}
 	if (!tx->procedural_type && (file_pointer = get_shape_file(line, N_TEXTURE_VALUES)))
 	{
 		if (file_pointer == NULL)
@@ -359,7 +365,6 @@ static void	link_shapes_materials_textures(t_scene *scene)
 	while (i < scene->num_materials)
 	{
 		scene->materials[i].texture = get_texture_by_id(scene, scene->materials[i].texture_id);
-		// 	scene->materials[i].texture->img_data = load_xpm_to_mlx_img(rt->mlx, scene->materials[i].texture->file);
 		i++;
 	}
 	i = 0;
