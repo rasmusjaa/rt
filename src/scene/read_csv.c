@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/30 12:50:48 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/30 13:36:05 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,8 +195,9 @@ void	check_shape_fields(t_scene *scene, char *line, int n)
 	s->angle = ft_clamp_d(values[12], MIN_ANGLE, MAX_ANGLE);
 	s->material_id = (int)values[13];
 	s->bounds = make_shape_bounds(s->position, values);
-	if (s->type == MODEL && (file_pointer = get_shape_file(line, N_SHAPE_VALUES)))
+	if (s->type == MODEL)
 	{
+		file_pointer = get_shape_file(line, N_SHAPE_VALUES);
 		if (file_pointer == NULL)
 			exit_message("no model on model line");
 		i = 0;
@@ -265,8 +266,9 @@ void	check_texture_fields(t_scene *scene, char *line, int n)
 	tx->color3 = ft_clamp_rgba(ft_make_rgba(values[10], values[11], values[12], values[13]));
 	ft_bzero(tx->file, 256);
 	tx->img_data = NULL;
-	if (!tx->procedural_type && (file_pointer = get_shape_file(line, N_TEXTURE_VALUES)))
+	if (!tx->procedural_type)
 	{
+		file_pointer = get_shape_file(line, N_TEXTURE_VALUES);
 		if (file_pointer == NULL)
 			exit_message("no texture on texture line");
 		i = 0;
@@ -422,5 +424,7 @@ t_scene		*read_scene(t_rt *rt, char *file)
 	scene->cube_map = get_texture_by_id(scene, scene->scene_config.sky_tex_id);
 	if (scene->cube_map->procedural_type || !scene->cube_map->img_data)
 		scene->cube_map = NULL;
+	scene->scene_config.dof = FALSE;
+	scene->scene_config.dof_samples = 50;
 	return (scene);
 }

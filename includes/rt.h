@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   rt.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
 /*   Updated: 2020/07/30 12:12:30 by rjaakonm         ###   ########.fr       */
@@ -113,6 +113,8 @@ typedef	struct	s_scene_config
 	t_rgba			ambient;
 	size_t			colorize;
 	size_t			sky_tex_id;
+	int				dof;
+	size_t			dof_samples;
 }				t_scene_config;
 
 struct s_rt;
