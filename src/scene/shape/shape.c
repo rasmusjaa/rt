@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/15 12:46:47 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/30 12:05:29 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/30 15:25:41 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int			solve_quadratic(t_quadratic q, double *t1, double *t2)
 
 int	intersects_shape(t_ray *ray, t_shape *shape, t_raycast_hit *hit, int debug)
 {
-	if (shape->bounds.has_bounds && !intersects_bounds(ray, &shape->bounds.b, debug))
+	if (shape->bounds.active && !intersects_bounds(ray, &shape->bounds, debug))
 		return(FALSE);
 	if ((shape->type == SPHERE && intersects_sphere(ray, shape, hit))
 	|| (shape->type == PLANE && intersects_plane(ray, shape, hit))
@@ -57,7 +57,7 @@ int	intersects_shape(t_ray *ray, t_shape *shape, t_raycast_hit *hit, int debug)
 	|| (shape->type == CYLINDER && intersects_cylinder(ray, shape, hit))
 	|| (shape->type == MODEL && intersects_octree_model(ray, shape, shape->octree, hit, debug)))
 	{
-		if (shape->bounds.has_bounds && !point_inside_bounds(hit->point, shape->bounds.b))
+		if (shape->bounds.active && !point_inside_bounds(hit->point, shape))
 			return (FALSE);
 		if (debug)
 				ft_printf("hit shape type %d, hit point %f %f %f\n", shape->type, hit->point.x, hit->point.y, hit->point.z);
