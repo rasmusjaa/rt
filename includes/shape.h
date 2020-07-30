@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:22:43 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/30 12:03:03 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/30 15:24:36 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,8 @@
 # include "octree.h"
 # include "color.h"
 # include "vector.h"
+# include "bounds.h"
 
-typedef struct s_ray t_ray;
-typedef struct s_raycast_hit t_raycast_hit;
 typedef struct s_mesh t_mesh;
 typedef struct s_triface t_triface;
 
@@ -47,12 +46,6 @@ typedef struct	s_shape_name_type_map
 	t_shape_type	type;
 }				t_shape_name_type_map;
 
-typedef struct	s_shape_b
-{
-	int			has_bounds;
-	t_bounds	b;
-}				t_shape_b;
-
 typedef struct	s_shape
 {
 	char			*name;
@@ -70,7 +63,7 @@ typedef struct	s_shape
 	double			reflection;
 	double			refraction;
 	double			shine;
-	t_shape_b		bounds;
+	t_bounds		bounds;
 	t_mesh			*mesh;
 	t_octree		*octree;
 }				t_shape;
@@ -87,7 +80,6 @@ int				intersects_cylinder(t_ray *ray, t_shape *cyl,
 					t_raycast_hit *hit);
 int				intersects_triangle(t_ray *ray, t_triface *triface,
 					t_raycast_hit *hit);
-int				intersects_bounds(t_ray *ray, t_bounds *b, int debug);
 int				intersects_model(t_ray *ray, t_shape *model,
 					t_raycast_hit *hit, int debug);
 int				intersects_octree_model(t_ray *ray, t_shape *model,

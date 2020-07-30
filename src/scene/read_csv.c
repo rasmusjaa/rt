@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/30 13:36:05 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/30 16:03:14 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,34 +142,34 @@ static char	*get_shape_name(t_shape_type type)
 	return (SHAPE_ERROR_STR);
 }
 
-t_shape_b	make_shape_bounds(t_vec3 pos, double *values)
+t_bounds	make_shape_bounds(t_vec3 pos, double *values)
 {
-	t_shape_b	b;
+	t_bounds	b;
 
-	b.has_bounds = FALSE;
-	b.b.min.x = -MAX_CLIP;
-	b.b.max.x = MAX_CLIP;
-	b.b.min.y = -MAX_CLIP;
-	b.b.max.y = MAX_CLIP;
-	b.b.min.z = -MAX_CLIP;
-	b.b.max.z = MAX_CLIP;
+	b.active = FALSE;
+	b.min.x = -MAX_CLIP;
+	b.max.x = MAX_CLIP;
+	b.min.y = -MAX_CLIP;
+	b.max.y = MAX_CLIP;
+	b.min.z = -MAX_CLIP;
+	b.max.z = MAX_CLIP;
 	if (ft_abs_d(values[14] - values[17]) > EPSILON)
 	{
-		b.b.min.x = pos.x + values[14];
-		b.b.max.x = pos.x + values[17];
-		b.has_bounds = TRUE;
+		b.min.x = pos.x + values[14];
+		b.max.x = pos.x + values[17];
+		b.active = TRUE;
 	}
 	if (ft_abs_d(values[15] - values[18]) > EPSILON)
 	{
-		b.b.min.y = pos.y + values[15];
-		b.b.max.y = pos.y + values[18];
-		b.has_bounds = TRUE;
+		b.min.y = pos.y + values[15];
+		b.max.y = pos.y + values[18];
+		b.active = TRUE;
 	}
 	if (ft_abs_d(values[16] - values[19]) > EPSILON)
 	{
-		b.b.min.z = pos.z + values[16];
-		b.b.max.z = pos.z + values[19];
-		b.has_bounds = TRUE;
+		b.min.z = pos.z + values[16];
+		b.max.z = pos.z + values[19];
+		b.active = TRUE;
 	}
 	return (b);
 }
@@ -209,6 +209,8 @@ void	check_shape_fields(t_scene *scene, char *line, int n)
 		s->octree = octree_create_node(s->mesh->bounds, s->mesh->num_trifaces, s->mesh->trifaces);
 		ft_printf("loaded model from file %s\n", file);
 	}
+	else
+		s->target = ft_normalize_vec3(ft_rotate_vec3(ft_sub_vec3(s->target, s->position), s->rotation));
 }
 
 void	check_light_fields(t_scene *scene, char *line, int n)

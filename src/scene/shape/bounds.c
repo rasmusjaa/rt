@@ -6,13 +6,14 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 13:31:34 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/29 17:56:29 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/30 15:43:22 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
 #include "bounds.h"
 #include "libft.h"
+#include "shape.h"
 
 /*
 ** mesh bounds are calculated on load
@@ -53,13 +54,13 @@ int	intersects_bounds(t_ray *ray, t_bounds *b, int debug)
 		return (TRUE);
 }
 
-int			point_inside_bounds(t_vec3 p, t_bounds bounds)
+int			point_inside_bounds(t_vec3 p, t_shape *shape)
 {
-	if (p.x < bounds.min.x || p.x > bounds.max.x)
+	if (p.x < shape->bounds.min.x || p.x > shape->bounds.max.x)
 		return (FALSE);
-	if (p.y < bounds.min.y || p.y > bounds.max.y)
+	if (p.y < shape->bounds.min.y || p.y > shape->bounds.max.y)
 		return (FALSE);
-	if (p.z < bounds.min.z || p.z > bounds.max.z)
+	if (p.z < shape->bounds.min.z || p.z > shape->bounds.max.z)
 		return (FALSE);
 	return (TRUE);
 }
