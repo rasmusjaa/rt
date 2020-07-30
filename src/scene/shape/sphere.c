@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:19:26 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/30 13:19:52 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/30 14:11:40 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,23 @@ t_vec2	calc_hit_uv_sphere(t_shape *sphere, t_raycast_hit *hit)
 	return (ft_make_vec2(u, v));
 }
 
+int		check_hits(t_ray *ray, t_raycast_hit *hit, t_shape *shape)
+{
+	if (hit->t > hit->t2)
+	{
+		if (hit->t2 > MIN_CLIP && hit->t2 < MAX_CLIP &&
+		point_inside_bounds(point_on_ray(ray, hit->t2), shape))
+		{
+			ft_swap_d(&hit->t, &hit->t2);
+			return (TRUE);
+		}
+	}
+	if (hit->t > MIN_CLIP && hit->t < MAX_CLIP &&
+		point_inside_bounds(point_on_ray(ray, hit->t), shape))
+		return (TRUE);
+	return (FALSE);
+}
+
 int		intersects_bump_sphere(t_ray *ray, t_shape *sphere,
 	t_raycast_hit *hit, t_vec2 uv)
 {
@@ -49,13 +66,16 @@ int		intersects_bump_sphere(t_ray *ray, t_shape *sphere,
 	q.c = ft_dot_vec3(oc, oc) - (temp * temp);
 	if (solve_quadratic(q, &hit->t, &hit->t2) > 0)
 	{
-		if ((hit->t > hit->t2 || hit->t < MIN_CLIP) && hit->t2 > MIN_CLIP)
-			ft_swap_d(&hit->t, &hit->t2);
-		if (hit->t > MAX_CLIP || hit->t < MIN_CLIP)
-			return (FALSE);
-		hit->point = point_on_ray(ray, hit->t);
-		hit->distance = hit->t;
-		return (TRUE);
+		// if ((hit->t > hit->t2 || hit->t < MIN_CLIP) && hit->t2 > MIN_CLIP)
+		// 	ft_swap_d(&hit->t, &hit->t2);
+		// if (hit->t > MAX_CLIP || hit->t < MIN_CLIP)
+		// 	return (FALSE);
+		if (check_hits(ray, hit, sphere))
+		{
+			hit->point = point_on_ray(ray, hit->t);
+			hit->distance = hit->t;
+			return (TRUE);
+		}
 	}
 	return (FALSE);
 }
@@ -81,16 +101,15 @@ int		intersects_sphere(t_ray *ray, t_shape *sphere, t_raycast_hit *hit)
 	q.c = ft_dot_vec3(oc, oc) - (temp * temp);
 	if (solve_quadratic(q, &hit->t, &hit->t2) > 0)
 	{
-		if ((hit->t > hit->t2 || hit->t < MIN_CLIP) && hit->t2 > MIN_CLIP)
-			ft_swap_d(&hit->t, &hit->t2);
-		if (hit->t > MAX_CLIP || hit->t < MIN_CLIP)
-			return (FALSE);
-		hit->point = point_on_ray(ray, hit->t);
-		hit->distance = hit->t;
-		if (sphere->material->bump_tex_id && get_texture_by_id(
-			ray->scene, sphere->material->bump_tex_id)->img_data != NULL)
-			return (prep_bump(ray, sphere, hit));
-		return (TRUE);
+		if (check_hits(ray, hit, sphere))
+		{
+			hit->point = point_on_ray(ray, hit->t);
+			hit->distance = hit->t;
+			if (sphere->material->bump_tex_id && get_texture_by_id(
+				ray->scene, sphere->material->bump_tex_id)->img_data != NULL)
+				return (prep_bump(ray, sphere, hit));
+			return (TRUE);
+		}
 	}
 	return (FALSE);
 }
