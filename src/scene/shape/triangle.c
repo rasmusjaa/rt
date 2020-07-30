@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:38:15 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/30 18:28:37 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/30 18:39:39 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,6 @@ t_vec3 calc_hit_normal_triangle(t_triface *triface, t_raycast_hit *hit)
 t_vec2 calc_hit_uv_triangle(t_shape *model, t_raycast_hit *hit)
 {
 	t_vec2 uv;
-	// double u;
-	// double v;
-	// double w;
-
-	// u = ft_len_vec3(ft_cross_vec3(ft_sub_vec3(hit->point, hit->triface->v[0]), ft_sub_vec3(hit->triface->v[2], hit->triface->v[0]))) * 0.5;
-	// v = ft_len_vec3(ft_cross_vec3(ft_sub_vec3(hit->point, hit->triface->v[0]), ft_sub_vec3(hit->triface->v[1], hit->triface->v[0]))) * 0.5;
-	// w = 1.0 - u - v;
-	// uv = ft_add_vec2(ft_mul_vec2(hit->triface->uv[0], u), ft_add_vec2(ft_mul_vec2(hit->triface->uv[1], v), ft_mul_vec2(hit->triface->uv[2], w)));
-	// uv.x -= floor(uv.x);
-	// uv.y -= floor(uv.y);
-
 
 	t_vec3 p1 = ft_sub_vec3(hit->triface->v[0], hit->point);
 	t_vec3 p2 = ft_sub_vec3(hit->triface->v[1], hit->point);

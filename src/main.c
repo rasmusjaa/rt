@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 14:59:56 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/30 15:39:54 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/30 18:19:46 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,22 +34,15 @@ void	render_tile_job(void *data)
 		while (cur.x < job_data->screen_coord.x + job_data->tile_size.x)
 		{
 			color = ft_make_rgba(0,0,0,1);
-			if (job_data->scene->scene_config.dof)
-			{
-				si = 0;
-				while (si < job_data->scene->scene_config.dof_samples)
-				{
-					camera_ray = get_camera_ray(job_data->scene, job_data->camera, cur.x, cur.y);
-					color = ft_add_rgba_uc(color, raycast(&camera_ray, job_data->scene, 0));
-					si++;
-				}
-				color = ft_div_rgba(color, job_data->scene->scene_config.dof_samples);
-			}
-			else
+			si = 0;
+			while (si < job_data->scene->scene_config.dof_samples)
 			{
 				camera_ray = get_camera_ray(job_data->scene, job_data->camera, cur.x, cur.y);
-				color = raycast(&camera_ray, job_data->scene, 0);
+				color = ft_add_rgba_uc(color, raycast(&camera_ray, job_data->scene, 0));
+				si++;
 			}
+			if (si > 1)
+				color = ft_div_rgba(color, job_data->scene->scene_config.dof_samples);
 			put_pixel_mlx_img(job_data->mlx_img, cur.x - job_data->screen_coord.x, cur.y - job_data->screen_coord.y, ft_get_color(ft_clamp_rgba(color)));
 			cur.x++;
 		}
@@ -206,8 +199,7 @@ void	reload_scene(t_rt *rt)
 	rt->scenes[rt->cur_scene]->scene_config.width = width;
 	rt->scenes[rt->cur_scene]->scene_config.height = height;
 	ft_printf("old width %d height %d\n", rt->scenes[rt->cur_scene]->scene_config.width, rt->scenes[rt->cur_scene]->scene_config.height);
-
-	render_scene(rt, rt->scenes[rt->cur_scene]);
+	rt->render_requested = TRUE;
 }
 
 static void	init_mlx(t_rt *rt)
