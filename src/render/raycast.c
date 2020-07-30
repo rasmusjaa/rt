@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/29 14:02:52 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/30 14:02:54 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,7 @@ static double calc_diffuse(t_light light, t_raycast_hit hit, t_scene *scene)
 	{
 		print_vec3("shape normal", hit.normal);
 		print_vec3("light dir", light_dir);
-		ft_printf("ray surface dot %f intensity %f, distance %f\n", d, intensity, distance); //
+		ft_printf("ray surface dot %f intensity %f, distance %f\n", d, intensity, hit.distance); //
 	}
 	d = d * intensity;
 	return (ft_clamp_d(d, 0, 1));

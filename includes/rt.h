@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rt.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/29 14:31:47 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/30 15:38:00 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@
 # define EPSILON 0.0001
 # define N_OBJ_TYPES 6
 # define N_UNIQUE_OBJS 11
-# define N_SCENE_VALUES 14
-# define N_CAMERA_VALUES 12
-# define N_SHAPE_VALUES 14
+# define N_SCENE_VALUES 16
+# define N_CAMERA_VALUES 14
+# define N_SHAPE_VALUES 20
 # define N_LIGHT_VALUES 10
 # define N_MATERIAL_VALUES 17
 # define N_TEXTURE_VALUES 14
@@ -69,6 +69,7 @@
 # define LIGHT_TYPES 2
 # define SHAPE_TYPES 6
 # define COLORIZES 7
+# define RENDER_TILE_RES 20
 
 # define SETTINGS_STR "settings"
 # define CAMERA_STR "camera"
@@ -113,6 +114,8 @@ typedef	struct	s_scene_config
 	t_rgba			ambient;
 	size_t			colorize;
 	size_t			sky_tex_id;
+	int				dof;
+	size_t			dof_samples;
 }				t_scene_config;
 
 struct s_rt;
@@ -191,6 +194,7 @@ typedef struct	s_rt
 	t_render_task	render_task;
 	t_asset_library	assets;
 	unsigned char	***grad_vectors;
+	int				render_requested;
 }				t_rt;
 
 typedef struct	s_thread

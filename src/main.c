@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 14:59:56 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/28 12:53:06 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/30 15:39:54 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,35 @@ void	render_tile_job(void *data)
 {
 	t_tile_job_data *job_data;
 	t_vec2i cur;
-	t_vec2i tile_coord;
+	t_rgba color;
+	t_ray camera_ray;
+	size_t si;
 
 	job_data = (t_tile_job_data*)data;
-	tile_coord = ft_make_vec2i(job_data->screen_coord.x / job_data->tile_size.x, job_data->screen_coord.y / job_data->tile_size.y);
 	cur.y = job_data->screen_coord.y;
 	while (cur.y < job_data->screen_coord.y + job_data->tile_size.y)
 	{
 		cur.x = job_data->screen_coord.x;
 		while (cur.x < job_data->screen_coord.x + job_data->tile_size.x)
 		{
-			t_ray camera_ray = get_camera_ray(job_data->scene, job_data->camera, cur.x, cur.y);
-			t_rgba color = raycast(&camera_ray, job_data->scene, 0);
-			put_pixel_mlx_img(job_data->mlx_img, cur.x - job_data->screen_coord.x, cur.y - job_data->screen_coord.y, ft_get_color(color));
+			color = ft_make_rgba(0,0,0,1);
+			if (job_data->scene->scene_config.dof)
+			{
+				si = 0;
+				while (si < job_data->scene->scene_config.dof_samples)
+				{
+					camera_ray = get_camera_ray(job_data->scene, job_data->camera, cur.x, cur.y);
+					color = ft_add_rgba_uc(color, raycast(&camera_ray, job_data->scene, 0));
+					si++;
+				}
+				color = ft_div_rgba(color, job_data->scene->scene_config.dof_samples);
+			}
+			else
+			{
+				camera_ray = get_camera_ray(job_data->scene, job_data->camera, cur.x, cur.y);
+				color = raycast(&camera_ray, job_data->scene, 0);
+			}
+			put_pixel_mlx_img(job_data->mlx_img, cur.x - job_data->screen_coord.x, cur.y - job_data->screen_coord.y, ft_get_color(ft_clamp_rgba(color)));
 			cur.x++;
 		}
 		cur.y++;
@@ -56,6 +72,8 @@ void	init_render_task(t_render_task *task, size_t res)
 	task->render_started = FALSE;
 	task->num_jobs = res * res;
 	task->jobs = task->num_jobs;
+	if (task->thread_pool)
+		tp_destroy(task->thread_pool);
 	task->thread_pool = tp_create(N_THREADS, task->num_jobs);
 	if (!(task->job_data_block = (t_tile_job_data*)(malloc(sizeof(t_tile_job_data) * task->num_jobs))))
 		exit_message("init_render_task: Failed to allocate memory for thread pool jobs!");
@@ -73,7 +91,6 @@ void	cleanup_render_task(t_rt *rt, t_render_task *task)
 	while (i < task->num_jobs)
 	{
 		destroy_mlx_img(rt->mlx, task->job_data_block[i].mlx_img);
-		// free(task->job_data_block[i].mlx_img);
 		i++;
 	}
 	free(task->job_data_block);
@@ -87,29 +104,17 @@ void	cleanup_render_task(t_rt *rt, t_render_task *task)
 
 void	render_scene(t_rt *rt, t_scene *scene)
 {
-	// clock_t start, end;
-	// double cpu_time_used;
+	t_camera *camera;
 	t_vec2i	cur;
 	t_vec2i tile_size;
-
 	int ji;
-	int res;
 
-	res = 10;
-	init_render_task(&rt->render_task, res);
+	ft_printf("render!\n");
+	init_render_task(&rt->render_task, RENDER_TILE_RES);
 	rt->render_task.render_started = TRUE;
-	tile_size = ft_make_vec2i(scene->scene_config.width / res, scene->scene_config.height / res);
-	// rt->render_finished = FALSE;
-	// res = 10;
-	// rt->num_render_jobs = res * res;
-	// if (rt->tp_render != NULL)
-		// tp_destroy(rt->tp_render);
-	// rt->tp_render = tp_create(N_THREADS, rt->num_render_jobs);
-	// if (!(rt->job_data_block = (t_tile_job_data*)(malloc(sizeof(t_tile_job_data) * rt->num_render_jobs))))
-		// exit_message("Failed to allocate memory for thread pool jobs!");
-	t_camera *camera = &(scene->cameras[scene->cur_camera]);
+	tile_size = ft_make_vec2i(scene->scene_config.width / RENDER_TILE_RES, scene->scene_config.height / RENDER_TILE_RES);
+	camera = &(scene->cameras[scene->cur_camera]);
 	init_camera(camera->position, camera->target, camera, scene);
-	// rt->done_tiles = ft_queue_create(QUEUE_COPY, rt->num_render_jobs, sizeof(t_tile_job_data));
 	gettimeofday(&rt->render_task.start_time, NULL);
 	ji = 0;
 	cur.y = 0;
@@ -134,9 +139,6 @@ void	render_scene(t_rt *rt, t_scene *scene)
 		}
 		cur.y += tile_size.y;
 	}
-	// end = clock();
-	// cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-
 }
 
 int update(void *arg)
@@ -148,6 +150,8 @@ int update(void *arg)
 	rt = (t_rt*)arg;
 	task = &rt->render_task;
 	job = NULL;
+	if (task->render_started && task->jobs == 0)
+		task->render_finished = TRUE;
 	while (task->render_started && task->done_tiles != NULL && !ft_queue_isempty(task->done_tiles))
 	{
 		pthread_mutex_lock(&task->task_mutex);
@@ -156,12 +160,16 @@ int update(void *arg)
 			mlx_put_image_to_window(rt->mlx->mlx_ptr, rt->mlx->win_ptr, job->mlx_img->img, job->screen_coord.x, job->screen_coord.y);
 		pthread_mutex_unlock(&task->task_mutex);
 	}
-	if (task->render_finished && task->done_tiles != NULL && ft_queue_isempty(task->done_tiles))
+	if (task->render_started && task->render_finished && task->done_tiles != NULL && ft_queue_isempty(task->done_tiles))
 	{
 		gettimeofday(&task->end_time, NULL);
-	//	draw_model_bounds(rt->mlx, rt->scenes[rt->cur_scene]);
 		ft_printf("render task finished in in: %.4f s\n", (double)(task->end_time.tv_usec - task->start_time.tv_usec) / 1000000 + (double)(task->end_time.tv_sec - task->start_time.tv_sec));
 		cleanup_render_task(rt, task);
+	}
+	if (rt->render_requested)
+	{
+		render_scene(rt, rt->scenes[rt->cur_scene]);
+		rt->render_requested = FALSE;
 	}
 	return (1);
 }
@@ -219,7 +227,7 @@ int		main(int ac, char **av)
 	rt = rt_init(ac - 1);
 	i = 0;
 	if (ac == 1)
-		exit_message("Usage:");
+		exit_message("Usage: RTFM!");
 	init_mlx(rt);
 	while (i < ac - 1)
 	{

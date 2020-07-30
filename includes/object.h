@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 13:05:58 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/24 22:12:13 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/29 22:47:45 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ typedef struct	s_camera
 	t_vec3			up;
 	double			horizontal;
 	double			vertical;
+	double			focal_length;
+	double			aperture;
 }				t_camera;
 
 typedef struct	s_light

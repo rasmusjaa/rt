@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/09 15:06:46 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/27 15:44:24 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/30 15:39:13 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,8 @@ int				key_press_hook(int key, t_rt *rt)
 		}
 		move_camera(key, camera, forward, right);
 		rotate_camera(key, camera);
-		render_scene(rt, scene);
+		// render_scene(rt, scene);
+		rt->render_requested = TRUE;
 	}
 	return (0);
 }
@@ -108,14 +109,16 @@ int				key_release_hook2(int key, t_rt *rt)
 			rt->cur_scene = 0;
 		ft_printf("Selected scene: %d (%s)\n", rt->cur_scene,
 			rt->scenes[rt->cur_scene]->scene_config.filepath);
-		render_scene(rt, rt->scenes[rt->cur_scene]);
+		// render_scene(rt, rt->scenes[rt->cur_scene]);
+		rt->render_requested = TRUE;
 	}
 	else if (key == KEY_X)
 	{
 		rt->scenes[rt->cur_scene]->scene_config.colorize++;
 		if (rt->scenes[rt->cur_scene]->scene_config.colorize > COLORIZES - 1)
 			rt->scenes[rt->cur_scene]->scene_config.colorize = 0;
-		render_scene(rt, rt->scenes[rt->cur_scene]);
+		// render_scene(rt, rt->scenes[rt->cur_scene]);
+		rt->render_requested = TRUE;
 	}
 	else if (key == KEY_ESC)
 		rt_destroy_exit(rt, EXIT_SUCCESS);
@@ -133,7 +136,8 @@ int				key_release_hook(int key, t_rt *rt)
 	else if (key == KEY_SPACE)
 	{
 		mlx_clear_window(rt->mlx->mlx_ptr, rt->mlx->win_ptr);
-		render_scene(rt, rt->scenes[rt->cur_scene]);
+		// render_scene(rt, rt->scenes[rt->cur_scene]);
+		rt->render_requested = TRUE;
 	}
 	else if (key == KEY_C)
 	{
@@ -141,7 +145,8 @@ int				key_release_hook(int key, t_rt *rt)
 		if (rt->scenes[rt->cur_scene]->cur_camera >
 				rt->scenes[rt->cur_scene]->num_cameras - 1)
 			rt->scenes[rt->cur_scene]->cur_camera = 0;
-		render_scene(rt, rt->scenes[rt->cur_scene]);
+		// render_scene(rt, rt->scenes[rt->cur_scene]);
+		rt->render_requested = TRUE;
 	}
 	else
 		return (key_release_hook2(key, rt));

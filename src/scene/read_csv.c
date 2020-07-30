@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_csv.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/29 16:32:29 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/30 14:05:36 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ void	check_scene_fields(t_scene *scene, char *line, int n)
 	conf->ambient = ft_clamp_rgba(ft_make_rgba(
 		values[9], values[10], values[11], values[12]));
 	conf->sky_tex_id = round(values[13]);
+	conf->dof = round(ft_clamp_d0(values[14], 0, 1));
+	conf->dof_samples = round(ft_clamp_d(values[15], 1, 1000));
 }
 
 void	check_camera_fields(t_scene *scene, char *line, int n)
@@ -111,6 +113,8 @@ void	check_camera_fields(t_scene *scene, char *line, int n)
 	cams[n].fov = ft_clamp_d(values[9], MIN_FOV, MAX_FOV);
 	cams[n].type = round(ft_clamp_d0(values[10], 0, CAMERA_TYPES - 1));
 	cams[n].aspect = ft_clamp_d(values[11], MIN_ASPECT, MAX_ASPECT);
+	cams[n].focal_length = ft_clamp_d(values[12], 0, MAX_CLIP);
+	cams[n].aperture = ft_clamp_d(values[13], 0.01, 10.0);
 }
 
 static t_shape_type	get_shape_type(char *line)
@@ -142,6 +146,37 @@ static char	*get_shape_name(t_shape_type type)
 	return (SHAPE_ERROR_STR);
 }
 
+t_shape_b	make_shape_bounds(t_vec3 pos, double *values)
+{
+	t_shape_b	b;
+
+	b.has_bounds = FALSE;
+	b.b.min.x = -MAX_CLIP;
+	b.b.max.x = MAX_CLIP;
+	b.b.min.y = -MAX_CLIP;
+	b.b.max.y = MAX_CLIP;
+	b.b.min.z = -MAX_CLIP;
+	b.b.max.z = MAX_CLIP;
+	if (ft_abs_d(values[14] - values[17]) > EPSILON)
+	{
+		b.b.min.x = pos.x + values[14];
+		b.b.max.x = pos.x + values[17];
+		b.has_bounds = TRUE;
+	}
+	if (ft_abs_d(values[15] - values[18]) > EPSILON)
+	{
+		b.b.min.y = pos.y + values[15];
+		b.b.max.y = pos.y + values[18];
+		b.has_bounds = TRUE;
+	}
+	if (ft_abs_d(values[16] - values[19]) > EPSILON)
+	{
+		b.b.min.z = pos.z + values[16];
+		b.b.max.z = pos.z + values[19];
+		b.has_bounds = TRUE;
+	}
+	return (b);
+}
 
 void	check_shape_fields(t_scene *scene, char *line, int n)
 {
@@ -157,15 +192,16 @@ void	check_shape_fields(t_scene *scene, char *line, int n)
 	s->name = get_shape_name(s->type);
 	s->position = ft_clamp_vec3(ft_make_vec3(values[0], values[1], values[2]), MIN_COORD, MAX_COORD);
 	s->target = ft_add_vec3(s->position, ft_make_vec3(0, 1, 0));
-//	s->target = ft_clamp_vec3(ft_make_vec3(values[3], values[4], values[5]), MIN_COORD, MAX_COORD);
 	s->rotation = ft_clamp_vec3(ft_make_vec3(-values[3], -values[4], -values[5]), 0, 360);
 	s->scale = ft_clamp_d(values[6], MIN_SCALE, MAX_SCALE);
 	s->color = ft_clamp_rgba(ft_make_rgba(values[7], values[8], values[9], values[10]));
 	s->radius = s->scale * ft_clamp_d(values[11], MIN_RADIUS, MAX_RADIUS);
 	s->angle = ft_clamp_d(values[12], MIN_ANGLE, MAX_ANGLE);
 	s->material_id = (int)values[13];
-	if (s->type == MODEL && (file_pointer = get_shape_file(line, N_SHAPE_VALUES)))
+	s->bounds = make_shape_bounds(s->position, values);
+	if (s->type == MODEL)
 	{
+		file_pointer = get_shape_file(line, N_SHAPE_VALUES);
 		if (file_pointer == NULL)
 			exit_message("no model on model line");
 		i = 0;
@@ -176,12 +212,6 @@ void	check_shape_fields(t_scene *scene, char *line, int n)
 		s->mesh = obj_load(file, *s);
 		s->octree = octree_create_node(s->mesh->bounds, s->mesh->num_trifaces, s->mesh->trifaces);
 		ft_printf("loaded model from file %s\n", file);
-	}
-	else
-	{
-		if (s->position.x == s->target.x && s->position.y == s->target.y && s->position.z == s->target.z)
-			s->target.y = s->position.y + 1;
-		s->target = ft_normalize_vec3(ft_rotate_vec3(ft_sub_vec3(s->target, s->position), s->rotation));
 	}
 }
 
@@ -246,8 +276,9 @@ void	check_texture_fields(t_scene *scene, char *line, int n)
 			if (perlin_init(scene->rt, tx) == -1)
 				exit_message("error initializing gradient vectors");
 	}
-	if (!tx->procedural_type && (file_pointer = get_shape_file(line, N_TEXTURE_VALUES)))
+	if (!tx->procedural_type)
 	{
+		file_pointer = get_shape_file(line, N_TEXTURE_VALUES);
 		if (file_pointer == NULL)
 			exit_message("no texture on texture line");
 		i = 0;
@@ -344,8 +375,6 @@ int		init_scene(char *file, t_scene *scene)
 	scene->num_lights = scene->num_all[LIGHT];
 	scene->num_materials = scene->num_all[MATERIAL];
 	scene->num_textures = scene->num_all[TEXTURE];
-	//allocate_materials(scene,scene->num_all[MATERIAL]);
-	//allocate_textures(scene, scene->num_all[TEXTURE]);
 	if (!(scene->cameras = (t_camera*)malloc(sizeof(t_camera) * scene->num_cameras)) ||
 		!(scene->shapes = (t_shape*)malloc(sizeof(t_shape) * scene->num_shapes)) ||
 		!(scene->lights = (t_light*)malloc(sizeof(t_light) * scene->num_lights)) ||
@@ -405,5 +434,6 @@ t_scene		*read_scene(t_rt *rt, char *file)
 	scene->cube_map = get_texture_by_id(scene, scene->scene_config.sky_tex_id);
 	if (scene->cube_map->procedural_type || !scene->cube_map->img_data)
 		scene->cube_map = NULL;
+	// scene->scene_config.dof_samples = 50;
 	return (scene);
 }
