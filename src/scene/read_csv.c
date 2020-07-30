@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_csv.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/30 13:36:05 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/30 14:05:36 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ void	check_scene_fields(t_scene *scene, char *line, int n)
 	conf->ambient = ft_clamp_rgba(ft_make_rgba(
 		values[9], values[10], values[11], values[12]));
 	conf->sky_tex_id = round(values[13]);
+	conf->dof = round(ft_clamp_d0(values[14], 0, 1));
+	conf->dof_samples = round(ft_clamp_d(values[15], 1, 1000));
 }
 
 void	check_camera_fields(t_scene *scene, char *line, int n)
@@ -111,6 +113,8 @@ void	check_camera_fields(t_scene *scene, char *line, int n)
 	cams[n].fov = ft_clamp_d(values[9], MIN_FOV, MAX_FOV);
 	cams[n].type = round(ft_clamp_d0(values[10], 0, CAMERA_TYPES - 1));
 	cams[n].aspect = ft_clamp_d(values[11], MIN_ASPECT, MAX_ASPECT);
+	cams[n].focal_length = ft_clamp_d(values[12], 0, MAX_CLIP);
+	cams[n].aperture = ft_clamp_d(values[13], 0.01, 10.0);
 }
 
 static t_shape_type	get_shape_type(char *line)
@@ -424,7 +428,6 @@ t_scene		*read_scene(t_rt *rt, char *file)
 	scene->cube_map = get_texture_by_id(scene, scene->scene_config.sky_tex_id);
 	if (scene->cube_map->procedural_type || !scene->cube_map->img_data)
 		scene->cube_map = NULL;
-	scene->scene_config.dof = FALSE;
-	scene->scene_config.dof_samples = 50;
+	// scene->scene_config.dof_samples = 50;
 	return (scene);
 }

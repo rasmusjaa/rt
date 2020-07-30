@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 14:59:56 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/29 23:10:37 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/30 14:11:58 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,12 +106,10 @@ void	render_scene(t_rt *rt, t_scene *scene)
 	t_vec2i	cur;
 	t_vec2i tile_size;
 	int ji;
-	int res;
 
-	res = 10;
-	init_render_task(&rt->render_task, res);
+	init_render_task(&rt->render_task, RENDER_TILE_RES);
 	rt->render_task.render_started = TRUE;
-	tile_size = ft_make_vec2i(scene->scene_config.width / res, scene->scene_config.height / res);
+	tile_size = ft_make_vec2i(scene->scene_config.width / RENDER_TILE_RES, scene->scene_config.height / RENDER_TILE_RES);
 	 camera = &(scene->cameras[scene->cur_camera]);
 	init_camera(camera->position, camera->target, camera, scene);
 	gettimeofday(&rt->render_task.start_time, NULL);

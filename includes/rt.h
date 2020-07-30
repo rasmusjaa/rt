@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/30 12:12:30 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/30 14:17:33 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@
 # define EPSILON 0.0001
 # define N_OBJ_TYPES 6
 # define N_UNIQUE_OBJS 11
-# define N_SCENE_VALUES 14
-# define N_CAMERA_VALUES 12
+# define N_SCENE_VALUES 16
+# define N_CAMERA_VALUES 14
 # define N_SHAPE_VALUES 20
 # define N_LIGHT_VALUES 10
 # define N_MATERIAL_VALUES 17
@@ -69,6 +69,7 @@
 # define LIGHT_TYPES 2
 # define SHAPE_TYPES 6
 # define COLORIZES 7
+# define RENDER_TILE_RES 20
 
 # define SETTINGS_STR "settings"
 # define CAMERA_STR "camera"
