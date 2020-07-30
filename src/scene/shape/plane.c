@@ -27,7 +27,7 @@ t_vec2 calc_hit_uv_plane(t_shape *plane, t_raycast_hit *hit)
 
 	p = hit->point;
 	
-
+	p = ft_sub_vec3(p, plane->position);
 	p = ft_rotate_vec3(hit->point, ft_invert_vec3(plane->rotation));
 	uv.x = (hit->point.x) / plane->material->u_scale;
 	uv.y = (hit->point.z) / plane->material->v_scale;
