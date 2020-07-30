@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/30 14:17:33 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/30 15:38:00 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,6 +193,7 @@ typedef struct	s_rt
 	size_t 			cur_scene;
 	t_render_task	render_task;
 	t_asset_library	assets;
+	int				render_requested;
 }				t_rt;
 
 typedef struct	s_thread
