@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:22:43 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/28 18:51:00 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/30 12:03:03 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,12 @@ typedef struct	s_shape_name_type_map
 	t_shape_type	type;
 }				t_shape_name_type_map;
 
+typedef struct	s_shape_b
+{
+	int			has_bounds;
+	t_bounds	b;
+}				t_shape_b;
+
 typedef struct	s_shape
 {
 	char			*name;
@@ -64,6 +70,7 @@ typedef struct	s_shape
 	double			reflection;
 	double			refraction;
 	double			shine;
+	t_shape_b		bounds;
 	t_mesh			*mesh;
 	t_octree		*octree;
 }				t_shape;

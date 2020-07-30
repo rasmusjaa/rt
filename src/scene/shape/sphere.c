@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:19:26 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/29 17:08:16 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/30 13:19:52 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int		intersects_bump_sphere(t_ray *ray, t_shape *sphere,
 		* sphere->material->bump_mult;
 	temp = sphere->radius - temp;
 	oc = ft_sub_vec3(ray->origin, sphere->position);
-	q.a = ft_dot_vec3(ray->direction, ray->direction);
+	q.a = 1;
 	q.b = 2.0 * ft_dot_vec3(oc, ray->direction);
 	q.c = ft_dot_vec3(oc, oc) - (temp * temp);
 	if (solve_quadratic(q, &hit->t, &hit->t2) > 0)
@@ -76,7 +76,7 @@ int		intersects_sphere(t_ray *ray, t_shape *sphere, t_raycast_hit *hit)
 	temp = sphere->radius + sphere->material->explode
 		* ft_inv_lerp_d((double)rand(), 0, RAND_MAX);
 	oc = ft_sub_vec3(ray->origin, sphere->position);
-	q.a = ft_dot_vec3(ray->direction, ray->direction);
+	q.a = 1;
 	q.b = 2.0 * ft_dot_vec3(oc, ray->direction);
 	q.c = ft_dot_vec3(oc, oc) - (temp * temp);
 	if (solve_quadratic(q, &hit->t, &hit->t2) > 0)
