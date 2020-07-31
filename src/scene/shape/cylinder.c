@@ -29,18 +29,21 @@ t_vec3	calc_hit_normal_cylinder(t_shape *c, t_raycast_hit *hit)
 
 t_vec2 calc_hit_uv_cylinder(t_shape *cylinder, t_raycast_hit *hit)
 {
-	double min, max;
-    min = 0;
-	max = 2;
-
-    
 	t_vec2 uv;
-    t_vec3 normal;
-    
-	cylinder = 0;
-    normal = hit->normal; 
- 	uv.x = atan2(normal.x, normal.y) / (M_PI * 2.0) + 0.5;
-    uv.y = (normal.y - min) / (max - min);
+	t_vec3 n;
+	t_vec3 p;
+	double min;
+	double max;
+
+	min = 0;
+	max = 1;
+	p = ft_sub_vec3(hit->point, cylinder->position);
+	n = ft_rotate_vec3(hit->normal, ft_invert_vec3(cylinder->rotation));
+	uv.x = atan2(n.x, n.z) / (2.0 * M_PI) + 0.5;
+    uv.y = (p.y - floor(p.y) - min) / (max - min);
+	uv.x *= 6.0;
+	uv.x /= cylinder->material->u_scale / cylinder->radius;
+	uv.y /= cylinder->material->v_scale / cylinder->radius;
 	return (uv);
 }
 

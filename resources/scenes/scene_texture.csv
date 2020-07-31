@@ -2,15 +2,17 @@ SETTINGS;SHADOWS;SHADING;SPECULAR;OPACITY;REFRACTION;REFLECTION;BOUNCES;WIDTH(80
 settings;1;1;1;1;1;1;10;90;90;0.3;0.3;0.3;1;2;;;;;;;;
 CAMERAS;POS_X;POS_Y;POS_Z;TAR_X;TAR_Y;TAR_Z;ROT_X;ROT_Y;ROT_Z;FOV;TYPE;ASPECT;;;;;;;;;;
 camera;0;50;0;0;0;0;;;;60;0;1;;;;;;;;;;
-camera;0;-0.5;15;0;0;0;0;0;0;90;0;1;;;;;;;;;;
+camera;0;1;5;0;1;0;0;0;0;90;0;1;;;;;;;;;;
 TEXTURES;ID;PROC_TYPE;COL1_R;COL1_G;COL1_B;COL1_A;COL2_R;COL2_G;COL2_B;COL2_A;?;?;?;?;FILE;;;;;;;
-texture;1;3;0;0;0;1;1;0;0;1;10;0.1;1;1;resources/perlin.xpm;;;;;;;
+texture;1;1;0;0;0;1;1;0;0;1;10;0.33;1;1;resources/cube_map.xpm;;;;;;;
 texture;2;0;1;1;1;1;1;0;0;1;1;1;1;1;resources/cube_map.xpm;;;;;;;
 texture;3;0;0;0;0;0;0;0;0;0;0;0;0;0;resources/perlin.xpm;;;;;;;
 MATERIALS;ID;TEX_ID;COL_R;COL_G;COl_B;COL_A;SHINE;REF_INDEX;REFLECTION;OPACITY;U_SCALE;V_SCALE;EXPLODE;NORMAL_TEXTURE_ID;NORMAL_MULT;BUMP_TEXTURE_ID;BUMP_MULT;;;;;
-material;1;1;0;0;0;1;0;1.33;0;1;5;5;0;3;3;0;0;;;;;
+material;1;1;0;0;0;1;0;1.33;0;1;1;1;0;3;3;0;0;;;;;
+material;2;0;1;1;1;1;0;1.33;0.5;1;1;1;0;3;3;0;0;;;;;
 SHAPES;POS_X;POS_Y;POS_Z;ROT_X;ROT_Y;ROT_Z;SCALE;COL_R;COL_G;COL_B;COL_A;RADIUS;ANGLE;MATERIAL_ID;BOUNDS_MIN_X;BOUNDS_MIN_Y;BOUNDS_MIN_Z;BOUNDS_MAX_X;BOUNDS_MAX_Y;BOUNDS_MAX_Z;MODEL;
-sphere;0;-1;0;0;180;0;1;0.4;0.8;0.5;1;1;45;1;;;;;;;;
-plane;0;-1;0;0;0;0;1;0.4;0.8;0.5;1;1;45;1;;;;;;;;
+cylinder;0;0;0;0;0;0;1;0.4;0.8;0.5;1;1;20;1;;;;;;;;
+plane;0;0;0;0;0;0;1;0.4;0.8;0.5;1;1;45;1;;;;;;;;
+#sphere
 LIGHTS;POS_X;POS_Y;POS_Z;COL_R;COL_G;COL_B;TYPE;INTENSITY;RADIUS (0-5 for soft shadows);LEDS;;;;;;;;;;;;
-point;20;6;10;1;1;1;0;400;0;1;;;;;;;;;;;;
+point;-5;5;5;1;1;1;0;4000;0;1;;;;;;;;;;;;
