@@ -50,7 +50,6 @@ t_vec2 calc_hit_uv_plane(t_shape *plane, t_raycast_hit *hit)
 		uv.x = ru - floor(ru);
 		uv.y = rv - floor(rv);
 
-
 	return (uv);
 }
 
