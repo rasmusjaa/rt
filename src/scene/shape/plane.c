@@ -24,24 +24,32 @@ t_vec2 calc_hit_uv_plane(t_shape *plane, t_raycast_hit *hit)
 {
 	t_vec2		uv;
 	t_vec3	p;
-	t_vec3 	rrotate;
+	t_vec3 n = hit->normal;
+	t_vec3 u = ft_normalize_vec3(ft_make_vec3(n.y, -n.x, 0));
+	t_vec3 v;
+
+//	t_vec3 	rrotate;
 	p = hit->point;
-	
-	rrotate = ft_invert_vec3(plane->rotation);
 
 	p = ft_sub_vec3(p, plane->position);
-	if (rrotate.z)
-	p = ft_rotate_vec3(hit->point, ft_make_vec3(0,0, rrotate.z));
-	if (rrotate.y)
-	p = ft_rotate_vec3(hit->point, ft_make_vec3(0,rrotate.y,0));
-	if (rrotate.x)
-	p = ft_rotate_vec3(hit->point, ft_make_vec3(rrotate.x, 0, 0));
+	if (n.x == 0 && n.y == 0)
+	{
+		ft_normalize_vec3(ft_make_vec3(n.y, -n.x, n.z));
+	}
+		v = ft_cross_vec3(n, u);
+		uv.x = ft_dot_vec3(u, p);
+		uv.y = ft_dot_vec3(v, p);
 	
-	uv.x = (p.x) / plane->material->u_scale;
-	uv.y = (p.z) / plane->material->v_scale;
-	
-	uv.x = uv.x - floor(uv.x);
-	uv.y = uv.y - floor(uv.y);
+		uv.x /= plane->material->u_scale;
+		uv.y /= plane->material->v_scale;	
+
+		double angle = ft_deg_to_rad(plane->rotation.y);
+		double ru = uv.x * cos(angle) - uv.y * sin(angle);
+		double rv = uv.y * cos(angle) + uv.x * sin(angle);
+
+		uv.x = ru - floor(ru);
+		uv.y = rv - floor(rv);
+
 
 	return (uv);
 }

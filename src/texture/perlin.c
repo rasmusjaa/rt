@@ -26,7 +26,7 @@ static double dotgrad(int ix, int iy, double x, double y, unsigned char ***g)
 	iy = iy % GRAD_MAX;
 	xvalue = (float)g[iy][ix][0] / 122.5 - 1;
 	yvalue = (float)g[iy][ix][1] / 122.5 - 1;
-	
+
 	return (dx * xvalue + dy * yvalue);
 }
 
@@ -51,24 +51,24 @@ double	perlin_noise(t_texture *texture, double x, double y)
 	value = ft_lerp_d(ix0, ix1, sy);
 	return (value / 2 + 0.5);
 }
-/*
-double octave_perlin(double x, double y, int oct, double pers, unsigned char ***g)
+
+double octave_perlin(t_texture *texture, t_vec2 uv, int oct, double pers)
 {
 	double total = 0;
 	double freq = 10;
-	double amplitude = 1;
+	double amplitude = texture->settings.z;
 	double maxvalue = 0;
 
 	for (int i = 0; i < oct; i++)
 	{
-		total += perlin_noise(x * freq, y * freq, g) * amplitude;
+		total += perlin_noise(texture, uv.x * freq, uv.y * freq) * amplitude;
 		maxvalue += amplitude;
 		amplitude *= pers;
 		freq *= 2;
 	}
 	return (total / maxvalue);
 }
-*/
+
 // double ft_map(double v, double s1, double e1, double s2, double e2)
 // {
 // 	double r;
