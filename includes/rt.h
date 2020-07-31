@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/31 17:29:55 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/31 17:57:33 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@
 # include "vector.h"
 # include "mlx.h"
 # include "raycast.h"
-# include "material.h"
+// # include "material.h"
+# include "render.h"
 
 # ifndef __linux__
 
@@ -98,6 +99,7 @@ struct s_mlx_img;
 struct s_mesh;
 struct s_texture;
 
+
 typedef	struct	s_scene_config
 {
 	char			*filepath;
@@ -145,40 +147,7 @@ typedef struct	s_mlx
 {
 	void			*mlx_ptr;
 	void			*win_ptr;
-	// void			*img_ptr;
-	// char			*data_addr;
-	// int				bpp;
-	// int				size_line;
-	// int				endian;
 }				t_mlx;
-
-typedef struct	s_tile_job_data
-{
-	struct s_rt		*rt;
-	t_mlx			*mlx;
-	t_scene			*scene;
-	struct s_mlx_img	*mlx_img;
-	t_vec2i			screen_coord;
-	t_vec2i			tile_size;
-	int				tile_index;
-	int				*jobs;
-	pthread_mutex_t	*task_mutex;
-	struct s_camera	*camera;
-}				t_tile_job_data;
-
-typedef struct	s_render_task
-{
-	struct timeval	start_time;
-	struct timeval	end_time;
-	struct s_tp		*thread_pool;
-	t_tile_job_data *job_data_block;
-	pthread_mutex_t task_mutex;
-	int				jobs;
-	int				num_jobs;
-	struct s_queue	*done_tiles;
-	size_t			render_finished;
-	size_t			render_started;
-}				t_render_task;
 
 typedef struct	s_asset_library
 {
@@ -198,14 +167,13 @@ typedef struct	s_rt
 	int				render_requested;
 }				t_rt;
 
-typedef struct	s_thread
-{
-	t_rt 			*rt;
-	int				thread;
-}				t_thread;
+// typedef struct	s_thread
+// {
+// 	t_rt 			*rt;
+// 	int				thread;
+// }				t_thread;
 
 
-void 			hooks_and_loop(t_rt *rt);
 void			reload_scene(t_rt *rt);
 void			load_scene(t_rt *rt, int scene_nb);
 
@@ -218,11 +186,8 @@ int				perlin_init(t_rt *rt, struct s_texture *texture);
 void			delete_gradient_vectors(unsigned char  ***g);
 void			rt_destroy_exit(t_rt *rt, int status);
 
-void			render_scene(t_rt *rt, t_scene *scene);
-void			render_tile(void *data);
-
-void			init_render_task(t_render_task *task, size_t res);
-void			cleanup_render_task(t_rt *rt, t_render_task *task);
+void			init_mlx(t_rt *rt);
+void			create_mlx_window(t_rt *rt, int w, int h, char *title);
 
 void			destroy_scene(t_rt *rt, t_scene *scene);
 

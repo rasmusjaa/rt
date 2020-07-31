@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/17 20:37:20 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/23 14:45:26 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/31 17:49:23 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,10 @@
 #  define KEY_X			7 // change for linux
 
 # endif
+
+void 			init_events(t_rt *rt);
+
+int				update(void *arg);
 
 int				mouse_press_hook(int button, int x, int y, t_rt *rt);
 int				mouse_release_hook(int button, int x, int y, t_rt *rt);

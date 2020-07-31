@@ -6,11 +6,12 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/31 17:26:23 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/31 17:32:26 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/31 17:55:36 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
+#include "render.h"
 #include "mlx_image.h"
 #include "ft_queue.h"
 #include "ft_printf.h"
