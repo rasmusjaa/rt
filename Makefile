@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+         #
+#    By: wkorande <willehard@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/01 15:48:04 by rjaakonm          #+#    #+#              #
-#    Updated: 2020/07/30 17:48:37 by rjaakonm         ###   ########.fr        #
+#    Updated: 2020/07/31 17:31:39 by wkorande         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,11 +14,13 @@ NAME = RT
 
 SRCDIR = src
 
-SRC = 	core/event_hooks/keyboard.c\
+SRC = 	core/cube_map.c\
+		core/event_hooks/keyboard.c\
 		core/event_hooks/mouse.c\
 		core/event_hooks/window.c\
 		core/mlx_image.c\
 		core/obj_loader.c\
+		core/perlin_init.c\
 		core/rt.c\
 		core/thread_pool/ft_get_num_procs.c\
 		core/thread_pool/tp.c\
@@ -26,19 +28,17 @@ SRC = 	core/event_hooks/keyboard.c\
 		core/thread_pool/tp_queue.c\
 		debug/debug.c\
 		debug/draw_line.c\
+		main.c\
 		mesh/mesh_calc_bounds.c\
 		mesh/mesh_create.c\
 		mesh/mesh_destroy.c\
 		mesh/mesh_set_vert.c\
 		octree/octree.c\
-		texture/material.c\
-		texture/texture.c\
-		texture/bricks.c\
-		texture/checker.c\
-		core/perlin_init.c\
-		texture/perlin.c\
 		render/light.c\
 		render/raycast.c\
+		render/render_scene.c\
+		render/render_task.c\
+		render/render_tile.c\
 		scene/camera.c\
 		scene/read_csv.c\
 		scene/shape/bounds.c\
@@ -49,8 +49,11 @@ SRC = 	core/event_hooks/keyboard.c\
 		scene/shape/shape.c\
 		scene/shape/sphere.c\
 		scene/shape/triangle.c\
-		main.c\
-		core/cube_map.c
+		texture/bricks.c\
+		texture/checker.c\
+		texture/material.c\
+		texture/perlin.c\
+		texture/texture.c
 
 SRCS = $(addprefix $(SRCDIR)/, $(SRC))
 

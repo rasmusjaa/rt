@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rt.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/30 16:57:32 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/31 17:29:55 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,7 +217,13 @@ t_rt			*rt_init(size_t num_scenes);
 int				perlin_init(t_rt *rt, struct s_texture *texture);
 void			delete_gradient_vectors(unsigned char  ***g);
 void			rt_destroy_exit(t_rt *rt, int status);
+
 void			render_scene(t_rt *rt, t_scene *scene);
+void			render_tile(void *data);
+
+void			init_render_task(t_render_task *task, size_t res);
+void			cleanup_render_task(t_rt *rt, t_render_task *task);
+
 void			destroy_scene(t_rt *rt, t_scene *scene);
 
 #endif
