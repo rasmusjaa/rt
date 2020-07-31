@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 14:59:56 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/31 17:50:23 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/31 18:12:52 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,28 +17,7 @@
 #include "thread_pool.h"
 #include "mlx_image.h"
 #include "debug.h"
-
-void	reload_scene(t_rt *rt)
-{
-	t_scene *scene;
-	char	*file;
-	int		width;
-	int		height;
-
-	scene = rt->scenes[rt->cur_scene];
-	file = scene->scene_config.filepath;
-	width = scene->scene_config.width;
-	height = scene->scene_config.height;
-	ft_printf("old width %d height %d\n", width, height);
-	destroy_scene(rt, scene);
-	rt->scenes[rt->cur_scene] = read_scene(rt, file);
-	rt->scenes[rt->cur_scene]->scene_config.width = width;
-	rt->scenes[rt->cur_scene]->scene_config.height = height;
-	ft_printf("old width %d height %d\n", rt->scenes[rt->cur_scene]->scene_config.width, rt->scenes[rt->cur_scene]->scene_config.height);
-	rt->render_requested = TRUE;
-}
-
-
+#include "scene.h"
 
 int		main(int ac, char **av)
 {

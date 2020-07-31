@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/30 14:02:54 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/31 18:19:12 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include "debug.h"
 #include "texture.h"
 #include "mlx_image.h"
+#include "scene.h"
 
 int trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit)
 {

@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/08 11:39:28 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/23 14:55:10 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/31 18:19:27 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "vector.h"
 #include "octree.h"
 #include "shape.h"
+#include "scene.h"
 
 void	print_vec3(char *s, t_vec3 v)
 {

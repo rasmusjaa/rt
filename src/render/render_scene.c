@@ -6,13 +6,15 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/31 17:25:26 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/31 17:33:21 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/31 18:18:45 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
 #include "thread_pool.h"
 #include "mlx_image.h"
+#include "scene.h"
+#include "object.h"
 
 void	render_scene(t_rt *rt, t_scene *scene)
 {

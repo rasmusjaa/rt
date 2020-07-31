@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/09 15:06:46 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/30 15:39:13 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/31 18:21:33 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #include "events.h"
 #include "ft_printf.h"
 #include "vector.h"
+#include "scene.h"
+#include "object.h"
 
 static void		move_camera2(int key, t_camera *cam, t_vec3 right)
 {

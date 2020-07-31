@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   material.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/15 14:24:30 by sluhtala          #+#    #+#             */
-/*   Updated: 2020/07/30 18:09:09 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/31 18:15:13 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "material.h"
 #include "texture.h"
 #include "color.h"
+#include "scene.h"
 
 // void	material_temp_function(t_scene *scene)
 // {

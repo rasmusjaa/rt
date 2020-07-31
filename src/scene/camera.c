@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   camera.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 23:03:26 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/30 17:57:27 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/31 18:15:51 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
 #include "debug.h"
+#include "scene.h"
 
 void	init_camera(t_vec3 origin, t_vec3 target, t_camera *cam, t_scene *scene)
 {

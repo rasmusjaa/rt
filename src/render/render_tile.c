@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/31 17:26:23 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/31 17:55:36 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/31 18:17:15 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 #include "mlx_image.h"
 #include "ft_queue.h"
 #include "ft_printf.h"
+#include "color.h"
+#include "raycast.h"
+#include "scene.h"
 
 void	render_tile(void *data)
 {

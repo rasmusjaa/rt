@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_csv.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/30 17:50:04 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/31 18:15:36 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 #include <sys/stat.h>
 #include "texture.h"
 #include "material.h"
+#include "scene.h"
 
 t_shape_name_type_map g_shape_name_type_map[SHAPE_TYPES] =
 {
