@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   perlin_init.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sluhtala <sluhtala@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/30 13:08:07 by sluhtala          #+#    #+#             */
-/*   Updated: 2020/07/30 13:08:41 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/07/30 22:40:48 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void  delete_gradient_vectors(unsigned char  ***g)
 
 	j = 0;
     if (!g)
-        return ;
+		return ;
 	while (j < GRAD_MAX)
 	{
 		i = 0;

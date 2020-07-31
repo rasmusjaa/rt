@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/09 13:50:27 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/30 15:38:15 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/31 18:12:43 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "texture.h"
 #include "ft_printf.h"
 #include <stdarg.h>
+#include "scene.h"
 
 void free_null(size_t count, ...)
 {
@@ -58,7 +59,6 @@ t_rt	*rt_init(size_t num_scenes)
 	rt->grad_vectors = NULL;
 	rt->render_task.thread_pool = NULL;
 	rt->render_task.job_data_block = NULL;
-	// rt->render_task.task_mutex = NULL;
 	rt->render_task.jobs = 0;
 	rt->render_task.num_jobs = 0;
 	rt->render_requested = FALSE;

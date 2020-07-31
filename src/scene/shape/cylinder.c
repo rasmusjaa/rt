@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cylinder.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:29:03 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/28 21:54:19 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/30 16:26:08 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,13 +65,12 @@ int	intersects_cylinder(t_ray *ray, t_shape *cyl, t_raycast_hit *hit)
 		ft_dot_vec3(v, v));
 	if (solve_quadratic(q, &hit->t, &hit->t2))
 	{
-		if (hit->t < 0 || (hit->t2 > 0 && hit->t2 < hit->t))
-			hit->t = hit->t2;
-		if (hit->t < 0 || hit->t > MAX_CLIP)
-			return (FALSE);
-		hit->point = point_on_ray(ray, hit->t);
-		hit->distance = hit->t;
-		return (TRUE);
+		if (check_t_hits(ray, hit, cyl))
+		{
+			hit->point = point_on_ray(ray, hit->t);
+			hit->distance = hit->t;
+			return (TRUE);
+		}
 	}
 	return (FALSE);
 

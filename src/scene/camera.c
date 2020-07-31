@@ -6,12 +6,13 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 23:03:26 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/30 13:58:19 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/31 18:15:51 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
 #include "debug.h"
+#include "scene.h"
 
 void	init_camera(t_vec3 origin, t_vec3 target, t_camera *cam, t_scene *scene)
 {
@@ -67,7 +68,7 @@ t_ray get_camera_ray(t_scene *scene, t_camera *cam, double screen_x,
 		ray.direction = ft_add_vec3(ray.direction, r);
 		ray.direction = ft_add_vec3(ray.direction, u);
 		ray.direction = ft_normalize_vec3(ray.direction);
-		if (scene->scene_config.dof)
+		if (scene->scene_config.dof && cam->focal_length > EPSILON && cam->aperture > 0.01)
 		{
 			focal_point = ft_add_vec3(cam->position, ft_mul_vec3(ray.direction, cam->focal_length));
 			ray.origin.x += random_d() * cam->aperture;

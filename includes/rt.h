@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/30 15:38:00 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/31 18:14:54 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@
 # include <math.h>
 # include <sys/time.h>
 # include <stdlib.h>
-# include "color.h"
-# include "vector.h"
+// # include "color.h"
+// # include "vector.h"
 # include "mlx.h"
-# include "raycast.h"
-# include "material.h"
+// # include "raycast.h"
+# include "render.h"
 
 # ifndef __linux__
 
@@ -97,87 +97,13 @@ struct s_queue;
 struct s_mlx_img;
 struct s_mesh;
 struct s_texture;
-
-typedef	struct	s_scene_config
-{
-	char			*filepath;
-	time_t			last_modified;
-	int				shadows;
-	int				shading;
-	int				specular;
-	int				opacity;
-	int				refraction;
-	int				reflection;
-	int				bounces;
-	int				width;
-	int				height;
-	t_rgba			ambient;
-	size_t			colorize;
-	size_t			sky_tex_id;
-	int				dof;
-	size_t			dof_samples;
-}				t_scene_config;
-
-struct s_rt;
-
-typedef struct	s_scene
-{
-	t_scene_config		scene_config;
-	size_t				num_all[N_OBJ_TYPES];
-	struct s_camera		*cameras;
-	size_t				num_cameras;
-	size_t				cur_camera;
-	struct s_light		*lights;
-	size_t				num_lights;
-	struct s_shape		*shapes;
-	size_t				num_shapes;
-	int					help_ray;
-	struct s_material	*materials;
-	size_t				num_materials;
-	struct s_texture	*textures;
-	size_t				num_textures;
-	struct s_texture	*cube_map;
-	struct s_rt			*rt;
-}					t_scene;
+struct s_scene;
 
 typedef struct	s_mlx
 {
 	void			*mlx_ptr;
 	void			*win_ptr;
-	// void			*img_ptr;
-	// char			*data_addr;
-	// int				bpp;
-	// int				size_line;
-	// int				endian;
 }				t_mlx;
-
-typedef struct	s_tile_job_data
-{
-	struct s_rt		*rt;
-	t_mlx			*mlx;
-	t_scene			*scene;
-	struct s_mlx_img	*mlx_img;
-	t_vec2i			screen_coord;
-	t_vec2i			tile_size;
-	int				tile_index;
-	int				*jobs;
-	pthread_mutex_t	*task_mutex;
-	struct s_camera	*camera;
-}				t_tile_job_data;
-
-typedef struct	s_render_task
-{
-	struct timeval	start_time;
-	struct timeval	end_time;
-	struct s_tp		*thread_pool;
-	t_tile_job_data *job_data_block;
-	pthread_mutex_t task_mutex;
-	int				jobs;
-	int				num_jobs;
-	struct s_queue	*done_tiles;
-	size_t			render_finished;
-	size_t			render_started;
-}				t_render_task;
 
 typedef struct	s_asset_library
 {
@@ -188,7 +114,7 @@ typedef struct	s_asset_library
 typedef struct	s_rt
 {
 	t_mlx 			*mlx;
-	t_scene 		**scenes;
+	struct s_scene	**scenes;
 	size_t			num_scenes;
 	size_t 			cur_scene;
 	t_render_task	render_task;
@@ -197,26 +123,16 @@ typedef struct	s_rt
 	int				render_requested;
 }				t_rt;
 
-typedef struct	s_thread
-{
-	t_rt 			*rt;
-	int				thread;
-}				t_thread;
-
-
-void 			hooks_and_loop(t_rt *rt);
-void			reload_scene(t_rt *rt);
-void			load_scene(t_rt *rt, int scene_nb);
-
 void 			exit_message(char *str);
 time_t			last_modified(char *file);
-t_scene			*read_scene(t_rt *rt, char *file);
 
 t_rt			*rt_init(size_t num_scenes);
 int				perlin_init(t_rt *rt, struct s_texture *texture);
 void			delete_gradient_vectors(unsigned char  ***g);
 void			rt_destroy_exit(t_rt *rt, int status);
-void			render_scene(t_rt *rt, t_scene *scene);
-void			destroy_scene(t_rt *rt, t_scene *scene);
+
+void			init_mlx(t_rt *rt);
+void			create_mlx_window(t_rt *rt, int w, int h, char *title);
+
 
 #endif

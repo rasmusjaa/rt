@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shape.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/15 12:46:47 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/30 15:25:41 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/30 18:41:53 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "shape.h"
 #include "mesh.h"
 #include "ft_printf.h"
+#include "libft.h"
 
 t_vec3	point_on_ray(t_ray *r, double t)
 {
@@ -22,6 +23,18 @@ t_vec3	point_on_ray(t_ray *r, double t)
 
 	p = ft_add_vec3(r->origin, ft_mul_vec3(r->direction, t));
 	return (p);
+}
+
+int		check_t_hits(t_ray *ray, t_raycast_hit *hit, t_shape *shape)
+{
+	if (hit->t > MIN_CLIP && hit->t < MAX_CLIP &&
+		point_inside_bounds(point_on_ray(ray, hit->t), shape))
+		return (TRUE);
+	ft_swap_d(&hit->t, &hit->t2);
+	if (hit->t > MIN_CLIP && hit->t < MAX_CLIP &&
+		point_inside_bounds(point_on_ray(ray, hit->t), shape))
+		return (TRUE);
+	return (FALSE);
 }
 
 int			solve_quadratic(t_quadratic q, double *t1, double *t2)
@@ -107,7 +120,7 @@ t_vec2 calc_hit_uv(t_raycast_hit *hit)
 	else if (hit->shape->type == CYLINDER)
 		return (calc_hit_uv_cylinder(hit->shape, hit));
 	else if (hit->shape->type == MODEL)
-		return (calc_hit_uv_triangle(hit->triface, hit));
+		return (calc_hit_uv_triangle(hit->shape, hit));
 	else
 	{
 		ft_printf("calc_hit_uv -- unknown shape type\n");

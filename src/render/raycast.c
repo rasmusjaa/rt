@@ -19,6 +19,7 @@
 #include "debug.h"
 #include "texture.h"
 #include "mlx_image.h"
+#include "scene.h"
 
 int trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit)
 {

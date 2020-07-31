@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:08:04 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/30 16:03:14 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/31 18:15:36 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 #include <sys/stat.h>
 #include "texture.h"
 #include "material.h"
+#include "scene.h"
 
 t_shape_name_type_map g_shape_name_type_map[SHAPE_TYPES] =
 {
@@ -358,7 +359,6 @@ int		init_scene(char *file, t_scene *scene)
 	scene->num_all[TEXTURE] = 0;
 	scene->scene_config.filepath = file;
 	scene->scene_config.last_modified = last_modified(file);
-
 	fd = open(file, O_RDONLY);
 	if (fd < 0 || read(fd, NULL, 0) == -1)
 		exit_message("Error loading file!");
@@ -375,6 +375,7 @@ int		init_scene(char *file, t_scene *scene)
 	}
 	close(fd);
 	scene->cur_camera = 0;
+	scene->num_settings = scene->num_all[SETTINGS];
 	scene->num_cameras = scene->num_all[CAMERA];
 	scene->num_shapes = scene->num_all[SHAPE];
 	scene->num_lights = scene->num_all[LIGHT];
@@ -435,10 +436,11 @@ t_scene		*read_scene(t_rt *rt, char *file)
 		free(line);
 	}
 	close(fd);
+	if (scene->num_settings < 1 || scene->num_cameras < 1)
+		exit_message("No settings or camera in scene file");
 	link_shapes_materials_textures(scene);
 	scene->cube_map = get_texture_by_id(scene, scene->scene_config.sky_tex_id);
-	if (scene->cube_map->procedural_type || !scene->cube_map->img_data)
+	if (!scene->cube_map || scene->cube_map->procedural_type || !scene->cube_map->img_data)
 		scene->cube_map = NULL;
-	// scene->scene_config.dof_samples = 50;
 	return (scene);
 }

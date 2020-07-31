@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   material.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/15 14:24:30 by sluhtala          #+#    #+#             */
-/*   Updated: 2020/07/29 16:40:38 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/31 18:15:13 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "material.h"
 #include "texture.h"
 #include "color.h"
+#include "scene.h"
 
 // void	material_temp_function(t_scene *scene)
 // {
@@ -50,7 +51,7 @@ t_material new_material(size_t id, t_rgba diffuse, t_texture *texture)
 
 	mat.id = id;
 	mat.diffuse = diffuse;
-	mat.shininess = 200;
+	mat.shininess = 1;
 	mat.specular = 1;
 	mat.texture = texture;
 	mat.opacity = 1;

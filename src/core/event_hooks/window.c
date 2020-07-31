@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   window.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/09 15:08:22 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/23 15:24:54 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/31 18:19:40 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "rt.h"
 #include "ft_printf.h"
+#include "scene.h"
 
 int		close_hook(t_rt *rt)
 {

@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/25 11:59:27 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/25 13:07:03 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/31 18:18:00 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MLX_IMAGE_H
 
 #include "rt.h"
+#include "color.h"
 #include "mlx.h"
 
 typedef enum e_cube_map_face
