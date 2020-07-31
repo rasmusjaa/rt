@@ -31,16 +31,34 @@ t_vec2 calc_hit_uv_cylinder(t_shape *cylinder, t_raycast_hit *hit)
 {
 	t_vec2 uv;
 	t_vec3 n;
-	t_vec3 p;
+	//t_vec3 p;
 	double min;
 	double max;
+	t_vec3 u;
 
 	min = 0;
 	max = 1;
-	p = ft_sub_vec3(hit->point, cylinder->position);
-	n = ft_rotate_vec3(hit->normal, ft_invert_vec3(cylinder->rotation));
-	uv.x = atan2(n.x, n.z) / (2.0 * M_PI) + 0.5;
-    uv.y = (p.y - floor(p.y) - min) / (max - min);
+	
+	//p = ft_sub_vec3(hit->point, cyliner->position);
+	n = hit->normal;
+	u = ft_cross_vec3(n, ft_normalize_vec3(ft_sub_vec3(hit->point, cylinder->position)));
+	t_vec3 x = ft_cross_vec3(u, ft_normalize_vec3(ft_sub_vec3(cylinder->target, cylinder->position)));
+	double d = ft_dot_vec3(x, n);
+
+	d =-0 ;
+	//n = ft_rotate_vec3(hit->normal, ft_invert_vec3(cylinder->rotation));
+	/*
+	u = ft_normalize_vec3(ft_make_vec3(n.y, -n.x, 0));
+	if (n.x == 0 && n.y == 0)
+	{
+		ft_normalize_vec3(ft_make_vec3(n.y, -n.x, n.z));
+	}
+		v = ft_cross_vec3(n, u);
+		uv.x = ft_dot_vec3(u, p);
+		uv.y = ft_dot_vec3(v, p);
+		*/
+	uv.x = atan2(u.x, u.z) / (2.0 * M_PI) + 0.5;
+    uv.y = (hit->point.y - floor(hit->point.y) - min) / (max - min);
 	uv.x *= 6.0;
 	uv.x /= cylinder->material->u_scale / cylinder->radius;
 	uv.y /= cylinder->material->v_scale / cylinder->radius;

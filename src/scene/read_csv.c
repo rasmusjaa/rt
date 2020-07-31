@@ -192,9 +192,9 @@ void	check_shape_fields(t_scene *scene, char *line, int n)
 	s->type = get_shape_type(line);
 	s->name = get_shape_name(s->type);
 	s->position = ft_clamp_vec3(ft_make_vec3(values[0], values[1], values[2]), MIN_COORD, MAX_COORD);
+	s->target = ft_add_vec3(s->position, ft_make_vec3(0, 1, 0));
 	s->rotation = ft_clamp_vec3(ft_make_vec3(-values[3], -values[4], -values[5]), 0, 360);
-	//s->target = ft_add_vec3(s->position, ft_make_vec3(0, 1, 0));
-	s->target = ft_normalize_vec3(ft_rotate_vec3(ft_sub_vec3(ft_make_vec3(0, 1, 0), s->position), s->rotation));
+	//s->target = ft_normalize_vec3(ft_rotate_vec3(ft_sub_vec3(ft_make_vec3(0, 1, 0), s->position), s->rotation));
 	//if (s->type == CONE)
 	//	s->target = ft_invert_vec3(s->target);
 	s->scale = ft_clamp_d(values[6], MIN_SCALE, MAX_SCALE);
@@ -217,8 +217,8 @@ void	check_shape_fields(t_scene *scene, char *line, int n)
 		s->octree = octree_create_node(s->mesh->bounds, s->mesh->num_trifaces, s->mesh->trifaces);
 		ft_printf("loaded model from file %s\n", file);
 	}
-	//else
-	//	s->target = ft_normalize_vec3(ft_rotate_vec3(ft_sub_vec3(s->target, s->position), s->rotation));
+	else
+		s->target = ft_normalize_vec3(ft_rotate_vec3(ft_sub_vec3(s->target, s->position), s->rotation));
 }
 
 void	check_light_fields(t_scene *scene, char *line, int n)
