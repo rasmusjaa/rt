@@ -6,7 +6,7 @@
 #    By: wkorande <willehard@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/01 15:48:04 by rjaakonm          #+#    #+#              #
-#    Updated: 2020/07/31 18:23:16 by wkorande         ###   ########.fr        #
+#    Updated: 2020/07/31 18:26:23 by wkorande         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,7 +36,7 @@ SRC = 	core/cube_map.c\
 		mesh/mesh_destroy.c\
 		mesh/mesh_set_vert.c\
 		octree/octree.c\
-		render/light.c\
+		render/shadow.c\
 		render/raycast.c\
 		render/render_scene.c\
 		render/render_task.c\
