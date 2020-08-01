@@ -27,25 +27,38 @@ t_vec3	calc_hit_normal_cylinder(t_shape *c, t_raycast_hit *hit)
 	return (ft_normalize_vec3(ft_sub_vec3(hit->point, v)));
 }
 
+#include "ft_printf.h"
+void putv3(t_vec3 v)
+{
+	ft_printf("vector : %.3f %.3f %.3f\n\n", v.x, v.y, v.z);	
+}
 t_vec2 calc_hit_uv_cylinder(t_shape *cylinder, t_raycast_hit *hit)
 {
 	t_vec2 uv;
 	t_vec3 n;
-	//t_vec3 p;
+	t_vec3 p;
 	double min;
 	double max;
-	t_vec3 u;
+	//t_vec3 u;
 
 	min = 0;
 	max = 1;
-	
+	//a = pi*r/180  a * 180 / pi
 	//p = ft_sub_vec3(hit->point, cyliner->position);
 	n = hit->normal;
-	u = ft_cross_vec3(n, ft_normalize_vec3(ft_sub_vec3(hit->point, cylinder->position)));
-	t_vec3 x = ft_cross_vec3(u, ft_normalize_vec3(ft_sub_vec3(cylinder->target, cylinder->position)));
-	double d = ft_dot_vec3(x, n);
+	double angle1 = atan(cylinder->target.x / ft_dot_vec3(ft_make_vec3(0, 1, 0), cylinder->target));
+	t_vec3 u  = ft_rotate_vec3(cylinder->target, ft_make_vec3(0, 0, angle1 * 180 / M_PI));
+	p = hit->point;
+	p = ft_rotate_vec3(p, ft_make_vec3(0, 0, angle1 * 180 / M_PI));
+	double angle2 = atan(u.z / ft_dot_vec3(ft_make_vec3(0, 1, 0), u));
+	p = ft_rotate_vec3(p, ft_make_vec3(angle2 * 180 / M_PI, 0, 0));
+	p = ft_sub_vec3(p, cylinder->position);
+	//putv3(p);
+	//exit(0);
+//	u = ft_cross_vec3(n, ft_normalize_vec3(ft_sub_vec3(hit->point, cylinder->position)));
+//	t_vec3 x = ft_cross_vec3(u, ft_normalize_vec3(ft_sub_vec3(cylinder->target, cylinder->position)));
+//	double d = ft_dot_vec3(x, n);
 
-	d =-0 ;
 	//n = ft_rotate_vec3(hit->normal, ft_invert_vec3(cylinder->rotation));
 	/*
 	u = ft_normalize_vec3(ft_make_vec3(n.y, -n.x, 0));
@@ -57,8 +70,8 @@ t_vec2 calc_hit_uv_cylinder(t_shape *cylinder, t_raycast_hit *hit)
 		uv.x = ft_dot_vec3(u, p);
 		uv.y = ft_dot_vec3(v, p);
 		*/
-	uv.x = atan2(u.x, u.z) / (2.0 * M_PI) + 0.5;
-    uv.y = (hit->point.y - floor(hit->point.y) - min) / (max - min);
+	uv.x = (atan2(p.x, p.z)) / (2.0 * M_PI) + 0.5;
+	uv.y = (p.y - floor(p.y) - min) / (max - min);
 	uv.x *= 6.0;
 	uv.x /= cylinder->material->u_scale / cylinder->radius;
 	uv.y /= cylinder->material->v_scale / cylinder->radius;
