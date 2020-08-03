@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/31 18:19:12 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/07/30 16:43:54 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -370,6 +370,7 @@ t_rgba raycast(t_ray *ray, t_scene *scene, int depth)
 	hit.shape = NULL;
 	ray->scene = scene;
 	ray->bump_ray = 0;
+	hit.t = INFINITY;
 	if (trace(ray, scene, &hit))
 	{
 		hit.depth = depth;
@@ -387,5 +388,8 @@ t_rgba raycast(t_ray *ray, t_scene *scene, int depth)
 		hit.ray = *ray;
 		color = shade(scene, &hit);
 	}
+	//fogtest
+	double d = ft_clamp_d(hit.t / 100.0, 0, 1);
+	color = ft_add_rgba(ft_mul_rgba(scene->scene_config.ambient, d), ft_mul_rgba(color, 1 - d));
 	return (colorize(scene->scene_config.colorize, color));
 }

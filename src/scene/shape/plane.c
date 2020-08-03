@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:24:54 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/29 13:42:02 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/07/30 16:37:29 by sluhtala         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,31 @@ t_vec2 calc_hit_uv_plane(t_shape *plane, t_raycast_hit *hit)
 {
 	t_vec2		uv;
 	t_vec3	p;
+	t_vec3 n = hit->normal;
+	t_vec3 u = ft_normalize_vec3(ft_make_vec3(n.y, -n.x, 0));
+	t_vec3 v;
 
+//	t_vec3 	rrotate;
 	p = hit->point;
-	
 
-	p = ft_rotate_vec3(hit->point, ft_invert_vec3(plane->rotation));
-	uv.x = (hit->point.x) / plane->material->u_scale;
-	uv.y = (hit->point.z) / plane->material->v_scale;
+	p = ft_sub_vec3(p, plane->position);
+	if (n.x == 0 && n.y == 0)
+	{
+		ft_normalize_vec3(ft_make_vec3(n.y, -n.x, n.z));
+	}
+		v = ft_cross_vec3(n, u);
+		uv.x = ft_dot_vec3(u, p);
+		uv.y = ft_dot_vec3(v, p);
 	
-	uv.x = uv.x - floor(uv.x);
-	uv.y = uv.y - floor(uv.y);
+		uv.x /= plane->material->u_scale;
+		uv.y /= plane->material->v_scale;	
+
+		double angle = ft_deg_to_rad(plane->rotation.y);
+		double ru = uv.x * cos(angle) - uv.y * sin(angle);
+		double rv = uv.y * cos(angle) + uv.x * sin(angle);
+
+		uv.x = ru - floor(ru);
+		uv.y = rv - floor(rv);
 
 	return (uv);
 }

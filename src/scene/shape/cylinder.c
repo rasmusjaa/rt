@@ -29,18 +29,27 @@ t_vec3	calc_hit_normal_cylinder(t_shape *c, t_raycast_hit *hit)
 
 t_vec2 calc_hit_uv_cylinder(t_shape *cylinder, t_raycast_hit *hit)
 {
-	double min, max;
-    min = 0;
-	max = 2;
-
-
 	t_vec2 uv;
-    t_vec3 normal;
+	t_vec3 p;
+	t_vec3 temp;
+	double angle;
+	t_vec3 up;
 
-	cylinder = 0;
-    normal = hit->normal;
- 	uv.x = atan2(normal.x, normal.y) / (M_PI * 2.0) + 0.5;
-    uv.y = (normal.y - min) / (max - min);
+	up = ft_make_vec3(0, 1, 0);
+	angle = atan(cylinder->target.x / ft_dot_vec3(up, cylinder->target));
+	temp = ft_rotate_vec3(cylinder->target,
+		ft_make_vec3(0, 0, angle * 180 / M_PI));
+	p = hit->point;
+	p = ft_rotate_vec3(p, ft_make_vec3(0, 0, angle * 180 / M_PI));
+	angle = atan(temp.z / ft_dot_vec3(up, temp));
+	p = ft_rotate_vec3(p, ft_make_vec3(angle * 180 / M_PI, 0, 0));
+	p = ft_sub_vec3(p, cylinder->position);
+	p = ft_rotate_vec3(p, ft_make_vec3(0, -cylinder->rotation.y, 0));
+	uv.x = (atan2(p.x, p.z)) / (2.0 * M_PI) + 0.5;
+	uv.y = p.y - floor(p.y);
+	uv.x *= 6.0;
+	uv.x /= cylinder->material->u_scale / cylinder->radius;
+	uv.y /= cylinder->material->v_scale / (cylinder->radius / cylinder->radius);
 	return (uv);
 }
 

@@ -116,7 +116,7 @@ t_vec2 calc_hit_uv(t_raycast_hit *hit)
 	else if (hit->shape->type == PLANE)
 		return (calc_hit_uv_plane(hit->shape, hit));
 	else if (hit->shape->type == CONE)
-		return (calc_hit_uv_cone(hit->shape, hit));
+		return (calc_hit_uv_cylinder(hit->shape, hit));
 	else if (hit->shape->type == CYLINDER)
 		return (calc_hit_uv_cylinder(hit->shape, hit));
 	else if (hit->shape->type == MODEL)

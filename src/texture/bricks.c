@@ -22,7 +22,7 @@ t_rgba	brick_texture(t_texture *texture, double u, double v)
 
 	//double a = 1 - mort_height * ((double)rows - 1) / (brick_height * (double)rows); 
 	double brick_width = brick_height * 3.333333;
-	
+
 	if (fmod(v, section_height) < mort_height)
 		return (texture->color2);
 	if (fmod(v, section_height * 2) < section_height)

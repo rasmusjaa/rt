@@ -20,7 +20,7 @@
 # define CHECKER 1
 # define BRICKS 2
 # define PERLIN 3
-# define GRAD_MAX 50
+# define GRAD_MAX 10
 
 struct s_mlx_img;
 
@@ -42,7 +42,7 @@ t_rgba					sample_texture(t_texture *texture, t_vec2 uv);
 
 t_rgba					brick_texture(t_texture *texture, double u, double v);
 double					perlin_noise(t_texture *texture, double x, double y);
-double					octave_perlin(double x, double y, int oct, double pers, unsigned char ***g);
+double					octave_perlin(t_texture *texture, t_vec2 uv, int oct, double pers);
 t_rgba					checker_texture(t_texture *texture, double v, double u);
 
 #endif

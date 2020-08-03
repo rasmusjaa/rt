@@ -25,9 +25,11 @@ t_vec2	calc_hit_uv_sphere(t_shape *sphere, t_raycast_hit *hit)
 	double v;
 	t_vec3 n;
 
-	n = ft_rotate_vec3(hit->normal, sphere->rotation);
+	n = ft_rotate_vec3(hit->normal, ft_invert_vec3(sphere->rotation));
 	u = atan2(n.x, n.z) / (2.0 * M_PI) + 0.5;
-	v = -n.y / 2.0 + 0.5;
+	v = 0.5 - asin(n.y) / M_PI;
+	u /=  sphere->material->u_scale / sphere->radius / 6;
+	v /=  sphere->material->v_scale / sphere->radius / 3;
 	return (ft_make_vec2(u, v));
 }
 
