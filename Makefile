@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+         #
+#    By: wkorande <willehard@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/01 15:48:04 by rjaakonm          #+#    #+#              #
-#    Updated: 2020/08/03 12:42:56 by rjaakonm         ###   ########.fr        #
+#    Updated: 2020/08/03 14:15:09 by wkorande         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,11 +37,15 @@ SRC = 	core/cube_map.c\
 		mesh/mesh_destroy.c\
 		mesh/mesh_set_vert.c\
 		octree/octree.c\
-		render/shadow.c\
 		render/raycast.c\
 		render/render_scene.c\
 		render/render_task.c\
 		render/render_tile.c\
+		render/shade.c\
+		render/shade_calc.c\
+		render/shade_calc_reflect_refract.c\
+		render/shade_colorize.c\
+		render/shadow.c\
 		scene/camera.c\
 		scene/read_csv.c\
 		scene/scene.c\
