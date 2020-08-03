@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/31 18:05:01 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/03 15:40:38 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/03 15:46:45 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	get_fields(char *line, double *values, int num_values)
 	}
 }
 
-int			handle_line(t_scene *scene, char *line)
+int		handle_line(t_scene *scene, char *line)
 {
 	int i;
 	int n;
@@ -74,7 +74,8 @@ int			handle_line(t_scene *scene, char *line)
 	i = 0;
 	while (i < N_UNIQUE_OBJS)
 	{
-		if (ft_strncmp(line, g_unique_objs[i].obj_str, ft_strlen(g_unique_objs[i].obj_str)) == 0) // sama kun alemmassa
+		if (ft_strncmp(line, g_unique_objs[i].obj_str,
+			ft_strlen(g_unique_objs[i].obj_str)) == 0)
 		{
 			scene->num_all[g_unique_objs[i].type]--;
 			n = scene->num_all[(int)g_unique_objs[i].type];
@@ -82,7 +83,7 @@ int			handle_line(t_scene *scene, char *line)
 		}
 		i++;
 	}
-	return (0);
+	return (1);
 }
 
 void	reload_scene(t_rt *rt)
@@ -101,11 +102,13 @@ void	reload_scene(t_rt *rt)
 	rt->scenes[rt->cur_scene] = read_scene(rt, file);
 	rt->scenes[rt->cur_scene]->scene_config.width = width;
 	rt->scenes[rt->cur_scene]->scene_config.height = height;
-	ft_printf("old width %d height %d\n", rt->scenes[rt->cur_scene]->scene_config.width, rt->scenes[rt->cur_scene]->scene_config.height);
+	ft_printf("old width %d height %d\n",
+		rt->scenes[rt->cur_scene]->scene_config.width,
+		rt->scenes[rt->cur_scene]->scene_config.height);
 	rt->render_requested = TRUE;
 }
 
-t_scene		*read_scene(t_rt *rt, char *file)
+t_scene	*read_scene(t_rt *rt, char *file)
 {
 	int		fd;
 	char	*line;
@@ -120,17 +123,15 @@ t_scene		*read_scene(t_rt *rt, char *file)
 	fd = open(file, O_RDONLY);
 	if (fd < 0 || read(fd, NULL, 0) == -1)
 		exit_message("Invalid file");
-	while (ft_get_next_line(fd, &line) > 0)
-	{
-		handle_line(scene, line);
+	while (ft_get_next_line(fd, &line) > 0 && handle_line(scene, line))
 		free(line);
-	}
 	close(fd);
 	if (scene->num_settings < 1 || scene->num_cameras < 1)
 		exit_message("No settings or camera in scene file");
 	link_shapes_materials_textures(scene);
 	scene->cube_map = get_texture_by_id(scene, scene->scene_config.sky_tex_id);
-	if (!scene->cube_map || scene->cube_map->procedural_type || !scene->cube_map->img_data)
+	if (!scene->cube_map || scene->cube_map->procedural_type ||
+		!scene->cube_map->img_data)
 		scene->cube_map = NULL;
 	return (scene);
 }
