@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shape.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:22:43 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/30 18:41:38 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/03 15:44:48 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int				intersects_triangle(t_ray *ray, t_triface *triface,
 int				intersects_model(t_ray *ray, t_shape *model,
 					t_raycast_hit *hit, int debug);
 int				intersects_octree_model(t_ray *ray, t_shape *model,
-					t_octree *node, t_raycast_hit *hit, int debug);
+					t_octree *node, t_raycast_hit *hit);
 
 t_vec3			calc_hit_normal(t_raycast_hit *hit);
 t_vec3			calc_hit_normal_sphere(t_shape *sphere, t_raycast_hit *hit);
@@ -97,7 +97,6 @@ t_vec2			calc_hit_uv_plane(t_shape *plane, t_raycast_hit *hit);
 t_vec2			calc_hit_uv_cone(t_shape *cone, t_raycast_hit *hit);
 t_vec2			calc_hit_uv_cylinder(t_shape *c, t_raycast_hit *hit);
 t_vec2			calc_hit_uv_triangle(t_shape *model, t_raycast_hit *hit);
-// t_vec2			calc_hit_uv_model(t_triface *triface, t_raycast_hit *hit);
 
 t_vec3			point_on_ray(t_ray *r, double t);
 int				check_t_hits(t_ray *ray, t_raycast_hit *hit, t_shape *shape);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shape.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/15 12:46:47 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/30 18:41:53 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/03 15:58:06 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int		check_t_hits(t_ray *ray, t_raycast_hit *hit, t_shape *shape)
 	return (FALSE);
 }
 
-int			solve_quadratic(t_quadratic q, double *t1, double *t2)
+int		solve_quadratic(t_quadratic q, double *t1, double *t2)
 {
 	double d;
 
@@ -58,29 +58,30 @@ int			solve_quadratic(t_quadratic q, double *t1, double *t2)
 	return (0);
 }
 
-
-
-int	intersects_shape(t_ray *ray, t_shape *shape, t_raycast_hit *hit, int debug)
+int		intersects_shape(t_ray *ray, t_shape *shape, t_raycast_hit *hit,
+	int debug)
 {
-	if (shape->bounds.active && !intersects_bounds(ray, &shape->bounds, debug))
-		return(FALSE);
+	if (shape->bounds.active && !intersects_bounds(ray, &shape->bounds))
+		return (FALSE);
 	if ((shape->type == SPHERE && intersects_sphere(ray, shape, hit))
 	|| (shape->type == PLANE && intersects_plane(ray, shape, hit))
 	|| (shape->type == CONE && intersects_cone(ray, shape, hit))
 	|| (shape->type == CYLINDER && intersects_cylinder(ray, shape, hit))
-	|| (shape->type == MODEL && intersects_octree_model(ray, shape, shape->octree, hit, debug)))
+	|| (shape->type == MODEL && intersects_octree_model(ray, shape,
+		shape->octree, hit)))
 	{
 		if (shape->bounds.active && !point_inside_bounds(hit->point, shape))
 			return (FALSE);
 		if (debug)
-				ft_printf("hit shape type %d, hit point %f %f %f\n", shape->type, hit->point.x, hit->point.y, hit->point.z);
+			ft_printf("hit shape type %d, hit point %f %f %f\n",
+				shape->type, hit->point.x, hit->point.y, hit->point.z);
 		hit->shape = shape;
 		return (TRUE);
 	}
 	return (FALSE);
 }
 
-t_vec3 calc_hit_normal(t_raycast_hit *hit)
+t_vec3	calc_hit_normal(t_raycast_hit *hit)
 {
 	if (!hit->shape)
 	{
@@ -96,7 +97,7 @@ t_vec3 calc_hit_normal(t_raycast_hit *hit)
 	else if (hit->shape->type == CYLINDER)
 		return (calc_hit_normal_cylinder(hit->shape, hit));
 	else if (hit->shape->type == MODEL)
-		return hit->normal;
+		return (hit->normal);
 	else
 	{
 		ft_printf("calc_hit_normal -- unknown shape type\n");
@@ -104,7 +105,7 @@ t_vec3 calc_hit_normal(t_raycast_hit *hit)
 	}
 }
 
-t_vec2 calc_hit_uv(t_raycast_hit *hit)
+t_vec2	calc_hit_uv(t_raycast_hit *hit)
 {
 	if (!hit->shape)
 	{
