@@ -292,7 +292,7 @@ void	check_texture_fields(t_scene *scene, char *line, int n)
 			i++;
 		ft_strncpy(tx->file, file_pointer, i);
 		tx->file[i] = 0;
-		tx->img_data = load_xpm_to_mlx_img(scene->rt->mlx, tx->file);
+		tx->img_data = load_file_to_mlx_img(scene->rt->mlx, tx->file);
 	}
 }
 

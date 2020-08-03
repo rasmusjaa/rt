@@ -6,7 +6,7 @@
 #    By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/01 15:48:04 by rjaakonm          #+#    #+#              #
-#    Updated: 2020/08/03 12:42:56 by rjaakonm         ###   ########.fr        #
+#    Updated: 2020/08/03 17:09:31 by sluhtala         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,9 @@ SRC = 	core/cube_map.c\
 		core/event_hooks/window.c\
 		core/mlx.c\
 		core/mlx_image.c\
+		core/mlx_image2.c\
+		core/load_ppm.c\
+		core/load_ppm2.c\
 		core/obj_loader.c\
 		core/perlin_init.c\
 		core/rt.c\

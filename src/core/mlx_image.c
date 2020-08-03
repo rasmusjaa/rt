@@ -62,7 +62,8 @@ void		destroy_mlx_img(t_mlx *mlx, t_mlx_img *mlx_img)
 		ft_putendl("destroy_mlx_img: mlx or mlx_img was null!");
 		return ;
 	}
-	mlx_destroy_image(mlx->mlx_ptr, mlx_img->img);
+	if (mlx_img->img)
+		mlx_destroy_image(mlx->mlx_ptr, mlx_img->img);
 	free(mlx_img);
 	mlx_img = NULL;
 }
@@ -82,19 +83,4 @@ int			get_pixel_mlx_img(t_mlx_img *img, int x, int y)
 		return (-1);
 	c = *(int*)(img->d_addr + (((y * img->width) + x) * img->bpp));
 	return (c);
-}
-
-t_mlx_img	*load_xpm_to_mlx_img(t_mlx *mlx, char *file)
-{
-	t_mlx_img	*mlx_img;
-	t_vec2i		size;
-	void		*img_data;
-
-	if (!(img_data = mlx_xpm_file_to_image(
-			mlx->mlx_ptr, file, &size.x, &size.y)))
-		exit_message("xpm_loader: failed to load xpm file!");
-	if (!(mlx_img = create_mlx_img_from_data(mlx, img_data, size.x, size.y)))
-		exit_message("xpm_loader: create_mlx_img_from_data failed!");
-	ft_printf("finished loading: %s\n", file);
-	return (mlx_img);
 }

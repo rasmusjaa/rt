@@ -389,7 +389,7 @@ t_rgba raycast(t_ray *ray, t_scene *scene, int depth)
 		color = shade(scene, &hit);
 	}
 	//fogtest
-	double d = ft_clamp_d(hit.t / 100.0, 0, 1);
-	color = ft_add_rgba(ft_mul_rgba(scene->scene_config.ambient, d), ft_mul_rgba(color, 1 - d));
+	//double d = ft_clamp_d(hit.t / 100.0, 0, 1);
+	//color = ft_add_rgba(ft_mul_rgba(scene->scene_config.ambient, d), ft_mul_rgba(color, 1 - d));
 	return (colorize(scene->scene_config.colorize, color));
 }
