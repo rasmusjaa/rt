@@ -13,7 +13,7 @@ Use ```git submodule update --init``` to initialize.
 - Multiple shapes:
   - Cone
   - Cylinder
-  - Plane
+  - Plane (and disc, just fill radius field for plane)
   - Sphere
   - .obj mesh files (that can be exported from Blender for example)
     - Vertexes, texture/UV coordinates and normals are used for trifaces
