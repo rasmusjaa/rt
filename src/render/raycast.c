@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/03 14:11:51 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/03 14:26:28 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@
 
 int trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit)
 {
-	t_raycast_hit cur_hit;
-	double	min_dist;
-	size_t	i;
-	int		hit_found;
+	t_raycast_hit	cur_hit;
+	double			min_dist;
+	int				hit_found;
+	size_t			i;
 
 	min_dist = INFINITY;
 	cur_hit.distance = INFINITY;
@@ -40,7 +40,7 @@ int trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit)
 			{
 				if (cur_hit.distance < hit->light_dist && cur_hit.shape != ray->source_shape)
 				{
-					ray->shadow += cur_hit.shape->material->opacity * (1 - ray->shadow); //material
+					ray->shadow += cur_hit.shape->material->opacity * (1 - ray->shadow);
 					hit_found = TRUE;
 				}
 			}
@@ -51,8 +51,6 @@ int trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit)
 					hit_found = TRUE;
 					*hit = cur_hit;
 					min_dist = cur_hit.distance;
-					// if (scene->help_ray == 1)
-					// 	ft_printf("closest distance %f\n", min_dist);
 				}
 			}
 		}
@@ -80,7 +78,8 @@ t_rgba raycast(t_ray *ray, t_scene *scene, int depth)
 	{
 		hit.depth = depth;
 		hit.normal = calc_hit_normal(&hit);
-		hit.uv = calc_hit_uv(&hit);
+		if (hit.shape->material->texture)
+			hit.uv = calc_hit_uv(&hit);
 		if (scene->help_ray)
 			ft_printf("uv: %f %f\n", hit.uv.x, hit.uv.y);
 		// if (hit.shape->material->texture)
