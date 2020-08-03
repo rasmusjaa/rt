@@ -6,13 +6,14 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:24:54 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/03 15:21:35 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/08/03 16:01:40 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shape.h"
 #include "libft.h"
 #include <math.h>
+#include "raycast.h"
 
 t_vec3	calc_hit_normal_plane(t_shape *plane, t_raycast_hit *hit)
 {

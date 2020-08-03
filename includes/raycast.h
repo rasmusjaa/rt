@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 13:24:35 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/08/03 14:07:57 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/03 15:49:28 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ double				in_shadow(struct s_light light, t_raycast_hit hit,
 						struct s_scene *scene);
 double				calc_shadow(struct s_light light, t_raycast_hit hit,
 						struct s_scene *scene);
+
+t_vec3				point_on_ray(t_ray *r, double t);
 
 t_rgba		shade(struct s_scene *scene, t_raycast_hit *hit);
 t_rgba		calc_specular(struct s_scene *scene, t_raycast_hit hit, struct s_camera cam);

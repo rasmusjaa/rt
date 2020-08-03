@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 13:05:58 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/29 22:47:45 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/03 15:18:51 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include "raycast.h"
 # include "material.h"
 # include "rt.h"
+# include "shape.h"
 
 typedef enum	e_camera_type
 {
@@ -85,6 +86,9 @@ typedef struct	s_unique_obj
 	t_object_func	func;
 	int				type;
 }				t_unique_obj;
+
+extern t_shape_name_type_map g_shape_name_type_map[SHAPE_TYPES];
+extern t_unique_obj g_unique_objs[N_UNIQUE_OBJS];
 
 struct s_ray		get_camera_ray(struct s_scene *scene, t_camera *camera,
 		double screen_x, double screen_y);

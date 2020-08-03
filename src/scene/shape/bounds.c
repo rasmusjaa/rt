@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 13:31:34 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/03 15:45:17 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/08/03 16:01:22 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "bounds.h"
 #include "libft.h"
 #include "shape.h"
+#include "raycast.h"
 
 /*
 ** mesh bounds are calculated on load

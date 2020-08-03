@@ -6,12 +6,13 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:29:03 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/03 15:35:11 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/08/03 16:01:27 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shape.h"
 #include "libft.h"
+#include "raycast.h"
 
 t_vec3	calc_hit_normal_cylinder(t_shape *c, t_raycast_hit *hit)
 {

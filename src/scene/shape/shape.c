@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/15 12:46:47 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/03 15:58:06 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/08/03 16:01:43 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,6 @@
 #include "mesh.h"
 #include "ft_printf.h"
 #include "libft.h"
-
-t_vec3	point_on_ray(t_ray *r, double t)
-{
-	t_vec3 p;
-
-	p = ft_add_vec3(r->origin, ft_mul_vec3(r->direction, t));
-	return (p);
-}
 
 int		check_t_hits(t_ray *ray, t_raycast_hit *hit, t_shape *shape)
 {

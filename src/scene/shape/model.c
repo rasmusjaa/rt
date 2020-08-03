@@ -6,26 +6,12 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:31:38 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/03 15:55:56 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/08/03 16:02:05 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shape.h"
-
-t_vec3	calc_smooth_normal(t_triface *tf, t_vec3 p)
-{
-	t_vec3 n;
-	double p0;
-	double p1;
-	double p2;
-
-	p0 = ft_len_vec3(ft_sub_vec3(p, tf->v[0]));
-	p1 = ft_len_vec3(ft_sub_vec3(p, tf->v[1]));
-	p2 = ft_len_vec3(ft_sub_vec3(p, tf->v[2]));
-	n = ft_add_vec3(ft_mul_vec3(tf->n[0], p0),
-		ft_add_vec3(ft_mul_vec3(tf->n[1], p1), ft_mul_vec3(tf->n[2], p2)));
-	return (ft_normalize_vec3(n));
-}
+#include "raycast.h"
 
 int		intersects_last_octree(t_ray *ray, t_shape *model,
 	t_octree *node, t_raycast_hit *hit)
