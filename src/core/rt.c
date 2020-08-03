@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rt.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/09 13:50:27 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/31 18:12:43 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/03 13:03:15 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 #include <stdarg.h>
 #include "scene.h"
 
-void free_null(size_t count, ...)
+void	free_null(size_t count, ...)
 {
 	va_list pl;
 	size_t	i;
@@ -88,8 +88,8 @@ void	destroy_scene(t_rt *rt, t_scene *scene)
 		destroy_mlx_img(rt->mlx, scene->textures[i].img_data);
 		i++;
 	}
-	free_null(5, scene->cameras, scene->lights, scene->shapes, scene->textures, scene->materials);
-	free(scene);
+	free_null(6, scene->cameras, scene->lights, scene->shapes,
+		scene->textures, scene->materials, scene);
 }
 
 void	rt_destroy_exit(t_rt *rt, int status)
@@ -103,7 +103,6 @@ void	rt_destroy_exit(t_rt *rt, int status)
 		i++;
 	}
 	free(rt->scenes);
-	// call render task cleanup
 	free(rt->mlx);
 	delete_gradient_vectors(rt->grad_vectors);
 	free(rt);

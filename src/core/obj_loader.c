@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/03 15:05:05 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/23 21:50:27 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/08/03 12:17:24 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
 
 static void	read_mesh_info(t_mesh *m, const char *filename)
 {
-	int fd;
-	char *line;
+	int		fd;
+	char	*line;
 
 	fd = open(filename, O_RDONLY);
 	if (fd < 0 || read(fd, NULL, 0) == -1)
@@ -61,7 +61,6 @@ void		triface_calc_bounds(t_triface *t)
 			t->bounds.min.y = t->v[i].y;
 		if (t->v[i].z < t->bounds.min.z)
 			t->bounds.min.z = t->v[i].z;
-
 		if (t->v[i].x > t->bounds.max.x)
 			t->bounds.max.x = t->v[i].x;
 		if (t->v[i].y > t->bounds.max.y)
@@ -72,36 +71,27 @@ void		triface_calc_bounds(t_triface *t)
 	}
 }
 
-static void	parse_face(t_mesh *m, size_t i, char *line)
+static void	parse_face(t_mesh *m, size_t i, char *line, size_t j)
 {
-	size_t j;
-	char **parts;
-	char **tf;
-	size_t	atoi;
+	char	**parts;
+	char	**tf;
+	size_t	n;
 
 	parts = ft_strsplit(line + 1, ' ');
-	j = 0;
-	while (parts[j])
+	while (parts[j] && (tf = ft_strsplit(parts[j], '/')))
 	{
-		tf = ft_strsplit(parts[j], '/');
-		if (!tf[0] || ((atoi = ft_atoi(tf[0])) && (atoi > m->num_vertices || atoi < 1)))
+		if (!tf[0] || ((n = ft_atoi(tf[0])) && (n > m->num_vertices || n < 1)))
 			exit_message("Not enough model vertices");
-		m->trifaces[i].v[j] = m->vertices[atoi - 1];
-		if (!tf[1] || ((atoi = ft_atoi(tf[1])) && (atoi > m->num_uvs || atoi < 1)))
+		m->trifaces[i].v[j] = m->vertices[n - 1];
+		if (!tf[1] || ((n = ft_atoi(tf[1])) && (n > m->num_uvs || n < 1)))
 			exit_message("Not enough model textures");
-		m->trifaces[i].uv[j] = m->uvs[atoi - 1];
-		if (!tf[2] || ((atoi = ft_atoi(tf[2])) && (atoi > m->num_normals || atoi < 1)))
+		m->trifaces[i].uv[j] = m->uvs[n - 1];
+		if (!tf[2] || ((n = ft_atoi(tf[2])) && (n > m->num_normals || n < 1)))
 			exit_message("Not enough model normals");
-		m->trifaces[i].n[j] = m->normals[atoi - 1];
-		free(tf[0]);
-		free(tf[1]);
-		free(tf[2]);
-		free(tf);
+		m->trifaces[i].n[j] = m->normals[n - 1];
+		free_null(5, tf[0], tf[1], tf[2], tf, parts[j]);
 		j++;
 	}
-	j = 0;
-	while (parts[j])
-		free(parts[j++]);
 	free(parts);
 	m->trifaces[i].e[0] = ft_sub_vec3(m->trifaces[i].v[1], m->trifaces[i].v[0]);
 	m->trifaces[i].e[1] = ft_sub_vec3(m->trifaces[i].v[2], m->trifaces[i].v[1]);
@@ -110,19 +100,11 @@ static void	parse_face(t_mesh *m, size_t i, char *line)
 	triface_calc_bounds(&m->trifaces[i]);
 }
 
-t_mesh		*obj_load(const char *filename, t_shape shape)
+void		read_mesh(int fd, t_mesh *m, t_shape shape)
 {
-	t_mesh	*m;
-	int		fd;
 	char	*line;
 	size_t	i[4];
 
-	if (!(m = mesh_create()))
-		return (NULL);
-	read_mesh_info(m, filename);
-	fd = open(filename, O_RDONLY);
-	if (fd < 0 || read(fd, NULL, 0) == -1)
-		exit_message("Error loading model file!");
 	i[0] = 0;
 	i[1] = 0;
 	i[2] = 0;
@@ -130,15 +112,32 @@ t_mesh		*obj_load(const char *filename, t_shape shape)
 	while (ft_get_next_line(fd, &line) > 0)
 	{
 		if (ft_strncmp(line, "v ", 2) == 0)
-			m->vertices[i[0]++] = ft_rotate_vec3(ft_mul_vec3(ft_add_vec3(ft_parse_vec3(line + 1), shape.position), shape.scale), shape.rotation);
+			m->vertices[i[0]++] = ft_rotate_vec3(ft_mul_vec3(ft_add_vec3(
+				ft_parse_vec3(line + 1), shape.position), shape.scale),
+				shape.rotation);
 		else if (ft_strncmp(line, "vt", 2) == 0)
 			m->uvs[i[1]++] = ft_parse_vec2(line + 1);
 		else if (ft_strncmp(line, "vn", 2) == 0)
-			m->normals[i[2]++] = ft_rotate_vec3(ft_parse_vec3(line + 2), shape.rotation);
+			m->normals[i[2]++] = ft_rotate_vec3(ft_parse_vec3(line + 2),
+				shape.rotation);
 		else if (ft_strncmp(line, "f ", 2) == 0)
-			parse_face(m, i[3]++, line);
+			parse_face(m, i[3]++, line, 0);
 		free(line);
 	}
+}
+
+t_mesh		*obj_load(const char *filename, t_shape shape)
+{
+	t_mesh	*m;
+	int		fd;
+
+	if (!(m = mesh_create()))
+		return (NULL);
+	read_mesh_info(m, filename);
+	fd = open(filename, O_RDONLY);
+	if (fd < 0 || read(fd, NULL, 0) == -1)
+		exit_message("Error loading model file!");
+	read_mesh(fd, m, shape);
 	close(fd);
 	mesh_calc_bounds(m);
 	return (m);

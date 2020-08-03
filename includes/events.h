@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   events.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/17 20:37:20 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/31 17:49:23 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/03 11:41:30 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define EVENTS_H
 
 # include "rt.h"
+#include "object.h"
 
 # ifndef __linux__
 
@@ -96,6 +97,8 @@ int				update(void *arg);
 int				mouse_press_hook(int button, int x, int y, t_rt *rt);
 int				mouse_release_hook(int button, int x, int y, t_rt *rt);
 int				mouse_move_hook(int x, int y, t_rt *rt);
+
+void 			rotate_camera(int key, t_camera *c);
 
 int				key_press_hook(int key, t_rt *rt);
 int				key_release_hook(int key, t_rt *rt);
