@@ -1,26 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   debug.h                                            :+:      :+:    :+:   */
+/*   keyboard2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/07/09 22:49:46 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/03 13:07:10 by rjaakonm         ###   ########.fr       */
+/*   Created: 2020/08/03 11:37:55 by rjaakonm          #+#    #+#             */
+/*   Updated: 2020/08/03 11:41:53 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef DEBUG_H
-# define DEBUG_H
+#include "events.h"
+#include "object.h"
 
-# include "vector.h"
-# include "object.h"
-# include "rt.h"
-
-void	draw_line(t_mlx *mlx, t_vec2i p0, t_vec2i p1, int color);
-t_vec2i	world_to_screen_point(
-			t_camera *camera, t_vec3 world_point, t_vec2i window_size);
-void	print_vec3(char *s, t_vec3 v);
-void	print_rgba(char *s, t_rgba c);
-
-#endif
+void	rotate_camera(int key, t_camera *c)
+{
+	if (key == KEY_NUM_4)
+		c->rotation.y += 10.0;
+	else if (key == KEY_NUM_6)
+		c->rotation.y -= 10.0;
+	else if (key == KEY_NUM_8)
+		c->rotation.x -= 10.0;
+	else if (key == KEY_NUM_2)
+		c->rotation.x += 10.0;
+}

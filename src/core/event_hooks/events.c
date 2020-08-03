@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   events.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/31 17:47:31 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/31 18:02:11 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/03 11:35:44 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,27 @@ void	init_events(t_rt *rt)
 	mlx_loop_hook(rt->mlx->mlx_ptr, update, rt);
 }
 
-int update(void *arg)
+int		update_clean(t_rt *rt, t_render_task *task)
+{
+	if (task->render_started && task->render_finished &&
+		task->done_tiles != NULL && ft_queue_isempty(task->done_tiles))
+	{
+		gettimeofday(&task->end_time, NULL);
+		ft_printf("render task finished in in: %.4f s\n",
+			(double)(task->end_time.tv_usec - task->start_time.tv_usec)
+			/ 1000000 + (double)(task->end_time.tv_sec
+			- task->start_time.tv_sec));
+		cleanup_render_task(rt, task);
+	}
+	if (rt->render_requested)
+	{
+		render_scene(rt, rt->scenes[rt->cur_scene]);
+		rt->render_requested = FALSE;
+	}
+	return (1);
+}
+
+int		update(void *arg)
 {
 	t_rt			*rt;
 	t_tile_job_data	*job;
@@ -44,24 +64,15 @@ int update(void *arg)
 	job = NULL;
 	if (task->render_started && task->jobs == 0)
 		task->render_finished = TRUE;
-	while (task->render_started && task->done_tiles != NULL && !ft_queue_isempty(task->done_tiles))
+	while (task->render_started && task->done_tiles != NULL &&
+		!ft_queue_isempty(task->done_tiles))
 	{
 		pthread_mutex_lock(&task->task_mutex);
 		job = (t_tile_job_data*)ft_queue_dequeue(task->done_tiles);
 		if (job)
-			mlx_put_image_to_window(rt->mlx->mlx_ptr, rt->mlx->win_ptr, job->mlx_img->img, job->screen_coord.x, job->screen_coord.y);
+			mlx_put_image_to_window(rt->mlx->mlx_ptr, rt->mlx->win_ptr,
+				job->mlx_img->img, job->screen_coord.x, job->screen_coord.y);
 		pthread_mutex_unlock(&task->task_mutex);
 	}
-	if (task->render_started && task->render_finished && task->done_tiles != NULL && ft_queue_isempty(task->done_tiles))
-	{
-		gettimeofday(&task->end_time, NULL);
-		ft_printf("render task finished in in: %.4f s\n", (double)(task->end_time.tv_usec - task->start_time.tv_usec) / 1000000 + (double)(task->end_time.tv_sec - task->start_time.tv_sec));
-		cleanup_render_task(rt, task);
-	}
-	if (rt->render_requested)
-	{
-		render_scene(rt, rt->scenes[rt->cur_scene]);
-		rt->render_requested = FALSE;
-	}
-	return (1);
+	return (update_clean(rt, task));
 }

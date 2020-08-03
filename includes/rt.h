@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rt.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/31 18:14:54 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/03 12:04:38 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,8 @@ typedef struct	s_rt
 	unsigned char	***grad_vectors;
 	int				render_requested;
 }				t_rt;
+
+void			free_null(size_t count, ...);
 
 void 			exit_message(char *str);
 time_t			last_modified(char *file);

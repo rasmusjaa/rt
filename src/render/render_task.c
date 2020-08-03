@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_task.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/31 17:26:54 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/31 17:32:52 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/03 12:59:38 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,11 @@ void	init_render_task(t_render_task *task, size_t res)
 	if (task->thread_pool)
 		tp_destroy(task->thread_pool);
 	task->thread_pool = tp_create(N_THREADS, task->num_jobs);
-	if (!(task->job_data_block = (t_tile_job_data*)(malloc(sizeof(t_tile_job_data) * task->num_jobs))))
-		exit_message("init_render_task: Failed to allocate memory for thread pool jobs!");
-	task->done_tiles = ft_queue_create(QUEUE_COPY, task->num_jobs, sizeof(t_tile_job_data));
+	if (!(task->job_data_block = (t_tile_job_data*)(malloc(sizeof(
+			t_tile_job_data) * task->num_jobs))))
+		exit_message("init_render_task: Failed to malloc thread pool jobs!");
+	task->done_tiles = ft_queue_create(QUEUE_COPY, task->num_jobs,
+		sizeof(t_tile_job_data));
 	pthread_mutex_init(&task->task_mutex, NULL);
 }
 

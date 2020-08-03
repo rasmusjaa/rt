@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:29:03 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/30 16:26:08 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/08/03 13:12:21 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ t_vec2 calc_hit_uv_cylinder(t_shape *cylinder, t_raycast_hit *hit)
 int	intersects_cylinder(t_ray *ray, t_shape *cyl, t_raycast_hit *hit)
 {
 	t_quadratic	q;
-	t_vec3		v;		// cylinder direction
-	t_vec3		ocxv;	// cross product of ray origin and cylinder direction
-	t_vec3		dxv;	// cross product of ray direction and cylinder direction
+	t_vec3		v;
+	t_vec3		ocxv;
+	t_vec3		dxv;
 	double		temp;
 
 	temp = cyl->material->explode > EPSILON ? cyl->radius + cyl->material->explode * ft_inv_lerp_d((double)rand(), 0, RAND_MAX) : cyl->radius;
