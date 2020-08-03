@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rt.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/09 13:50:27 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/03 13:03:15 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/08/03 15:37:30 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include "ft_printf.h"
 #include <stdarg.h>
 #include "scene.h"
+#include "material.h"
 
 void	free_null(size_t count, ...)
 {

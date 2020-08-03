@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 13:24:35 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/29 14:06:48 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/08/03 15:49:28 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ struct s_shape;
 struct s_scene;
 struct s_light;
 struct s_triface;
+struct s_camera;
 
 typedef struct		s_ray
 {
@@ -61,5 +62,16 @@ double				in_shadow(struct s_light light, t_raycast_hit hit,
 						struct s_scene *scene);
 double				calc_shadow(struct s_light light, t_raycast_hit hit,
 						struct s_scene *scene);
+
+t_vec3				point_on_ray(t_ray *r, double t);
+
+t_rgba		shade(struct s_scene *scene, t_raycast_hit *hit);
+t_rgba		calc_specular(struct s_scene *scene, t_raycast_hit hit, struct s_camera cam);
+double		calc_diffuse(struct s_light light, t_raycast_hit hit, struct s_scene *scene);
+double		calc_fresnel(t_vec3 normal, t_vec3 idir, double ior);
+t_rgba		calc_refract(struct s_scene *scene, t_vec3 idir, t_raycast_hit hit, double ior, int depth);
+t_rgba		calc_reflect(struct s_scene *scene, t_raycast_hit hit, t_vec3 idir, t_vec3 normal, int depth);
+double		calc_fresnel(t_vec3 normal, t_vec3 idir, double ior);
+t_rgba		colorize(size_t colorize, t_rgba color);
 
 #endif

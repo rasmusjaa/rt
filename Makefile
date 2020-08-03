@@ -6,7 +6,7 @@
 #    By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/01 15:48:04 by rjaakonm          #+#    #+#              #
-#    Updated: 2020/08/03 17:09:31 by sluhtala         ###   ########.fr        #
+#    Updated: 2020/08/03 16:03:44 by rjaakonm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,14 +40,20 @@ SRC = 	core/cube_map.c\
 		mesh/mesh_destroy.c\
 		mesh/mesh_set_vert.c\
 		octree/octree.c\
-		render/shadow.c\
 		render/raycast.c\
 		render/render_scene.c\
 		render/render_task.c\
 		render/render_tile.c\
+		render/shade.c\
+		render/shade_calc.c\
+		render/shade_calc_reflect_refract.c\
+		render/shade_colorize.c\
+		render/shadow.c\
 		scene/camera.c\
-		scene/read_csv.c\
-		scene/scene.c\
+		scene/scene_read.c\
+		scene/scene_check_fields.c\
+		scene/scene_read_helper.c\
+		scene/scene_read_init.c\
 		scene/shape/bounds.c\
 		scene/shape/cone.c\
 		scene/shape/cylinder.c\

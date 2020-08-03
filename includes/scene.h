@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/31 18:09:15 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/31 18:14:41 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/03 15:36:20 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,30 +17,35 @@
 # include <stdlib.h>
 # include <sys/time.h>
 # include "color.h"
-
-typedef	struct	s_scene_config
-{
-	char			*filepath;
-	time_t			last_modified;
-	int				shadows;
-	int				shading;
-	int				specular;
-	int				opacity;
-	int				refraction;
-	int				reflection;
-	int				bounces;
-	int				width;
-	int				height;
-	t_rgba			ambient;
-	size_t			colorize;
-	size_t			sky_tex_id;
-	int				dof;
-	size_t			dof_samples;
-}				t_scene_config;
+# include "vector.h"
+# include "bounds.h"
+# include "shape.h"
 
 struct s_rt;
 
-typedef struct	s_scene
+typedef	struct		s_scene_config
+{
+	char				*filepath;
+	time_t				last_modified;
+	int					shadows;
+	int					shading;
+	int					specular;
+	int					opacity;
+	int					refraction;
+	int					reflection;
+	int					bounces;
+	int					width;
+	int					height;
+	t_rgba				ambient;
+	size_t				colorize;
+	size_t				sky_tex_id;
+	int					dof;
+	size_t				dof_samples;
+}						t_scene_config;
+
+struct s_rt;
+
+typedef struct			s_scene
 {
 	t_scene_config		scene_config;
 	size_t				num_settings;
@@ -59,10 +64,28 @@ typedef struct	s_scene
 	size_t				num_textures;
 	struct s_texture	*cube_map;
 	struct s_rt			*rt;
-}					t_scene;
+}						t_scene;
 
-t_scene			*read_scene(t_rt *rt, char *file);
-void			reload_scene(t_rt *rt);
-void			destroy_scene(t_rt *rt, t_scene *scene);
+t_scene					*read_scene(t_rt *rt, char *file);
+void					reload_scene(t_rt *rt);
+void					destroy_scene(t_rt *rt, t_scene *scene);
+int						init_scene(char *file, t_scene *scene);
+
+void					check_scene_fields(t_scene *scene, char *line, int n);
+void					check_camera_fields(t_scene *scene, char *line, int n);
+void					check_shape_fields(t_scene *scene, char *line, int n);
+void					check_light_fields(t_scene *scene, char *line, int n);
+void					check_material_fields(t_scene *scene, char *line, int n);
+void					check_texture_fields(t_scene *scene, char *line, int n);
+
+void					get_fields(char *line, double *values, int num_values);
+t_bounds				make_shape_bounds(t_vec3 pos, double *values);
+void					link_shapes_materials_textures(t_scene *scene);
+char					*get_shape_file(char *line, int num_values);
+time_t					last_modified(char *file);
+
+t_shape_type			get_shape_type(char *line);
+char					*get_shape_name(t_shape_type type);
+int						handle_line(t_scene *scene, char *line);
 
 #endif

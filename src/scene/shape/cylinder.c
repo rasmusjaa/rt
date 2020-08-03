@@ -6,12 +6,13 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:29:03 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/03 13:12:21 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/08/03 16:01:27 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shape.h"
 #include "libft.h"
+#include "raycast.h"
 
 t_vec3	calc_hit_normal_cylinder(t_shape *c, t_raycast_hit *hit)
 {
@@ -27,7 +28,7 @@ t_vec3	calc_hit_normal_cylinder(t_shape *c, t_raycast_hit *hit)
 	return (ft_normalize_vec3(ft_sub_vec3(hit->point, v)));
 }
 
-t_vec2 calc_hit_uv_cylinder(t_shape *cylinder, t_raycast_hit *hit)
+t_vec2	calc_hit_uv_cylinder(t_shape *cylinder, t_raycast_hit *hit)
 {
 	t_vec2 uv;
 	t_vec3 p;
@@ -53,7 +54,7 @@ t_vec2 calc_hit_uv_cylinder(t_shape *cylinder, t_raycast_hit *hit)
 	return (uv);
 }
 
-int	intersects_cylinder(t_ray *ray, t_shape *cyl, t_raycast_hit *hit)
+int		intersects_cylinder(t_ray *ray, t_shape *cyl, t_raycast_hit *hit)
 {
 	t_quadratic	q;
 	t_vec3		v;
@@ -61,14 +62,15 @@ int	intersects_cylinder(t_ray *ray, t_shape *cyl, t_raycast_hit *hit)
 	t_vec3		dxv;
 	double		temp;
 
-	temp = cyl->material->explode > EPSILON ? cyl->radius + cyl->material->explode * ft_inv_lerp_d((double)rand(), 0, RAND_MAX) : cyl->radius;
+	temp = cyl->material->explode > EPSILON ? cyl->radius +
+		cyl->material->explode * ft_inv_lerp_d((double)rand(), 0, RAND_MAX) :
+		cyl->radius;
 	v = cyl->target;
 	ocxv = ft_cross_vec3(ft_sub_vec3(ray->origin, cyl->position), v);
 	dxv = ft_cross_vec3(ray->direction, v);
 	q.a = ft_dot_vec3(dxv, dxv);
 	q.b = 2 * ft_dot_vec3(dxv, ocxv);
-	q.c = ft_dot_vec3(ocxv, ocxv) - ((temp * temp) *
-		ft_dot_vec3(v, v));
+	q.c = ft_dot_vec3(ocxv, ocxv) - ((temp * temp) * ft_dot_vec3(v, v));
 	if (solve_quadratic(q, &hit->t, &hit->t2))
 	{
 		if (check_t_hits(ray, hit, cyl))
@@ -79,5 +81,4 @@ int	intersects_cylinder(t_ray *ray, t_shape *cyl, t_raycast_hit *hit)
 		}
 	}
 	return (FALSE);
-
 }
