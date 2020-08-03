@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 14:59:56 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/07/31 18:12:52 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/03 13:07:48 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ int		main(int ac, char **av)
 	while (i < ac - 1)
 	{
 		rt->scenes[i] = read_scene(rt, av[i + 1]);
-		print_scene_info(rt->scenes[i]);
 		i++;
 	}
 	create_mlx_window(rt, rt->scenes[rt->cur_scene]->scene_config.width,

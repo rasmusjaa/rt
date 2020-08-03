@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_image.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/10 16:00:45 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/27 15:43:16 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/03 12:28:44 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 #include "libft.h"
 #include "ft_printf.h"
 
-t_mlx_img	*create_mlx_img_from_data(t_mlx *mlx, void *data, int width, int height)
+t_mlx_img	*create_mlx_img_from_data(t_mlx *mlx, void *data,
+	int width, int height)
 {
 	t_mlx_img *img;
 
@@ -27,7 +28,8 @@ t_mlx_img	*create_mlx_img_from_data(t_mlx *mlx, void *data, int width, int heigh
 	img->width = width;
 	img->height = height;
 	img->img = data;
-	if (!(img->d_addr = mlx_get_data_addr(img->img, &img->bpp, &img->size_line, &img->endian)))
+	if (!(img->d_addr = mlx_get_data_addr(img->img, &img->bpp,
+			&img->size_line, &img->endian)))
 		exit_message("create_mlx_img_from_data: mlx_get_data_addr failed!");
 	img->bpp /= 8;
 	return (img);
@@ -85,10 +87,11 @@ int			get_pixel_mlx_img(t_mlx_img *img, int x, int y)
 t_mlx_img	*load_xpm_to_mlx_img(t_mlx *mlx, char *file)
 {
 	t_mlx_img	*mlx_img;
-	t_vec2i 	size;
+	t_vec2i		size;
 	void		*img_data;
 
-	if (!(img_data = mlx_xpm_file_to_image(mlx->mlx_ptr, file, &size.x, &size.y)))
+	if (!(img_data = mlx_xpm_file_to_image(
+			mlx->mlx_ptr, file, &size.x, &size.y)))
 		exit_message("xpm_loader: failed to load xpm file!");
 	if (!(mlx_img = create_mlx_img_from_data(mlx, img_data, size.x, size.y)))
 		exit_message("xpm_loader: create_mlx_img_from_data failed!");

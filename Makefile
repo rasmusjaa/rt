@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: wkorande <willehard@gmail.com>             +#+  +:+       +#+         #
+#    By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/01 15:48:04 by rjaakonm          #+#    #+#              #
-#    Updated: 2020/07/31 18:26:23 by wkorande         ###   ########.fr        #
+#    Updated: 2020/08/03 12:42:56 by rjaakonm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,7 @@ SRCDIR = src
 SRC = 	core/cube_map.c\
 		core/event_hooks/events.c\
 		core/event_hooks/keyboard.c\
+		core/event_hooks/keyboard2.c\
 		core/event_hooks/mouse.c\
 		core/event_hooks/window.c\
 		core/mlx.c\
@@ -104,6 +105,6 @@ re: fclean all
 
 run:
 	$(CC) $(CFLAGS) $(INCL) $(SRCS) $(LIB) -o $(NAME)
-	./RT resources/scenes/scene_texture.csv
+	./RT resources/scenes/simple.csv
 
 .PHONY: all libftmake clean fclean re run debug
