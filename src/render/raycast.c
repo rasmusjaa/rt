@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 16:10:39 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/03 14:26:28 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/03 15:48:52 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,14 @@
 #include "texture.h"
 #include "mlx_image.h"
 #include "scene.h"
+
+t_vec3	point_on_ray(t_ray *r, double t)
+{
+	t_vec3 p;
+
+	p = ft_add_vec3(r->origin, ft_mul_vec3(r->direction, t));
+	return (p);
+}
 
 int trace(t_ray *ray, t_scene *scene, t_raycast_hit *hit)
 {

@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 13:31:34 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/03 15:30:18 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/03 15:58:24 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,34 +20,35 @@
 ** mesh bounds are calculated on load
 ** axis aligned
 */
+
 int	intersects_bounds(t_ray *ray, t_bounds *b, int debug)
 {
+	double txmin;
+	double txmax;
+	double tymin;
+	double tymax;
+	double tzmin;
+	double tzmax;
+
 	// might have to add that if camera is in bounding box return true
-	double txmin = (b->min.x - ray->origin.x) / ray->direction.x;
-	double txmax = (b->max.x - ray->origin.x) / ray->direction.x;
+	txmin = (b->min.x - ray->origin.x) / ray->direction.x;
+	txmax = (b->max.x - ray->origin.x) / ray->direction.x;
 
 	// need to swap if we are looking from behind, as is only works if camera pos in front of bounds
 	if (txmin > txmax)
 		ft_swap_d(&txmin, &txmax);
-
-	double tymin = (b->min.y - ray->origin.y) / ray->direction.y;
-	double tymax = (b->max.y - ray->origin.y) / ray->direction.y;
-
+	tymin = (b->min.y - ray->origin.y) / ray->direction.y;
+	tymax = (b->max.y - ray->origin.y) / ray->direction.y;
 	if (tymin > tymax)
 		ft_swap_d(&tymin, &tymax);
-
 	if ((txmin > tymax) || (tymin > txmax))
 		return (FALSE);
-
-	double tzmin = (b->min.z - ray->origin.z) / ray->direction.z;
-	double tzmax = (b->max.z - ray->origin.z) / ray->direction.z;
-
+	tzmin = (b->min.z - ray->origin.z) / ray->direction.z;
+	tzmax = (b->max.z - ray->origin.z) / ray->direction.z;
 	if (tzmin > tzmax)
 		ft_swap_d(&tzmin, &tzmax);
-
 	if ((txmin > tzmax) || (tzmin > txmax))
 		return (FALSE);
-
 	if ((tymin > tzmax)  || (tzmin > tymax))
 		return (FALSE);
 	return (TRUE);
@@ -55,7 +56,7 @@ int	intersects_bounds(t_ray *ray, t_bounds *b, int debug)
 		return (TRUE);
 }
 
-int			point_inside_bounds(t_vec3 p, t_shape *shape)
+int	point_inside_bounds(t_vec3 p, t_shape *shape)
 {
 	if (p.x < shape->bounds.min.x || p.x > shape->bounds.max.x)
 		return (FALSE);
@@ -66,7 +67,7 @@ int			point_inside_bounds(t_vec3 p, t_shape *shape)
 	return (TRUE);
 }
 
-int			inside_bounds(t_bounds object_bounds, t_bounds bounds)
+int	inside_bounds(t_bounds object_bounds, t_bounds bounds)
 {
 	if ((bounds.min.x < object_bounds.min.x &&
 		bounds.max.x < object_bounds.min.x) ||
