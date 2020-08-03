@@ -37,12 +37,11 @@ typedef struct			s_texture
 }					t_texture;
 
 
-t_texture				new_texture(size_t id, size_t procedural, char *file, t_rgba col1, t_rgba col2, t_rgba col3);
 t_rgba					sample_texture(t_texture *texture, t_vec2 uv);
 
 t_rgba					brick_texture(t_texture *texture, double u, double v);
 double					perlin_noise(t_texture *texture, double x, double y);
-double					octave_perlin(t_texture *texture, t_vec2 uv, int oct, double pers);
+double					o_perlin(t_texture *texture, t_vec2 uv, int oct, double pers);
 t_rgba					checker_texture(t_texture *texture, double v, double u);
 
 #endif

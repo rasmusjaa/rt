@@ -62,7 +62,7 @@ int		intersects_plane(t_ray *ray, t_shape *plane, t_raycast_hit *hit)
 	{
 		hit->distance = hit->t;
 		hit->point = point_on_ray(ray, hit->t);
-		if (plane->radius >= 0.001)
+		if (plane->radius > 0.001)
 		{
 			if (ft_len_vec3(ft_sub_vec3(hit->point, plane->position)) >
 					plane->radius)
