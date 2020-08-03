@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bounds.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 13:31:34 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/30 15:43:22 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/08/03 15:30:18 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "bounds.h"
 #include "libft.h"
 #include "shape.h"
+#include "raycast.h"
 
 /*
 ** mesh bounds are calculated on load

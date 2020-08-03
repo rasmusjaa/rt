@@ -6,11 +6,12 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:31:38 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/27 18:45:51 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/03 15:29:39 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shape.h"
+#include "raycast.h"
 
 t_vec3 calc_smooth_normal(t_triface *tf, t_vec3 p)
 {

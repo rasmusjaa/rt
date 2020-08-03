@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   plane.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:24:54 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/30 16:37:29 by sluhtala         ###   ########.fr       */
+/*   Updated: 2020/08/03 15:29:25 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shape.h"
 #include "libft.h"
 #include <math.h>
+#include "raycast.h"
 
 t_vec3	calc_hit_normal_plane(t_shape *plane, t_raycast_hit *hit)
 {
@@ -39,9 +40,9 @@ t_vec2 calc_hit_uv_plane(t_shape *plane, t_raycast_hit *hit)
 		v = ft_cross_vec3(n, u);
 		uv.x = ft_dot_vec3(u, p);
 		uv.y = ft_dot_vec3(v, p);
-	
+
 		uv.x /= plane->material->u_scale;
-		uv.y /= plane->material->v_scale;	
+		uv.y /= plane->material->v_scale;
 
 		double angle = ft_deg_to_rad(plane->rotation.y);
 		double ru = uv.x * cos(angle) - uv.y * sin(angle);

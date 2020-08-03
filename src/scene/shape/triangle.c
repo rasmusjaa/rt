@@ -6,12 +6,13 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:38:15 by wkorande          #+#    #+#             */
-/*   Updated: 2020/07/30 18:39:39 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/03 15:28:52 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shape.h"
 #include "libft.h"
+#include "raycast.h"
 
 t_vec3 calc_hit_normal_triangle(t_triface *triface, t_raycast_hit *hit)
 {
