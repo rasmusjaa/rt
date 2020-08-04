@@ -55,11 +55,9 @@ t_rgba		sample_texture(t_texture *texture, t_vec2 uv)
 		color = brick_texture(texture, uv.x, uv.y);
 	else if (texture->procedural_type == PERLIN)
 	{
-		//p = o_perlin(texture, uv, texture->settings.x, texture->settings.y);
-		p = perlin_noise(texture->perlin_data, texture->perlin_data->point.x,
-			texture->perlin_data->point.y );
-		p = p * 0.5 + 0.5;
-		color = ft_make_rgba(p, p, p, 1);
+		p = o_perlin(texture, uv, texture->settings.x, texture->settings.y);
+		color = ft_mul_rgba(texture->color1, p);
+		color = ft_blend_rgba(ft_mul_rgba(texture->color2, 1 - p), color);
 	}
 	return (color);
 }
