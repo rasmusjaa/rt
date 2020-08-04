@@ -113,14 +113,15 @@ typedef struct	s_asset_library
 
 typedef struct	s_rt
 {
-	t_mlx 			*mlx;
-	struct s_scene	**scenes;
-	size_t			num_scenes;
-	size_t 			cur_scene;
-	t_render_task	render_task;
-	t_asset_library	assets;
-	unsigned char	***grad_vectors;
-	int				render_requested;
+	t_mlx 					*mlx;
+	struct s_scene			**scenes;
+	size_t					num_scenes;
+	size_t 					cur_scene;
+	t_render_task			render_task;
+	t_asset_library			assets;
+	//unsigned char	***grad_vectors;
+	struct s_perlin_data	*perlin_data;
+	int						render_requested;
 }				t_rt;
 
 void			free_null(size_t count, ...);
@@ -130,7 +131,7 @@ time_t			last_modified(char *file);
 
 t_rt			*rt_init(size_t num_scenes);
 int				perlin_init(t_rt *rt, struct s_texture *texture);
-void			delete_gradient_vectors(unsigned char  ***g);
+//void			delete_gradient_vectors(unsigned char  ***g);
 void			rt_destroy_exit(t_rt *rt, int status);
 
 void			init_mlx(t_rt *rt);

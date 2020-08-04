@@ -156,7 +156,7 @@ void	check_texture_fields(t_scene *scene, char *line, int n)
 	tx->settings = ft_clamp_vec3(ft_make_vec3(values[10], values[11], values[12]), 0, 100);
 	ft_bzero(tx->file, 256);
 	tx->img_data = NULL;
-	tx->grad_vectors = NULL;
+	tx->perlin_data = NULL;
 	if (tx->procedural_type == PERLIN)
 	{
 			if (perlin_init(scene->rt, tx) == -1)

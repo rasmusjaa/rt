@@ -24,6 +24,14 @@
 
 struct s_mlx_img;
 
+typedef struct			s_perlin_data
+{
+	double				grads_x[256];
+	double				grads_y[256];
+	int					perm[256];
+	t_vec2				point;
+}						t_perlin_data;
+
 typedef struct			s_texture
 {
 	size_t				id;
@@ -33,14 +41,16 @@ typedef struct			s_texture
 	t_rgba				color1;
 	t_rgba				color2;
 	t_vec3				settings;
-	unsigned char		***grad_vectors;
+	//unsigned char		***grad_vectors;
+	t_perlin_data		*perlin_data;
 }					t_texture;
+
 
 
 t_rgba					sample_texture(t_texture *texture, t_vec2 uv);
 
 t_rgba					brick_texture(t_texture *texture, double u, double v);
-double					perlin_noise(t_texture *texture, double x, double y);
+double					perlin_noise(t_perlin_data *perlin, double x, double y);
 double					o_perlin(t_texture *texture, t_vec2 uv, int oct, double pers);
 t_rgba					checker_texture(t_texture *texture, double v, double u);
 

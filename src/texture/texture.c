@@ -46,7 +46,7 @@ t_rgba		sample_texture(t_texture *texture, t_vec2 uv)
 		c = get_pixel_mlx_img(texture->img_data, uv.x *
 			texture->img_data->width, uv.y * texture->img_data->height);
 		color = ft_make_rgba((double)((c >> (16)) & 0xff) / 255.0,
-			(double)((c >> (8)) & 0xff) / 255.0,
+			(double)((c >> (8)) & 0xffd) / 255.0,
 			(double)((c >> (0)) & 0xff) / 255.0, 1.0);
 	}
 	else if (texture->procedural_type == CHECKER)
@@ -55,7 +55,10 @@ t_rgba		sample_texture(t_texture *texture, t_vec2 uv)
 		color = brick_texture(texture, uv.x, uv.y);
 	else if (texture->procedural_type == PERLIN)
 	{
-		p = o_perlin(texture, uv, texture->settings.x, texture->settings.y);
+		//p = o_perlin(texture, uv, texture->settings.x, texture->settings.y);
+		p = perlin_noise(texture->perlin_data, texture->perlin_data->point.x,
+			texture->perlin_data->point.y );
+		p = p * 0.5 + 0.5;
 		color = ft_make_rgba(p, p, p, 1);
 	}
 	return (color);

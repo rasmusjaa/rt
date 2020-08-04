@@ -33,7 +33,7 @@ t_vec2	calc_hit_uv_plane(t_shape *plane, t_raycast_hit *hit)
 	u = ft_normalize_vec3(ft_make_vec3(n.y, -n.x, 0));
 	p = ft_sub_vec3(hit->point, plane->position);
 	if (n.x == 0 && n.y == 0)
-		ft_normalize_vec3(ft_make_vec3(n.y, -n.x, n.z));
+		u = ft_normalize_vec3(ft_make_vec3(n.y, -n.x, n.z));
 	uv.x = ft_dot_vec3(u, p);
 	uv.y = ft_dot_vec3(ft_cross_vec3(n, u), p);
 	uv.x /= plane->material->u_scale;
