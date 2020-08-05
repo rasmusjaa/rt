@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 13:24:35 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/08/05 14:57:07 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/05 15:13:36 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,18 @@ typedef struct			s_raycast_hit
 	struct s_triface	*triface;
 	t_vec2				uv;
 }						t_raycast_hit;
+
+typedef struct			s_fresnel_params
+{
+	double				kr;
+	double				cosi;
+	double				etai;
+	double				etat;
+	double				sint;
+	double				cost;
+	double				rs;
+	double				rp;
+}						t_fresnel_params;
 
 t_rgba					raycast(t_ray *ray, struct s_scene *scene, int depth);
 int						trace(t_ray *ray, struct s_scene *scene,
