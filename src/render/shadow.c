@@ -58,26 +58,33 @@ static t_vec2	random_inside_circle(t_vec2 center, double radius)
 	return (p);
 }
 
+static void		init_random_shadow_ray(t_ray *shadow_ray, t_vec3 *lp,
+	t_raycast_hit *hit, t_light *light)
+{
+	t_vec2 rnd;
+
+	rnd = random_inside_circle(ft_make_vec2(0, 0), light->radius);
+	*lp = ft_add_vec3(light->position, ft_make_vec3(rnd.x, rnd.y, 0));
+	shadow_ray->origin = ft_add_vec3(hit->point, ft_mul_vec3(hit->normal,
+		EPSILON));
+	shadow_ray->direction = ft_sub_vec3(*lp, hit->point);
+}
+
 double			calc_shadow(t_light light, t_raycast_hit hit, t_scene *scene)
 {
 	int				i;
 	double			s;
 	t_ray			shadow_ray;
 	t_raycast_hit	new_hit;
-	t_vec2			rnd;
 	t_vec3			lp;
 
 	if (light.radius < EPSILON)
 		return (in_shadow(light, hit, scene));
 	s = 0;
 	i = 0;
-	while (i < light.leds)
+	while (i++ < light.leds)
 	{
-		rnd = random_inside_circle(ft_make_vec2(0, 0), light.radius);
-		lp = ft_add_vec3(light.position, ft_make_vec3(rnd.x, rnd.y, 0));
-		shadow_ray.origin = ft_add_vec3(hit.point, ft_mul_vec3(hit.normal,
-			EPSILON));
-		shadow_ray.direction = ft_sub_vec3(lp, hit.point);
+		init_random_shadow_ray(&shadow_ray, &lp, &hit, &light);
 		shadow_ray.source_shape = hit.shape;
 		new_hit.light_dist = ft_len_vec3(shadow_ray.direction);
 		new_hit.shape = NULL;
@@ -88,7 +95,6 @@ double			calc_shadow(t_light light, t_raycast_hit hit, t_scene *scene)
 		shadow_ray.bump_ray = FALSE;
 		if (trace(&shadow_ray, scene, &new_hit))
 			s += (1.0 / light.leds) * shadow_ray.shadow;
-		i++;
 	}
 	return (s);
 }
