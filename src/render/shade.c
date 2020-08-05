@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/03 13:26:30 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/03 13:39:27 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/05 14:57:37 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,11 @@ static t_rgba	color_from_shape(t_rgba color, t_scene *scene, t_raycast_hit *hit)
 	if (scene->scene_config.opacity && hit->shape->material->opacity < 1 - EPSILON) //material->opacity
 	{
 		refraction = scene->scene_config.refraction ? hit->shape->material->refra_index : 1; //material->refra_index
-		rac = calc_refract(scene, hit->ray.direction, *hit, refraction, hit->depth);
+		rac = calc_refract(scene, hit->ray.direction, *hit, refraction);
 		if (scene->scene_config.refraction && refraction > 1 + EPSILON)
 		{
 			fresnel = calc_fresnel(hit->normal, hit->ray.direction, refraction);
-			rec = calc_reflect(scene, *hit, hit->ray.direction, hit->normal, hit->depth);
+			rec = calc_reflect(scene, *hit, hit->ray.direction, hit->normal);
 			rec_calced = TRUE;
 			rac = ft_lerp_rgba(rac, rec, fresnel);
 		}
@@ -68,7 +68,7 @@ static t_rgba	color_from_shape(t_rgba color, t_scene *scene, t_raycast_hit *hit)
 	if (scene->scene_config.reflection && hit->shape->material->reflection > EPSILON) //material
 	{
 		if (!rec_calced)
-			rec = calc_reflect(scene, *hit, hit->ray.direction, hit->normal, hit->depth);
+			rec = calc_reflect(scene, *hit, hit->ray.direction, hit->normal);
 		color = ft_lerp_rgba(color, rec, hit->shape->material->reflection); //material
 	}
 	return (ft_clamp_rgba(color));
