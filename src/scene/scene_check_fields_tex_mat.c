@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/05 13:18:30 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/05 13:19:15 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/05 14:20:53 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ void	check_material_fields(t_scene *scene, char *line, int n)
 	get_fields(line, values, N_MATERIAL_VALUES);
 	mat->id = round(values[0]);
 	mat->texture_id = round(values[1]);
-	mat->diffuse = ft_clamp_rgba(ft_make_rgba(values[2], values[3], values[4], values[5]));
+	mat->diffuse = ft_clamp_rgba(ft_make_rgba(values[2],
+		values[3], values[4], values[5]));
 	mat->shininess = ft_clamp_d(values[6], 0, 1);
 	mat->refra_index = ft_clamp_d(values[7], 1, 6);
 	mat->reflection = ft_clamp_d(values[8], 0, 1);
