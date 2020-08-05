@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/08 11:39:28 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/03 13:08:22 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/08/05 14:04:47 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ void	print_rgba(char *s, t_rgba c)
 	ft_printf("%s %.2f, %.2f, %.2f %.2f\n", s, c.r, c.g, c.b, c.a);
 }
 
-t_vec2i	world_to_screen_point(t_camera *camera, t_vec3 world_point, t_vec2i window_size)
+t_vec2i	world_to_screen_point(t_camera *camera, t_vec3 world_point,
+			t_vec2i window_size)
 {
 	t_vec3	dir;
 	t_vec2i	screen_point;
