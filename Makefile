@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+         #
+#    By: wkorande <willehard@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/01 15:48:04 by rjaakonm          #+#    #+#              #
-#    Updated: 2020/08/03 16:03:44 by rjaakonm         ###   ########.fr        #
+#    Updated: 2020/08/05 13:23:04 by wkorande         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,11 +20,11 @@ SRC = 	core/cube_map.c\
 		core/event_hooks/keyboard2.c\
 		core/event_hooks/mouse.c\
 		core/event_hooks/window.c\
+		core/load_ppm.c\
+		core/load_ppm2.c\
 		core/mlx.c\
 		core/mlx_image.c\
 		core/mlx_image2.c\
-		core/load_ppm.c\
-		core/load_ppm2.c\
 		core/obj_loader.c\
 		core/perlin_init.c\
 		core/rt.c\
@@ -50,8 +50,10 @@ SRC = 	core/cube_map.c\
 		render/shade_colorize.c\
 		render/shadow.c\
 		scene/camera.c\
-		scene/scene_read.c\
 		scene/scene_check_fields.c\
+		scene/scene_check_fields_shape.c\
+		scene/scene_check_fields_tex_mat.c\
+		scene/scene_read.c\
 		scene/scene_read_helper.c\
 		scene/scene_read_init.c\
 		scene/shape/bounds.c\
