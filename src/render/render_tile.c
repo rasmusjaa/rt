@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/31 17:26:23 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/05 15:13:25 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/08/05 15:53:27 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ void	render_tile_pixels(t_tile_job_data *job_data, t_vec2i cur)
 		camera_ray = get_camera_ray(job_data->scene,
 			job_data->camera, cur.x, cur.y);
 		color = ft_add_rgba_uc(color, raycast(&camera_ray, job_data->scene, 0));
+		if (!job_data->scene->scene_config.dof)
+			break ;
 		si++;
 	}
 	if (si > 1)

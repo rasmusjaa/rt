@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/03 13:26:30 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/05 15:43:14 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/08/05 15:46:19 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static int		set_rec_calced(t_scene *scene, t_raycast_hit *hit,
 	refraction = hit->shape->material->refra_index;
 	fresnel = calc_fresnel(hit->normal, hit->ray.direction, refraction);
 	*rec = calc_reflect(scene, *hit, hit->ray.direction,
-		hit->normal, hit->depth);
+		hit->normal);
 	*rac = ft_lerp_rgba(*rac, *rec, fresnel);
 	return (TRUE);
 }
@@ -75,7 +75,7 @@ static t_rgba	color_from_shape(t_rgba color, t_scene *scene,
 	{
 		r = scene->scene_config.refraction ?
 			hit->shape->material->refra_index : 1;
-		rera[1] = calc_refract(scene, hit->ray.direction, *hit, r, hit->depth);
+		rera[1] = calc_refract(scene, hit->ray.direction, *hit, r);
 		if (scene->scene_config.refraction && r > 1 + EPSILON)
 			rec_calced = set_rec_calced(scene, hit, &rera[0], &rera[1]);
 		color = ft_lerp_rgba(color, rera[1], 1 - hit->shape->material->opacity);
@@ -85,7 +85,7 @@ static t_rgba	color_from_shape(t_rgba color, t_scene *scene,
 	{
 		if (!rec_calced)
 			rera[0] = calc_reflect(scene, *hit, hit->ray.direction,
-				hit->normal, hit->depth);
+				hit->normal);
 		color = ft_lerp_rgba(color, rera[0], hit->shape->material->reflection);
 	}
 	return (ft_clamp_rgba(color));
