@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/03 14:44:38 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/05 13:20:48 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/05 14:20:28 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,12 @@ void	check_camera_fields(t_scene *scene, char *line, int n)
 
 	get_fields(line, values, N_CAMERA_VALUES);
 	cams = scene->cameras;
-	cams[n].position = ft_clamp_vec3(ft_make_vec3(values[0], values[1], values[2]), MIN_COORD, MAX_COORD);
-	cams[n].target = ft_clamp_vec3(ft_make_vec3(values[3], values[4], values[5]), MIN_COORD, MAX_COORD);
-	cams[n].rotation = ft_clamp_vec3(ft_make_vec3(-values[6], -values[7], -values[8]), 0, 360);
+	cams[n].position = ft_clamp_vec3(ft_make_vec3(values[0], values[1],
+		values[2]), MIN_COORD, MAX_COORD);
+	cams[n].target = ft_clamp_vec3(ft_make_vec3(values[3], values[4],
+		values[5]), MIN_COORD, MAX_COORD);
+	cams[n].rotation = ft_clamp_vec3(ft_make_vec3(-values[6], -values[7],
+		-values[8]), 0, 360);
 	cams[n].fov = ft_clamp_d(values[9], MIN_FOV, MAX_FOV);
 	cams[n].type = round(ft_clamp_d0(values[10], 0, CAMERA_TYPES - 1));
 	cams[n].aspect = ft_clamp_d(values[11], MIN_ASPECT, MAX_ASPECT);
@@ -69,15 +72,12 @@ void	check_light_fields(t_scene *scene, char *line, int n)
 
 	lights = scene->lights;
 	get_fields(line, values, N_LIGHT_VALUES);
-	lights[n].position = ft_clamp_vec3(ft_make_vec3(values[0], values[1], values[2]), MIN_COORD, MAX_COORD);
-	lights[n].color = ft_clamp_rgba(ft_make_rgba(values[3], values[4], values[5], 1.0));
+	lights[n].position = ft_clamp_vec3(ft_make_vec3(values[0], values[1],
+		values[2]), MIN_COORD, MAX_COORD);
+	lights[n].color = ft_clamp_rgba(ft_make_rgba(values[3], values[4],
+		values[5], 1.0));
 	lights[n].type = round(ft_clamp_d0(values[6], 0, LIGHT_TYPES - 1));
 	lights[n].intensity = ft_clamp_d(values[7], MIN_INTENSITY, MAX_INTENSITY);
 	lights[n].radius = ft_clamp_d(values[8], 0, 5);
 	lights[n].leds = round(ft_clamp_d(values[9], 2, 100));
 }
-
-
-
-
-
