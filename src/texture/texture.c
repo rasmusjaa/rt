@@ -32,6 +32,8 @@ t_texture	*get_texture_by_id(t_scene *scene, size_t id)
 	return (NULL);
 }
 
+t_rgba	ft_rgba
+
 t_rgba		sample_texture(t_texture *texture, t_vec2 uv)
 {
 	t_rgba	color;
@@ -45,9 +47,7 @@ t_rgba		sample_texture(t_texture *texture, t_vec2 uv)
 		uv.y = uv.y - floor(uv.y);
 		c = get_pixel_mlx_img(texture->img_data, uv.x *
 			texture->img_data->width, uv.y * texture->img_data->height);
-		color = ft_make_rgba((double)((c >> (16)) & 0xff) / 255.0,
-			(double)((c >> (8)) & 0xffd) / 255.0,
-			(double)((c >> (0)) & 0xff) / 255.0, 1.0);
+		color = ft_get_rgba(c);
 	}
 	else if (texture->procedural_type == CHECKER)
 		color = checker_texture(texture, uv.x, uv.y);
