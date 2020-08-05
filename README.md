@@ -2,9 +2,6 @@
 
 ## Notes
 
-Libft as submodule.
-
-Use ```git submodule update --init``` to initialize.
 
 ## Features
 - CPU multithreading
@@ -66,6 +63,7 @@ Use ```git submodule update --init``` to initialize.
 - Texture modifications
   - Procedural textures
     - Checkers
-    - Tiles
+    - Bricks
+    - Perlin noise
   - RGB colors for procedural textures
-  - Texture from file (.xpm)
+  - Texture from file (.xpm .ppm)
