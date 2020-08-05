@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 23:03:26 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/08/05 14:26:57 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/08/05 16:19:07 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,8 @@ void	init_camera(t_vec3 origin, t_vec3 target, t_camera *cam, t_scene *scene)
 		ft_make_vec3(0, 1, -EPSILON)));
 	cam->up = ft_normalize_vec3(ft_cross_vec3(cam->right, cam->forward));
 	cam->horizontal = tan((cam->fov * M_PI / 180.0) / 2);
-	cam->aspect = cam->aspect * (double)scene->scene_config.width /
-		(double)scene->scene_config.height;
-	cam->vertical = cam->horizontal / cam->aspect;
+	cam->vertical = cam->horizontal * ((double)scene->scene_config.height /
+		(double)scene->scene_config.width) * cam->aspect;
 }
 
 t_vec2	random_inside_unit_circle(void)
