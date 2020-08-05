@@ -3,16 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   ft_get_color.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <wkorande@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/03 17:11:35 by wkorande          #+#    #+#             */
-/*   Updated: 2020/02/03 17:13:00 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/05 12:48:06 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "color.h"
 
-int	ft_get_color(t_rgba c)
+t_rgba	ft_get_rgba(int color)
+{
+	return (ft_make_rgba(
+		(double)((color >> (16)) & 0xff) / 255.0,
+		(double)((color >> (8)) & 0xff) / 255.0,
+		(double)((color >> (0)) & 0xff) / 255.0,
+		1.0));
+}
+
+int		ft_get_color(t_rgba c)
 {
 	int r;
 	int g;
