@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/25 12:53:20 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/05 13:45:34 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/05 14:03:51 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static t_cube_map_face	determine_face(t_vec3 v)
 		return (determine_face2(v));
 }
 
-static t_vec3	set_map_axis(t_cube_map_face dir, t_vec3 v)
+static t_vec3		set_map_axis(t_cube_map_face dir, t_vec3 v)
 {
 	t_vec3	c;
 
