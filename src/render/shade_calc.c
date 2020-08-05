@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/03 13:30:07 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/05 15:18:35 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/05 15:21:23 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ t_rgba	calc_specular(t_scene *scene, t_raycast_hit hit, t_camera cam)
 	return (total_color);
 }
 
-double	calc_diffuse(t_light light, t_raycast_hit hit, t_scene *scene)
+double	calc_diffuse(t_light light, t_raycast_hit hit)
 {
 	double d;
 	double distance;
@@ -64,7 +64,7 @@ double	calc_diffuse(t_light light, t_raycast_hit hit, t_scene *scene)
 	if (light.type == DIRECTIONAL)
 		intensity = light.intensity / 1000;
 	else
-		intensity = light.intensity * ((double)1 / (distance * distance));
+		intensity = light.intensity * (1.0 / (distance * distance));
 	d = d * intensity;
 	return (ft_clamp_d(d, 0, 1));
 }
