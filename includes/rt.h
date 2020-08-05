@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rt.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/08/05 13:09:38 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/05 14:14:20 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@
 # define MAX_ASPECT 2.0
 # define MIN_BOUNCES 1
 # define MAX_BOUNCES 100
-# define CAMERA_TYPES 3
+# define CAMERA_TYPES 2
 # define LIGHT_TYPES 2
 # define SHAPE_TYPES 6
 # define COLORIZES 7
