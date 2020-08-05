@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/25 12:53:20 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/03 14:08:36 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/05 12:47:30 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ t_rgba					sample_cube_map(t_mlx_img *cube_map, t_vec3 v)
 	int		dir;
 	t_vec3	c;
 	int		color;
-	t_rgba	rgba;
 
 	dir = determine_face(v);
 	if (dir == FRONT)
@@ -108,10 +107,5 @@ t_rgba					sample_cube_map(t_mlx_img *cube_map, t_vec3 v)
 	else if (dir == TOP)
 		c.x += 2.0;
 	color = get_pixel_mlx_img(cube_map, (c.x / 8.0) * cube_map->width, (c.y / 6.0) * cube_map->height);
-	rgba = ft_make_rgba(
-		(double)((color >> (16)) & 0xff) / 255.0,
-		(double)((color >> (8)) & 0xff) / 255.0,
-		(double)((color >> (0)) & 0xff) / 255.0,
-		1.0);
-	return (rgba);
+	return (ft_get_rgba(color));
 }
