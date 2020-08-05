@@ -30,9 +30,9 @@ static char		*image_allocate(char *line, int *width, int *height)
 	i = 0;
 	while (i < *width * *height)
 	{
-		data[i * 4 + 0] = 0;
-		data[i * 4 + 1] = 0;
-		data[i * 4 + 2] = 0;
+		data[i * 4 + 0] = 1;
+		data[i * 4 + 1] = 1;
+		data[i * 4 + 2] = 1;
 		data[i * 4 + 3] = 1;
 		i++;
 	}

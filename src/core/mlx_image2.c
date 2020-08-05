@@ -33,13 +33,16 @@ t_mlx_img	*load_xpm_to_mlx_img(t_mlx *mlx, char *file)
 
 t_mlx_img	*load_ppm_to_mlx_img(char *file)
 {
-	t_mlx_img	*mlx_img;
-	t_vec2i		size;
+	t_mlx_img		*mlx_img;
+	t_vec2i			size;
+	unsigned char	*data;
 
 	if (!(mlx_img = (t_mlx_img*)malloc(sizeof(t_mlx_img))))
 		exit_message("create_mlx_img_from_data: failed to malloc t_mlx_img!");
-	if (!(mlx_img->d_addr = img_load_ppm(file, &size.x, &size.y)))
+	if (!(data = (unsigned char*)img_load_ppm(
+		file, &size.x, &size.y)))
 		exit_message("ppm_loader: failed to load ppm file!");
+	mlx_img->d_addr = (void*)data;
 	mlx_img->bpp = 4;
 	mlx_img->img = NULL;
 	mlx_img->width = size.x;

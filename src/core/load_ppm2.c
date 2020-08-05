@@ -25,11 +25,11 @@ static int	data_from_line(char *data, char *line, int *gap, int *i)
 		*gap %= 3;
 		file_data = ft_atoi(line);
 		if (*gap == 0)
-			data[*i + 0] = file_data;
+			data[*i + 2] = file_data;
 		if (*gap == 1)
 			data[*i + 1] = file_data;
 		if (*gap == 2)
-			data[*i + 2] = file_data;
+			data[*i + 0] = file_data;
 		while (*line != ' ' && *line)
 			line++;
 		if (*line == ' ')
@@ -80,7 +80,7 @@ int			ppm_read_pixels(int fd, char *data, int *width, int *height)
 
 int			ppm_bin_read_pixels(int fd, char *data, int *width, int *height)
 {
-	int file_data[3];
+	int file_data[1];
 	int gap;
 	int i;
 	int ret;
@@ -95,12 +95,12 @@ int			ppm_bin_read_pixels(int fd, char *data, int *width, int *height)
 	{
 		gap = gap % 3;
 		if (gap == 0)
-			data[i + 0] = file_data[0];
+			data[i + 2] = file_data[0];
 		if (gap == 1)
 			data[i + 1] = file_data[0];
 		if (gap == 2)
-			data[i + 2] = file_data[0];
-		gap += ret;
+			data[i + 0] = file_data[0];
+		gap += 1;
 		if (gap == 3)
 			i += 4;
 	}
