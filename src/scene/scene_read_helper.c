@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/03 14:56:18 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/03 15:33:35 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/05 13:34:04 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,35 +20,6 @@
 #include "object.h"
 #include "libft.h"
 #include "ft_printf.h"
-
-t_shape_type	get_shape_type(char *line)
-{
-	int i;
-
-	i = 0;
-	while (i < SHAPE_TYPES)
-	{
-		if (ft_strncmp(line, g_shape_name_type_map[i].name, 4) == 0)
-			return ( g_shape_name_type_map[i].type);
-		i++;
-	}
-	ft_printf("Error reading shape from: %s\n", line);
-	return (-1);
-}
-
-char	*get_shape_name(t_shape_type type)
-{
-	int i;
-
-	i = 0;
-	while (i < SHAPE_TYPES)
-	{
-		if (g_shape_name_type_map[i].type == type)
-			return (g_shape_name_type_map[i].name);
-		i++;
-	}
-	return (SHAPE_ERROR_STR);
-}
 
 time_t	last_modified(char *file)
 {

@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 13:05:58 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/08/03 15:18:51 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/05 13:11:26 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,20 +20,20 @@
 # include "rt.h"
 # include "shape.h"
 
-typedef enum	e_camera_type
+typedef enum		e_camera_type
 {
 	PERSPECTIVE,
 	ORTHOGRAPHIC,
 	FISHEYE
-}				t_camera_type;
+}					t_camera_type;
 
-typedef enum	e_light_type
+typedef enum		e_light_type
 {
 	POINT,
 	DIRECTIONAL
-}				t_light_type;
+}					t_light_type;
 
-typedef enum	e_object_type
+typedef enum		e_object_type
 {
 	SETTINGS,
 	CAMERA,
@@ -41,9 +41,9 @@ typedef enum	e_object_type
 	LIGHT,
 	MATERIAL,
 	TEXTURE
-}				t_object_type;
+}					t_object_type;
 
-typedef struct	s_camera
+typedef struct		s_camera
 {
 	t_vec3			position;
 	t_vec3			target;
@@ -58,9 +58,9 @@ typedef struct	s_camera
 	double			vertical;
 	double			focal_length;
 	double			aperture;
-}				t_camera;
+}					t_camera;
 
-typedef struct	s_light
+typedef struct		s_light
 {
 	t_vec3			position;
 	t_rgba			color;
@@ -68,31 +68,31 @@ typedef struct	s_light
 	double			intensity;
 	double			radius;
 	double			leds;
-}				t_light;
+}					t_light;
 
-typedef struct	s_object
+typedef struct		s_object
 {
 	t_object_type	type;
 	void			*data;
-}				t_object;
+}					t_object;
 
 struct s_scene;
 
 typedef void	(*t_object_func)(struct s_scene *scene, char *line, int n);
 
-typedef struct	s_unique_obj
+typedef struct		s_unique_obj
 {
 	char			obj_str[15];
 	t_object_func	func;
 	int				type;
-}				t_unique_obj;
+}					t_unique_obj;
 
 extern t_shape_name_type_map g_shape_name_type_map[SHAPE_TYPES];
 extern t_unique_obj g_unique_objs[N_UNIQUE_OBJS];
 
 struct s_ray		get_camera_ray(struct s_scene *scene, t_camera *camera,
-		double screen_x, double screen_y);
+						double screen_x, double screen_y);
 void				init_camera(t_vec3 origin, t_vec3 target,
-		t_camera *camera, struct s_scene *scene);
+						t_camera *camera, struct s_scene *scene);
 
 #endif

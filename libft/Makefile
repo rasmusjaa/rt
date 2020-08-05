@@ -6,7 +6,7 @@
 #    By: wkorande <willehard@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/15 15:22:37 by wkorande          #+#    #+#              #
-#    Updated: 2020/08/03 14:01:06 by wkorande         ###   ########.fr        #
+#    Updated: 2020/08/05 12:51:17 by wkorande         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -130,15 +130,6 @@ LIST_SRC = ft_lstadd.c\
 		ft_lstsize.c\
 		ft_lstnewptr.c
 
-HT_SRC = ft_ht_create.c\
-		ft_ht_destroy.c\
-		ft_ht_del.c\
-		ft_ht_get.c\
-		ft_ht_set.c\
-		ft_ht_hash_str.c\
-		ft_ht_hash_int.c\
-		ft_ht_print.c
-
 Q_SRC = ft_queue_dequeue.c\
 		ft_queue_print.c\
 		ft_queue_enqueue.c\
@@ -227,7 +218,6 @@ SRCDIR = srcs
 
 LIBC_SRCDIR = $(SRCDIR)/libc
 LIST_SRCDIR = $(SRCDIR)/list
-HT_SRCDIR = $(SRCDIR)/hashtable
 Q_SRCDIR = $(SRCDIR)/queue
 ST_SRCDIR = $(SRCDIR)/stack
 PF_SRCDIR = $(SRCDIR)/ft_printf
@@ -238,7 +228,6 @@ COLOR_SRCDIR = $(SRCDIR)/color
 SRCS =	$(addprefix $(SRCDIR)/, $(SRC))\
 		$(addprefix $(LIBC_SRCDIR)/, $(LIBC_SRC))\
 		$(addprefix $(LIST_SRCDIR)/, $(LIST_SRC))\
-		$(addprefix $(HT_SRCDIR)/, $(HT_SRC))\
 		$(addprefix $(Q_SRCDIR)/, $(Q_SRC))\
 		$(addprefix $(ST_SRCDIR)/, $(ST_SRC))\
 		$(addprefix $(PF_SRCDIR)/, $(PF_SRC))\

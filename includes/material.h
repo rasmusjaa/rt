@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   material.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/15 14:09:34 by sluhtala          #+#    #+#             */
-/*   Updated: 2020/07/29 13:49:39 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/08/05 13:15:47 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MATERIALS_H
-# define MATERIALS_H
+#ifndef MATERIAL_H
+# define MATERIAL_H
 
 # include "rt.h"
 # include "color.h"
@@ -19,8 +19,9 @@
 # define DEFAULT_MATERIAL_ID SIZE_MAX
 
 struct s_texture;
+struct s_scene;
 
-typedef struct		s_material
+typedef struct			s_material
 {
 	size_t				id;
 	t_rgba				diffuse;
@@ -38,13 +39,11 @@ typedef struct		s_material
 	size_t				bump_tex_id;
 	double				normal_mult;
 	double				bump_mult;
-}					t_material;
+}						t_material;
 
-typedef struct s_scene t_scene;
-
-t_material			new_material(size_t id, t_rgba diffuse, struct s_texture *texture);
-
-t_material			*get_material_by_id(t_scene *scene, size_t id);
-struct s_texture			*get_texture_by_id(t_scene *scene, size_t id);
+t_material				new_material(size_t id, t_rgba diffuse,
+							struct s_texture *texture);
+t_material				*get_material_by_id(struct s_scene *scene, size_t id);
+struct s_texture		*get_texture_by_id(struct s_scene *scene, size_t id);
 
 #endif
