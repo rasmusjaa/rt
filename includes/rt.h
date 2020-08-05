@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rt.h                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/08/05 14:14:20 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/08/05 15:29:06 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,13 @@
 # define SHAPE_ERROR_STR "shape_error"
 # define MATERIAL_STR "material"
 # define TEXTURE_STR "texture"
+
+# define COLORIZE_GRAY 1
+# define COLORIZE_INVERT 2
+# define COLORIZE_SEPIA 3
+# define COLORIZE_RED 4
+# define COLORIZE_GREEN 5
+# define COLORIZE_BLUE 6
 
 # define TRUE 1
 # define FALSE 0
