@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/05 13:20:07 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/05 13:24:10 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/05 13:33:16 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,38 @@
 #include "libft.h"
 #include "obj_loader.h"
 #include "ft_printf.h"
+#include "object.h"
 
-void	check_shape_fields(t_scene *scene, char *line, int n)
+static t_shape_type	get_shape_type(char *line)
+{
+	int i;
+
+	i = 0;
+	while (i < SHAPE_TYPES)
+	{
+		if (ft_strncmp(line, g_shape_name_type_map[i].name, 4) == 0)
+			return ( g_shape_name_type_map[i].type);
+		i++;
+	}
+	ft_printf("Error reading shape from: %s\n", line);
+	return (-1);
+}
+
+static char			*get_shape_name(t_shape_type type)
+{
+	int i;
+
+	i = 0;
+	while (i < SHAPE_TYPES)
+	{
+		if (g_shape_name_type_map[i].type == type)
+			return (g_shape_name_type_map[i].name);
+		i++;
+	}
+	return (SHAPE_ERROR_STR);
+}
+
+void				check_shape_fields(t_scene *scene, char *line, int n)
 {
 	double		values[N_SHAPE_VALUES];
 	char		file[256];
