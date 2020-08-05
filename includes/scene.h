@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/31 18:09:15 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/03 15:36:20 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/05 13:04:02 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 
 struct s_rt;
 
-typedef	struct		s_scene_config
+typedef	struct			s_scene_config
 {
 	char				*filepath;
 	time_t				last_modified;
@@ -75,7 +75,8 @@ void					check_scene_fields(t_scene *scene, char *line, int n);
 void					check_camera_fields(t_scene *scene, char *line, int n);
 void					check_shape_fields(t_scene *scene, char *line, int n);
 void					check_light_fields(t_scene *scene, char *line, int n);
-void					check_material_fields(t_scene *scene, char *line, int n);
+void					check_material_fields(
+							t_scene *scene, char *line, int n);
 void					check_texture_fields(t_scene *scene, char *line, int n);
 
 void					get_fields(char *line, double *values, int num_values);

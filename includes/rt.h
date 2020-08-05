@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/03 01:19:59 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/08/03 15:13:00 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/05 13:09:38 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,7 @@
 # include <math.h>
 # include <sys/time.h>
 # include <stdlib.h>
-// # include "color.h"
-// # include "vector.h"
 # include "mlx.h"
-// # include "raycast.h"
 # include "render.h"
 
 # ifndef __linux__
@@ -41,7 +38,6 @@
 # define N_LIGHT_VALUES 10
 # define N_MATERIAL_VALUES 17
 # define N_TEXTURE_VALUES 14
-
 
 # define MIN_WIDTH 800
 # define MIN_HEIGHT 800
@@ -99,43 +95,31 @@ struct s_mesh;
 struct s_texture;
 struct s_scene;
 
-typedef struct	s_mlx
+typedef struct				s_mlx
 {
-	void			*mlx_ptr;
-	void			*win_ptr;
-}				t_mlx;
+	void					*mlx_ptr;
+	void					*win_ptr;
+}							t_mlx;
 
-typedef struct	s_asset_library
+typedef struct				s_rt
 {
-	struct s_texture	*textures;
-	struct s_mesh		*meshes;
-}				t_asset_library;
-
-typedef struct	s_rt
-{
-	t_mlx 					*mlx;
+	t_mlx					*mlx;
 	struct s_scene			**scenes;
 	size_t					num_scenes;
-	size_t 					cur_scene;
+	size_t					cur_scene;
 	t_render_task			render_task;
-	t_asset_library			assets;
-	//unsigned char	***grad_vectors;
 	struct s_perlin_data	*perlin_data;
 	int						render_requested;
-}				t_rt;
+}							t_rt;
 
-void			free_null(size_t count, ...);
-
-void 			exit_message(char *str);
-time_t			last_modified(char *file);
-
-t_rt			*rt_init(size_t num_scenes);
-int				perlin_init(t_rt *rt, struct s_texture *texture);
-//void			delete_gradient_vectors(unsigned char  ***g);
-void			rt_destroy_exit(t_rt *rt, int status);
-
-void			init_mlx(t_rt *rt);
-void			create_mlx_window(t_rt *rt, int w, int h, char *title);
-
+t_rt						*rt_init(size_t num_scenes);
+void						rt_destroy_exit(t_rt *rt, int status);
+void						free_null(size_t count, ...);
+void						exit_message(char *str);
+time_t						last_modified(char *file);
+int							perlin_init(t_rt *rt, struct s_texture *texture);
+void						init_mlx(t_rt *rt);
+void						create_mlx_window(t_rt *rt, int w, int h,
+								char *title);
 
 #endif

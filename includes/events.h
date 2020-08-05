@@ -3,18 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   events.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/17 20:37:20 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/03 11:41:30 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/08/05 13:14:26 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EVENTS_H
 # define EVENTS_H
-
-# include "rt.h"
-#include "object.h"
 
 # ifndef __linux__
 
@@ -86,24 +83,27 @@
 #  define KEY_I			105
 #  define KEY_C			99
 #  define KEY_S			115
-#  define KEY_X			7 // change for linux
+#  define KEY_X			7
 
 # endif
 
-void 			init_events(t_rt *rt);
+struct s_rt;
+struct s_camera;
+
+void			init_events(struct s_rt *rt);
 
 int				update(void *arg);
 
-int				mouse_press_hook(int button, int x, int y, t_rt *rt);
-int				mouse_release_hook(int button, int x, int y, t_rt *rt);
-int				mouse_move_hook(int x, int y, t_rt *rt);
+int				mouse_press_hook(int button, int x, int y, struct s_rt *rt);
+int				mouse_release_hook(int button, int x, int y, struct s_rt *rt);
+int				mouse_move_hook(int x, int y, struct s_rt *rt);
 
-void 			rotate_camera(int key, t_camera *c);
+void			rotate_camera(int key, struct s_camera *c);
 
-int				key_press_hook(int key, t_rt *rt);
-int				key_release_hook(int key, t_rt *rt);
+int				key_press_hook(int key, struct s_rt *rt);
+int				key_release_hook(int key, struct s_rt *rt);
 
-int				close_hook(t_rt *rt);
-int				expose_hook(t_rt *rt);
+int				close_hook(struct s_rt *rt);
+int				expose_hook(struct s_rt *rt);
 
 #endif
