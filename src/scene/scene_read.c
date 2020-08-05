@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   scene_read.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/31 18:05:01 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/03 15:46:45 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/05 16:30:03 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,14 +97,10 @@ void	reload_scene(t_rt *rt)
 	file = scene->scene_config.filepath;
 	width = scene->scene_config.width;
 	height = scene->scene_config.height;
-	ft_printf("old width %d height %d\n", width, height);
 	destroy_scene(rt, scene);
 	rt->scenes[rt->cur_scene] = read_scene(rt, file);
 	rt->scenes[rt->cur_scene]->scene_config.width = width;
 	rt->scenes[rt->cur_scene]->scene_config.height = height;
-	ft_printf("old width %d height %d\n",
-		rt->scenes[rt->cur_scene]->scene_config.width,
-		rt->scenes[rt->cur_scene]->scene_config.height);
 	rt->render_requested = TRUE;
 }
 

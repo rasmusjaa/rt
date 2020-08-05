@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/31 17:47:31 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/03 11:35:44 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/08/05 16:30:42 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int		update_clean(t_rt *rt, t_render_task *task)
 	}
 	if (rt->render_requested)
 	{
+		mlx_clear_window(rt->mlx->mlx_ptr, rt->mlx->win_ptr);
 		render_scene(rt, rt->scenes[rt->cur_scene]);
 		rt->render_requested = FALSE;
 	}

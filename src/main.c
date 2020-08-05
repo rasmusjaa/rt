@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 14:59:56 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/08/03 13:07:48 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/08/05 16:25:42 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int		main(int ac, char **av)
 	rt = rt_init(ac - 1);
 	i = 0;
 	if (ac == 1)
-		exit_message("Usage: RTFM!");
+		exit_message("Usage: ./RT [scene_file]");
 	init_mlx(rt);
 	while (i < ac - 1)
 	{
