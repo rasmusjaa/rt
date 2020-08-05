@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shade.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/03 13:26:30 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/05 14:57:37 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/05 15:43:14 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,7 @@ static t_rgba	color_from_lights(t_scene *scene, t_raycast_hit *hit)
 		if (scene->scene_config.shadows)
 			s = calc_shadow(scene->lights[i], *hit, scene);
 		if (s < 1 && scene->scene_config.shading)
-			light = ft_mul_rgba(light, calc_diffuse(scene->lights[i],
-			*hit, scene));
+			light = ft_mul_rgba(light, calc_diffuse(scene->lights[i], *hit));
 		light = ft_mul_rgba(light, 1.0 - s);
 		total_light = ft_add_rgba(total_light, light);
 		i++;
