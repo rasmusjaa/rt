@@ -47,11 +47,11 @@ t_rgba		sample_texture(t_texture *texture, t_vec2 uv)
 			texture->img_data->width, uv.y * texture->img_data->height);
 		color = ft_get_rgba(c);
 	}
-	else if (texture->procedural_type == CHECKER)
+	else if (texture && texture->procedural_type == CHECKER)
 		color = checker_texture(texture, uv.x, uv.y);
-	else if (texture->procedural_type == BRICKS)
+	else if (texture && texture->procedural_type == BRICKS)
 		color = brick_texture(texture, uv.x, uv.y);
-	else if (texture->procedural_type == PERLIN)
+	else if (texture && texture->procedural_type == PERLIN)
 	{
 		p = o_perlin(texture, uv, texture->settings.x, texture->settings.y);
 		color = ft_mul_rgba(texture->color1, p);
