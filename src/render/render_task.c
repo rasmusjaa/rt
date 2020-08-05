@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_task.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/31 17:26:54 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/05 15:16:14 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/08/05 15:22:52 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 void	cleanup_render_task(t_rt *rt, t_render_task *task)
 {
-	size_t	i;
+	int	i;
 
 	ft_queue_destroy(task->done_tiles);
 	task->done_tiles = NULL;
