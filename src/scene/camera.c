@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 23:03:26 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/08/05 14:21:19 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/08/05 14:26:57 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ double	random_d(void)
 	return (r);
 }
 
-void	perspective_cam(t_scene *scene, t_camera *cam, t_ray *ray, t_vec2 target)
+void	perspective_cam(t_scene *scene, t_camera *cam, t_ray *ray,
+	t_vec2 target)
 {
 	t_vec3	r;
 	t_vec3	u;
@@ -59,13 +60,16 @@ void	perspective_cam(t_scene *scene, t_camera *cam, t_ray *ray, t_vec2 target)
 	ray->direction = ft_add_vec3(ray->direction, r);
 	ray->direction = ft_add_vec3(ray->direction, u);
 	ray->direction = ft_normalize_vec3(ray->direction);
-	if (scene->scene_config.dof && cam->focal_length > EPSILON && cam->aperture > 0.01)
+	if (scene->scene_config.dof && cam->focal_length > EPSILON
+		&& cam->aperture > 0.01)
 	{
-		focal_point = ft_add_vec3(cam->position, ft_mul_vec3(ray->direction, cam->focal_length));
+		focal_point = ft_add_vec3(cam->position, ft_mul_vec3(ray->direction,
+			cam->focal_length));
 		ray->origin.x += random_d() * cam->aperture;
 		ray->origin.y += random_d() * cam->aperture;
 		ray->origin.z += random_d() * cam->aperture;
-		ray->direction = ft_normalize_vec3(ft_sub_vec3(focal_point, ray->origin));
+		ray->direction = ft_normalize_vec3(ft_sub_vec3(focal_point,
+			ray->origin));
 	}
 }
 
@@ -83,24 +87,10 @@ t_ray	get_camera_ray(t_scene *scene, t_camera *cam, double screen_x,
 	ray.direction = cam->forward;
 	if (cam->type == PERSPECTIVE)
 		perspective_cam(scene, cam, &ray, target);
-	// {
-	// 	r = ft_mul_vec3(cam->right, target.x * cam->horizontal);
-	// 	u = ft_mul_vec3(cam->up, target.y * cam->vertical);
-	// 	ray.direction = ft_add_vec3(ray.direction, r);
-	// 	ray.direction = ft_add_vec3(ray.direction, u);
-	// 	ray.direction = ft_normalize_vec3(ray.direction);
-	// 	if (scene->scene_config.dof && cam->focal_length > EPSILON && cam->aperture > 0.01)
-	// 	{
-	// 		focal_point = ft_add_vec3(cam->position, ft_mul_vec3(ray.direction, cam->focal_length));
-	// 		ray.origin.x += random_d() * cam->aperture;
-	// 		ray.origin.y += random_d() * cam->aperture;
-	// 		ray.origin.z += random_d() * cam->aperture;
-	// 		ray.direction = ft_normalize_vec3(ft_sub_vec3(focal_point, ray.origin));
-	// 	}
-	// }
 	else if (cam->type == ORTHOGRAPHIC)
 	{
-		r = ft_mul_vec3(cam->right, target.x * cam->horizontal * (cam->fov / 5.0));
+		r = ft_mul_vec3(cam->right, target.x * cam->horizontal
+			* (cam->fov / 5.0));
 		u = ft_mul_vec3(cam->up, target.y * cam->vertical * (cam->fov / 5.0));
 		ray.origin = ft_add_vec3(ft_add_vec3(ray.origin, r), u);
 	}
