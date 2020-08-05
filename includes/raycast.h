@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/23 13:24:35 by rjaakonm          #+#    #+#             */
-/*   Updated: 2020/08/05 13:06:34 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/05 14:57:07 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,9 @@ double					calc_diffuse(struct s_light light, t_raycast_hit hit,
 							struct s_scene *scene);
 double					calc_fresnel(t_vec3 normal, t_vec3 idir, double ior);
 t_rgba					calc_refract(struct s_scene *scene, t_vec3 idir,
-							t_raycast_hit hit, double ior, int depth);
+							t_raycast_hit hit, double ior);
 t_rgba					calc_reflect(struct s_scene *scene, t_raycast_hit hit,
-							t_vec3 idir, t_vec3 normal, int depth);
+							t_vec3 idir, t_vec3 normal);
 double					calc_fresnel(t_vec3 normal, t_vec3 idir, double ior);
 t_rgba					colorize(size_t colorize, t_rgba color);
 
