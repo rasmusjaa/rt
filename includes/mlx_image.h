@@ -43,7 +43,12 @@ t_mlx_img		*create_mlx_img_from_data(t_mlx *mlx, void *data, int width, int heig
 void			destroy_mlx_img(t_mlx *mlx, t_mlx_img *mlx_img);
 void			put_pixel_mlx_img(t_mlx_img *img, int x, int y, int c);
 int				get_pixel_mlx_img(t_mlx_img *img, int x, int y);
+t_mlx_img		*load_file_to_mlx_img(t_mlx *mlx, char *file);
 t_mlx_img		*load_xpm_to_mlx_img(t_mlx *mlx, char *file);
+char			*img_load_ppm(char *filename, int *width, int *height);
+int 			ppm_bin_read_pixels(int fd, char *data, int *width, int *height);
+int				ppm_read_pixels(int fd, char *data, int *width, int *height);
+
 t_rgba			sample_cube_map(t_mlx_img *cube_map, t_vec3 v);
 
 #endif
