@@ -32,8 +32,6 @@ t_texture	*get_texture_by_id(t_scene *scene, size_t id)
 	return (NULL);
 }
 
-t_rgba	ft_rgba
-
 t_rgba		sample_texture(t_texture *texture, t_vec2 uv)
 {
 	t_rgba	color;
