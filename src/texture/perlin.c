@@ -24,7 +24,7 @@ static double	ft_smoothstep(double x)
 	return (y);
 }
 
-static double 	surflet(double x, double y, double grad_x, double grad_y)
+static double	surflet(double x, double y, double grad_x, double grad_y)
 {
 	double xy;
 
@@ -49,8 +49,8 @@ double			perlin_noise(t_perlin_data *perlin, double x, double y)
 		while (grid.x <= cell.x + 1)
 		{
 			hash = perlin->perm[(perlin->perm[grid.x & 255] + grid.y) & 255];
-			result += surflet(x - grid.x, y - grid.y, perlin->grads_x[hash & 255],
-				perlin->grads_y[hash & 255]);
+			result += surflet(x - grid.x, y - grid.y,
+				perlin->grads_x[hash & 255], perlin->grads_y[hash & 255]);
 			grid.x++;
 		}
 		grid.y++;
@@ -58,13 +58,13 @@ double			perlin_noise(t_perlin_data *perlin, double x, double y)
 	return (result);
 }
 
-double		o_perlin(t_texture *texture, t_vec2 uv, int oct, double pers)
+double			o_perlin(t_texture *texture, t_vec2 uv, int oct, double pers)
 {
-	double total;
-	double freq;
-	double maxvalue;
-	double amp;
-	int i;
+	double	total;
+	double	freq;
+	double	maxvalue;
+	double	amp;
+	int		i;
 
 	freq = ft_clamp_d(texture->settings.z, 5, 100);
 	total = 0;
@@ -84,4 +84,3 @@ double		o_perlin(t_texture *texture, t_vec2 uv, int oct, double pers)
 	}
 	return ((total / maxvalue) / 2.0 + 0.5);
 }
-
