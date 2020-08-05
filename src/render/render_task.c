@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/31 17:26:54 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/03 12:59:38 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/08/05 15:16:14 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,9 @@
 #include "thread_pool.h"
 #include "mlx_image.h"
 
-void	init_render_task(t_render_task *task, size_t res)
-{
-	task->render_finished = FALSE;
-	task->render_started = FALSE;
-	task->num_jobs = res * res;
-	task->jobs = task->num_jobs;
-	if (task->thread_pool)
-		tp_destroy(task->thread_pool);
-	task->thread_pool = tp_create(N_THREADS, task->num_jobs);
-	if (!(task->job_data_block = (t_tile_job_data*)(malloc(sizeof(
-			t_tile_job_data) * task->num_jobs))))
-		exit_message("init_render_task: Failed to malloc thread pool jobs!");
-	task->done_tiles = ft_queue_create(QUEUE_COPY, task->num_jobs,
-		sizeof(t_tile_job_data));
-	pthread_mutex_init(&task->task_mutex, NULL);
-}
-
 void	cleanup_render_task(t_rt *rt, t_render_task *task)
 {
-	int i;
+	size_t	i;
 
 	ft_queue_destroy(task->done_tiles);
 	task->done_tiles = NULL;
@@ -51,4 +34,21 @@ void	cleanup_render_task(t_rt *rt, t_render_task *task)
 	task->num_jobs = 0;
 	pthread_mutex_destroy(&task->task_mutex);
 	rt->render_task.render_started = FALSE;
+}
+
+void	init_render_task(t_render_task *task, size_t res)
+{
+	task->render_finished = FALSE;
+	task->render_started = FALSE;
+	task->num_jobs = res * res;
+	task->jobs = task->num_jobs;
+	if (task->thread_pool)
+		tp_destroy(task->thread_pool);
+	task->thread_pool = tp_create(N_THREADS, task->num_jobs);
+	if (!(task->job_data_block = (t_tile_job_data*)(malloc(sizeof(
+			t_tile_job_data) * task->num_jobs))))
+		exit_message("init_render_task: Failed to malloc thread pool jobs!");
+	task->done_tiles = ft_queue_create(QUEUE_COPY, task->num_jobs,
+		sizeof(t_tile_job_data));
+	pthread_mutex_init(&task->task_mutex, NULL);
 }
