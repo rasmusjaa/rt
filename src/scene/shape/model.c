@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:31:38 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/03 16:02:05 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/08/06 16:05:58 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ int		intersects_octree_model(t_ray *ray, t_shape *model,
 	if (node->is_last)
 		return (intersects_last_octree(ray, model, node, hit));
 	cur_hit.distance = INFINITY;
+	hit->distance = INFINITY;
 	hit_found = FALSE;
 	i = 0;
 	while (i < NUM_CHILDREN)

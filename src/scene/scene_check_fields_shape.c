@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   scene_check_fields_shape.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/05 13:20:07 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/05 14:28:49 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/06 14:57:53 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

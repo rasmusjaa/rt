@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shade_calc_reflect_refract.c                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/03 13:38:33 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/06 14:25:43 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/06 14:53:16 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

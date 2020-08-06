@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shade_calc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/03 13:30:07 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/05 15:21:23 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/06 15:33:53 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,10 @@ double	calc_diffuse(t_light light, t_raycast_hit hit)
 		light_dir = ft_sub_vec3(light.position, hit.point);
 	distance = ft_len_vec3(light_dir);
 	light_dir = ft_normalize_vec3(light_dir);
-	d = ft_clamp_d(ft_dot_vec3(light_dir, hit.normal), 0, 1) +
+	d = ft_dot_vec3(light_dir, hit.normal);
+	if (hit.shape->type == PLANE || hit.shape->type == MODEL)
+		d = ft_abs_d(d);
+	d = ft_clamp_d(d, 0, 1) +
 		(1.0 - hit.shape->material->opacity);
 	if (light.type == DIRECTIONAL)
 		intensity = light.intensity / 1000;

@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/15 12:46:47 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/03 16:01:43 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2020/08/06 16:08:02 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,11 @@ int		intersects_shape(t_ray *ray, t_shape *shape, t_raycast_hit *hit,
 	|| (shape->type == MODEL && intersects_octree_model(ray, shape,
 		shape->octree, hit)))
 	{
-		if (shape->bounds.active && !point_inside_bounds(hit->point, shape))
-			return (FALSE);
 		if (debug)
 			ft_printf("hit shape type %d, hit point %f %f %f\n",
 				shape->type, hit->point.x, hit->point.y, hit->point.z);
+		if (shape->bounds.active && !point_inside_bounds(hit->point, shape))
+			return (FALSE);
 		hit->shape = shape;
 		return (TRUE);
 	}
