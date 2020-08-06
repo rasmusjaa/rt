@@ -6,7 +6,7 @@
 /*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/03 13:38:33 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/05 14:58:30 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/06 14:25:43 by wkorande         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ t_rgba	calc_reflect(t_scene *scene, t_raycast_hit hit, t_vec3 idir,
 	t_ray	reflect_ray;
 	t_rgba	color;
 
-	reflect_ray.origin = hit.point;
+	reflect_ray.origin = ft_add_vec3(hit.point,
+		ft_mul_vec3(hit.normal, EPSILON));
 	reflect_ray.direction = ft_normalize_vec3(ft_reflect_vec3(idir, normal));
 	reflect_ray.is_shadow = FALSE;
 	reflect_ray.last_color = hit.shape->material->diffuse;
