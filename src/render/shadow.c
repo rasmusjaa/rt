@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shadow.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/14 16:48:51 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/03 15:37:09 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/06 16:34:49 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static void		init_random_shadow_ray(t_ray *shadow_ray, t_vec3 *lp,
 	t_vec2 rnd;
 
 	rnd = random_inside_circle(ft_make_vec2(0, 0), light->radius);
-	*lp = ft_add_vec3(light->position, ft_make_vec3(rnd.x, rnd.y, 0));
+	*lp = ft_add_vec3(light->position, ft_make_vec3(rnd.x, rnd.y, rnd.y));
 	shadow_ray->origin = ft_add_vec3(hit->point, ft_mul_vec3(hit->normal,
 		EPSILON));
 	shadow_ray->direction = ft_sub_vec3(*lp, hit->point);
