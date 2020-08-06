@@ -6,7 +6,7 @@
 #    By: wkorande <willehard@gmail.com>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/01 15:48:04 by rjaakonm          #+#    #+#              #
-#    Updated: 2020/08/05 13:23:04 by wkorande         ###   ########.fr        #
+#    Updated: 2020/08/06 16:49:37 by wkorande         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -90,11 +90,9 @@ CC = clang
 
 all: $(NAME)
 
-$(NAME): libftmake
-	$(CC) $(CFLAGS) $(INCL) $(SRCS) $(LIB) -o $(NAME)
-
-libftmake:
+$(NAME):
 	@make -C libft
+	$(CC) $(CFLAGS) $(INCL) $(SRCS) $(LIB) -o $(NAME)
 
 libftdebug:
 	@make debug -C libft
