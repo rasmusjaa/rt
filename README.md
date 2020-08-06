@@ -63,7 +63,11 @@
 - Texture modifications
   - Procedural textures
     - Checkers
+      -Texture setting 1 changes size relative to uv. Good starting value is 0.2
     - Bricks
+      -Texture setting 1 changes the amount rows in uv. Setting 2 changes the size of mortar relative to brick heigth. 
+        Good starting values are 10 and 0.33.
     - Perlin noise
+      -Texture Setting 1 is the amount of octaves. (1 - 10) Settings 2 and 3 are persistance and frequency.
   - RGB colors for procedural textures
   - Texture from file (.xpm .ppm)
