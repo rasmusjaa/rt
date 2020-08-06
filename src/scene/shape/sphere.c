@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sphere.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wkorande <willehard@gmail.com>             +#+  +:+       +#+        */
+/*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/13 18:19:26 by wkorande          #+#    #+#             */
-/*   Updated: 2020/08/03 15:47:55 by wkorande         ###   ########.fr       */
+/*   Updated: 2020/08/06 02:48:27 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ int		intersects_bump_sphere(t_ray *ray, t_shape *sphere,
 	t_texture	*tex;
 
 	tex = get_texture_by_id(ray->scene, sphere->material->bump_tex_id);
+	if (tex->img_data == NULL)
+		return (TRUE);
 	temp = ft_intensity_rgba(sample_texture(tex, uv))
 		* sphere->material->bump_mult;
 	temp = sphere->radius - temp;
@@ -88,7 +90,7 @@ int		intersects_sphere(t_ray *ray, t_shape *sphere, t_raycast_hit *hit)
 			hit->point = point_on_ray(ray, hit->t);
 			hit->distance = hit->t;
 			if (sphere->material->bump_tex_id && get_texture_by_id(
-				ray->scene, sphere->material->bump_tex_id)->img_data != NULL)
+				ray->scene, sphere->material->bump_tex_id) != NULL)
 				return (prep_bump(ray, sphere, hit));
 			return (TRUE);
 		}
