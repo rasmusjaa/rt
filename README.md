@@ -6,7 +6,7 @@
 
 Object of this project was to create scenes with ray tracing method and implement lots of extra functionality in addition to basic object drawing. 
 
-Allowed functions were: open, read, write, close, malloc, free, perror, strerror, exit, all functions of the math library (-lm man man 3 math), all functions of the MinilibX or their equivalent in another graphic library and necessary funcions for extra functions. For extras we used pthread.h for multithreading, sys/stat.h to see if file was updated, stdarg.h to make multiple pointer free function, and time.h to count our rending times.
+Allowed functions were: open, read, write, close, malloc, free, perror, strerror, exit, all functions of the math library (-lm man man 3 math), all functions of the MinilibX or their equivalent in another graphic library and necessary funcions for extra functions. For extras we used pthread.h for multithreading, sys/stat.h to see if file was updated, stdarg.h to make multiple pointer free function, and time.h to count our rending times. Eveything else was made from scratch.
 
 ![Christmas Ball](https://github.com/wehard/rt/blob/master/resources/screenshots/sasus_christmas.jpg)
 
