@@ -1,7 +1,14 @@
 # RT
 
+![Desert Image](https://github.com/wehard/rt/blob/master/resources/screenshots/desert.jpg)
+
 ## Notes
 
+![Desert](https://github.com/wehard/rt/blob/master/resources/screenshots/desert.jpg)
+
+Object of this project was to create scenes with ray tracing method and implement lots of extra functionality in addition to basic object drawing. Allowed function were: open, read, write, close, malloc, free, perror, strerror, exit, all functions of the math library (-lm man man 3 math), all functions of the MinilibX or their equivalent in another graphic library.
+
+![Christmas Ball](https://github.com/wehard/rt/blob/master/resources/screenshots/sasus_christmas.jpg)
 
 ## Features
 - CPU multithreading
@@ -69,5 +76,14 @@
         Good starting values are 10 and 0.33.
     - Perlin noise
       -Texture Setting 1 is the amount of octaves. (1 - 10) Settings 2 and 3 are persistance and frequency.
+    - Sky texture
+  - Camera modifications
+    - Position and rotation
+    - Depth of field
+      - Focal length
+      - Aperture
+    - Aspect ratio (automatically calculated, but can also be stretched)
+    - Fied off view
+    - Perspective and ortographic types
   - RGB colors for procedural textures
   - Texture from file (.xpm .ppm)
