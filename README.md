@@ -2,6 +2,13 @@
 
 ![Desert Image](https://github.com/wehard/rt/blob/master/resources/screenshots/desert.jpg)
 
+## Installation
+
+Tested on MacOS Mojave/Catalina and Linux Ubuntu.
+Requires MinilibX (for example this works https://github.com/pbondoer/MinilibX.git )
+Run make on MinilibX and on copy libmlx.a (from root after make) to /usr/local/lib and mlx.h (from sierra dir on MacOS Catalina) to /usr/local/include
+Clone this repository, run make and run program with ./RT [scene_file], for example ./RT resources/scenes/cat_house.csv
+
 ## Notes
 
 Object of this project was to create scenes with ray tracing method and implement lots of extra functionality in addition to basic object drawing. 
